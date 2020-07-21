@@ -1,8 +1,12 @@
 tensorflow>=2.1.0
 scikit-learn
+scikit-image
 numpy
 scipy
 h5py
 click
 matplotlib
 pytest
+tqdm
+xarray
+h5netcdf

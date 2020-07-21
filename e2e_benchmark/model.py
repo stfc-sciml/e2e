@@ -9,55 +9,88 @@ def unet(input_shape: Tuple[int, int, int]) -> tf.keras.Model:
     x = input_layer
 
     # Encoder
-    x = layers.Conv2D(16, 3, padding='same')(x)
+    x = layers.Conv2D(32, 3, padding='same', kernel_initializer='he_normal')(x)
     x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
+    x = layers.Conv2D(32, 3, padding='same', kernel_initializer='he_normal')(x)
+    x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
     skip1 = x
     x = layers.MaxPool2D(2)(x)
 
-    x = layers.Conv2D(32, 3, padding='same')(x)
+    x = layers.Conv2D(64, 3, padding='same', kernel_initializer='he_normal')(x)
     x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
+    x = layers.Conv2D(64, 3, padding='same', kernel_initializer='he_normal')(x)
+    x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
     skip2 = x
     x = layers.MaxPool2D(2)(x)
 
-    x = layers.Conv2D(64, 3, padding='same')(x)
+    x = layers.Conv2D(128, 3, padding='same', kernel_initializer='he_normal')(x)
     x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
+    x = layers.Conv2D(128, 3, padding='same', kernel_initializer='he_normal')(x)
+    x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
     skip3 = x
     x = layers.MaxPool2D(2)(x)
 
-    x = layers.Conv2D(128, 3, padding='same')(x)
+    x = layers.Conv2D(256, 3, padding='same', kernel_initializer='he_normal')(x)
     x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
+    x = layers.Conv2D(256, 3, padding='same', kernel_initializer='he_normal')(x)
+    x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
     skip4 = x
     x = layers.MaxPool2D(2)(x)
 
     # Bottleneck
-    x = layers.Conv2D(256, 3, padding='same')(x)
+    x = layers.Conv2D(512, 3, padding='same', kernel_initializer='he_normal')(x)
     x = layers.ReLU()(x)
-    x = layers.Dropout(0.2)(x)
-    x = layers.Conv2D(256, 3, padding='same')(x)
+    x = layers.BatchNormalization()(x)
+    x = layers.Conv2D(512, 3, padding='same', kernel_initializer='he_normal')(x)
     x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
 
     # Decoder
     x = layers.UpSampling2D(2)(x)
     x = layers.Concatenate(axis=-1)([x, skip4])
-    x = layers.Conv2D(128, 3, padding='same')(x)
+    x = layers.Conv2D(256, 3, padding='same', kernel_initializer='he_normal')(x)
+    x = layers.BatchNormalization()(x)
     x = layers.ReLU()(x)
+    x = layers.Conv2D(256, 3, padding='same', kernel_initializer='he_normal')(x)
+    x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
 
     x = layers.UpSampling2D(2)(x)
     x = layers.Concatenate(axis=-1)([x, skip3])
-    x = layers.Conv2D(64, 3, padding='same')(x)
+    x = layers.Conv2D(128, 3, padding='same', kernel_initializer='he_normal')(x)
     x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
+    x = layers.Conv2D(128, 3, padding='same', kernel_initializer='he_normal')(x)
+    x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
 
     x = layers.UpSampling2D(2)(x)
     x = layers.Concatenate(axis=-1)([x, skip2])
-    x = layers.Conv2D(32, 3, padding='same')(x)
+    x = layers.Conv2D(64, 3, padding='same', kernel_initializer='he_normal')(x)
     x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
+    x = layers.Conv2D(64, 3, padding='same', kernel_initializer='he_normal')(x)
+    x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
 
     x = layers.UpSampling2D(2)(x)
     x = layers.Concatenate(axis=-1)([x, skip1])
-    x = layers.Conv2D(16, 3, padding='same')(x)
+    x = layers.Conv2D(32, 3, padding='same', kernel_initializer='he_normal')(x)
     x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
+    x = layers.Conv2D(32, 3, padding='same', kernel_initializer='he_normal')(x)
+    x = layers.ReLU()(x)
+    x = layers.BatchNormalization()(x)
 
-    x = layers.Conv2D(1, 1, activation='sigmoid', padding='same')(x)
+    x = layers.Conv2D(1, 1, activation='sigmoid', padding='same', kernel_initializer='he_normal')(x)
 
     model = tf.keras.Model(input_layer, x)
     return model
