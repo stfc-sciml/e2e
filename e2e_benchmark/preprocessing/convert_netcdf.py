@@ -1,3 +1,4 @@
+import click
 import h5py
 import numpy as np
 from functools import partial
@@ -62,5 +63,19 @@ def convert_netcdf(path: Path, output_path: Path, n_jobs: int = 8):
             pass
 
 
+@click.command()
+@click.argument('input-path')
+@click.argument('output-path')
+def prepare(input_path, output_path):
+    input_path = Path(input_path)
+
+    if not input_path.exists():
+        click.Abort('The input path {} does not exist!'.format(input_path))
+
+    output_path = Path(output_path)
+    output_path.mkdir(exist_ok=True, parents=True)
+
+    convert_netcdf(input_path, output_path)
+
 if __name__ == "__main__":
-    convert_netcdf()
+    prepare()
