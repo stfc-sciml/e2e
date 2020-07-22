@@ -32,7 +32,7 @@ class ImageLoader:
             irradiances[name] = irradiance
         return irradiances
 
-    def load_reflectance(self, view='an'):
+    def load_reflectances(self, view='an'):
         refs = [
             self.load_reflectance_channel(
                 self.path,

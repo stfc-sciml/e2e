@@ -6,13 +6,15 @@ import numpy as np
 
 from e2e_benchmark.constants import PATCH_SIZE, IMAGE_H, IMAGE_W
 
+N_CHANNELS = 9
+
 
 class SLSTRDataLoader:
 
     def __init__(self, data_dir: Path, shuffle: bool = True, batch_size: int=32):
         self._data_dir = data_dir
 
-        self._image_paths = Path(self._data_dir).glob('S3A*.hdf')
+        self._image_paths = Path(self._data_dir).glob('**/S3A*.hdf')
         self._image_paths = list(map(str, self._image_paths))
 
         self._shuffle = shuffle
@@ -22,7 +24,7 @@ class SLSTRDataLoader:
 
     @property
     def input_size(self):
-        return (PATCH_SIZE, PATCH_SIZE, 9)
+        return (PATCH_SIZE, PATCH_SIZE, N_CHANNELS)
 
     @property
     def output_size(self):
@@ -37,30 +39,21 @@ class SLSTRDataLoader:
             msk = handle['bayes'][:]
 
         bts = (bts - 270.0) / 22.0
-        # Mean - Std norm, already in range 0-1, convert to (-1, 1) range.
         refs = refs - 0.5
         img = np.concatenate([refs, bts], axis=-1)
 
         msk[msk > 0] = 1
+        msk[msk == 0] = 0
+        msk = msk.astype(np.float)
 
         yield img, msk
 
     def _preprocess_images(self, img, msk):
-        # NaN fill the images
-        img = self._nan_fill_image(img)
-        msk = self._nan_fill_image(msk)
-
         # Crop & convert to patches
         img = self._transform_image(img)
         msk = self._transform_image(msk)
 
         return img, msk
-
-    def _nan_fill_image(self, img):
-        img = tf.cast(img, tf.float32)
-        nan_mask = tf.math.is_finite(img)
-        img = tf.where(nan_mask, img, 0)
-        return img
 
     def _transform_image(self, img):
         # Crop to image which is divisible by the patch size
@@ -85,7 +78,7 @@ class SLSTRDataLoader:
 
     def _generator(self, path):
         types = (tf.float32, tf.float32)
-        shapes = (tf.TensorShape([IMAGE_H, IMAGE_W, 9]),
+        shapes = (tf.TensorShape([IMAGE_H, IMAGE_W, N_CHANNELS]),
                   tf.TensorShape([IMAGE_H, IMAGE_W, 1]))
         dataset = tf.data.Dataset.from_generator(self._load_data,
                                                  output_types=types,

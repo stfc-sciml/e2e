@@ -15,9 +15,11 @@ def do_conversion(path: Path, output_path: Path):
 
     bts = loader.load_bts().to_array().values
     rads = loader.load_radiances().to_array().values
-    refs = loader.load_radiances().to_array().values
-    bayes = loader.load_flags().bayes_in.values
-    summary = loader.load_flags().summary_cloud.values
+    refs = loader.load_reflectances().to_array().values
+    flags = loader.load_flags()
+    bayes = flags.bayes_in.values
+    summary = flags.summary_cloud.values
+    day = flags.day.values
 
     rads = np.transpose(rads, [1, 2, 0])
     refs = np.transpose(refs, [1, 2, 0])
@@ -44,7 +46,11 @@ def do_conversion(path: Path, output_path: Path):
     bayes = resize(bayes, (IMAGE_H, IMAGE_W), anti_aliasing=False, preserve_range=True)
     summary = resize(summary, (IMAGE_H, IMAGE_W), anti_aliasing=False, preserve_range=True)
 
-    output_file = (output_path / path.name).with_suffix('.hdf')
+    folder = 'day' if np.all(day) > 0 else 'night'
+    folder = output_path / folder
+    folder.mkdir(parents=True, exist_ok=True)
+
+    output_file = (folder / path.name).with_suffix('.hdf')
 
     with h5py.File(output_file, 'w') as handle:
         handle.create_dataset("bts", data=bts)
@@ -76,6 +82,7 @@ def prepare(input_path, output_path):
     output_path.mkdir(exist_ok=True, parents=True)
 
     convert_netcdf(input_path, output_path)
+
 
 if __name__ == "__main__":
     prepare()
