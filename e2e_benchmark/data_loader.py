@@ -5,20 +5,26 @@ import tensorflow as tf
 import numpy as np
 
 from e2e_benchmark.constants import PATCH_SIZE, IMAGE_H, IMAGE_W
+from typing import Union, List
 
 N_CHANNELS = 9
 
 
 class SLSTRDataLoader:
 
-    def __init__(self, data_dir: Path, shuffle: bool = True, batch_size: int=32):
-        self._data_dir = data_dir
+    def __init__(self, paths: Union[Path, List[Path]], shuffle: bool = True, batch_size: int = 32, single_image: bool = False):
+        if paths.is_dir():
+            self._image_paths = Path(self._data_dir).glob('**/S3A*.hdf')
+        else:
+            self._image_paths = paths
 
-        self._image_paths = Path(self._data_dir).glob('**/S3A*.hdf')
         self._image_paths = list(map(str, self._image_paths))
 
         self._shuffle = shuffle
         self.batch_size = batch_size
+
+        self.single_image = single_image
+        self.patch_padding = 'valid' if not single_image else 'same'
 
         assert len(self._image_paths) > 0, 'No image data found in path!'
 
@@ -70,10 +76,12 @@ class SLSTRDataLoader:
         dims = [1, PATCH_SIZE, PATCH_SIZE, 1]
         img = tf.expand_dims(img, axis=0)
         b, h, w, c = img.shape
-        img = tf.image.extract_patches(img, dims, dims, [1, 1, 1, 1], padding='VALID')
+        img = tf.image.extract_patches(img, dims, dims, [1, 1, 1, 1], padding=self.patch_padding.upper())
 
-        n, nx, ny, np = img.shape
-        img = tf.reshape(img, (n * nx * ny, PATCH_SIZE, PATCH_SIZE, c))
+        if not self.single_image:
+            n, nx, ny, np = img.shape
+            img = tf.reshape(img, (n * nx * ny, PATCH_SIZE, PATCH_SIZE, c))
+
         return img
 
     def _generator(self, path):
@@ -95,6 +103,10 @@ class SLSTRDataLoader:
 
         dataset = dataset.interleave(self._generator, cycle_length=8, num_parallel_calls=8)
         dataset = dataset.map(self._preprocess_images, num_parallel_calls=8)
+
+        if self.single_image:
+            return dataset
+
         dataset = dataset.unbatch()
         dataset = dataset.cache()
         dataset = dataset.prefetch(self.batch_size * 3)

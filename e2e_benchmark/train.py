@@ -63,7 +63,6 @@ def train_model(data_path: Path, output_path: Path):
             clip_offset = 15
             predicted = predicted[:, clip_offset:-clip_offset, clip_offset:-clip_offset]
             masks = masks[:, clip_offset:-clip_offset, clip_offset:-clip_offset]
-            # loss = tf.keras.losses.binary_crossentropy(masks, predicted)
             loss = bce(masks, predicted)
             loss_metric.update_state(loss)
 
