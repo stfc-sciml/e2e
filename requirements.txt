@@ -10,3 +10,4 @@ pytest
 tqdm
 xarray
 h5netcdf
+tables

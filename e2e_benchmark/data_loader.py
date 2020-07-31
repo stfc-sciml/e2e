@@ -13,8 +13,8 @@ N_CHANNELS = 9
 class SLSTRDataLoader:
 
     def __init__(self, paths: Union[Path, List[Path]], shuffle: bool = True, batch_size: int = 32, single_image: bool = False):
-        if paths.is_dir():
-            self._image_paths = Path(self._data_dir).glob('**/S3A*.hdf')
+        if isinstance(paths, Path):
+            self._image_paths = Path(paths).glob('**/S3A*.hdf')
         else:
             self._image_paths = paths
 
@@ -70,7 +70,8 @@ class SLSTRDataLoader:
         target_h = IMAGE_H - offset_h * 2
         target_w = IMAGE_W - offset_w * 2
 
-        img = tf.image.crop_to_bounding_box(img, offset_h, offset_w, target_h, target_w)
+        if not self.single_image:
+            img = tf.image.crop_to_bounding_box(img, offset_h, offset_w, target_h, target_w)
 
         # Covert image from IMAGE_H x IMAGE_W to PATCH_SIZE x PATCH_SIZE
         dims = [1, PATCH_SIZE, PATCH_SIZE, 1]

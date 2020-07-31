@@ -6,3 +6,7 @@ IMAGE_H = 1200
 IMAGE_W = 1500
 # Patch size
 PATCH_SIZE = 256
+# No. of channels
+N_CHANNELS = 9
+# Min allowable SST
+MIN_SST = 273.15
