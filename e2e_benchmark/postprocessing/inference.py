@@ -9,18 +9,18 @@ from e2e_benchmark.data_loader import SLSTRDataLoader
 from e2e_benchmark.constants import PATCH_SIZE, N_CHANNELS, IMAGE_H, IMAGE_W
 
 
-def reconstruct_from_patches(patches, nx, ny):
+def reconstruct_from_patches(patches, nx, ny, patch_size: int = PATCH_SIZE):
     # n, nx, ny, _, _, c = patches.shape
 
-    h = ny * PATCH_SIZE
-    w = nx * PATCH_SIZE
+    h = ny * patch_size
+    w = nx * patch_size
     out = np.zeros((1, h, w, 1))
 
     for i in range(ny):
         for j in range(nx):
-            py = i * PATCH_SIZE
-            px = j * PATCH_SIZE
-            out[0, py:py + PATCH_SIZE, px:px + PATCH_SIZE] = patches[0, i, j]
+            py = i * patch_size
+            px = j * patch_size
+            out[0, py:py + patch_size, px:px + patch_size] = patches[0, i, j]
 
     # Crop off the additional padding
     offset_y = (h - IMAGE_H) // 2
@@ -45,7 +45,8 @@ def main(model_file, data_dir, output_dir):
     # Create data loader in single image mode. This turns off shuffling and
     # only yields batches of images for a single image at a time so they can be
     # reconstructed.
-    data_loader = SLSTRDataLoader(file_paths, single_image=True)
+    CROP_SIZE = 80
+    data_loader = SLSTRDataLoader(file_paths, single_image=True, crop_size=CROP_SIZE)
     dataset = data_loader.to_dataset()
 
     for file_name, (patches, _) in tqdm(zip(file_paths, dataset), total=len(file_paths)):
@@ -56,9 +57,12 @@ def main(model_file, data_dir, output_dir):
         # perform inference on patches
         mask_patches = model.predict_on_batch(patches)
 
+        # crop edge artifacts
+        mask_patches = tf.image.crop_to_bounding_box(mask_patches, CROP_SIZE // 2, CROP_SIZE // 2, PATCH_SIZE - CROP_SIZE, PATCH_SIZE - CROP_SIZE)
+
         # reconstruct patches back to full size image
-        mask_patches = tf.reshape(mask_patches, (n, ny, nx, PATCH_SIZE, PATCH_SIZE, 1))
-        mask = reconstruct_from_patches(mask_patches, nx, ny)
+        mask_patches = tf.reshape(mask_patches, (n, ny, nx, PATCH_SIZE - CROP_SIZE, PATCH_SIZE - CROP_SIZE, 1))
+        mask = reconstruct_from_patches(mask_patches, nx, ny, patch_size=PATCH_SIZE - CROP_SIZE)
         mask_name = (output_dir / file_name.name).with_suffix('.h5')
 
         with h5py.File(mask_name, 'w') as handle:

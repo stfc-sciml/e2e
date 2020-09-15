@@ -12,7 +12,7 @@ N_CHANNELS = 9
 
 class SLSTRDataLoader:
 
-    def __init__(self, paths: Union[Path, List[Path]], shuffle: bool = True, batch_size: int = 32, single_image: bool = False):
+    def __init__(self, paths: Union[Path, List[Path]], shuffle: bool = True, batch_size: int = 32, single_image: bool = False, crop_size: int = 20):
         if isinstance(paths, Path):
             self._image_paths = Path(paths).glob('**/S3A*.hdf')
         else:
@@ -20,11 +20,12 @@ class SLSTRDataLoader:
 
         self._image_paths = list(map(str, self._image_paths))
 
-        self._shuffle = shuffle
+        self._shuffle = shuffle if not single_image else False
         self.batch_size = batch_size
 
         self.single_image = single_image
         self.patch_padding = 'valid' if not single_image else 'same'
+        self.crop_size = crop_size
 
         assert len(self._image_paths) > 0, 'No image data found in path!'
 
@@ -75,9 +76,15 @@ class SLSTRDataLoader:
 
         # Covert image from IMAGE_H x IMAGE_W to PATCH_SIZE x PATCH_SIZE
         dims = [1, PATCH_SIZE, PATCH_SIZE, 1]
+        strides = dims.copy()
+
+        if self.single_image:
+            strides[1] -= self.crop_size
+            strides[2] -= self.crop_size
+
         img = tf.expand_dims(img, axis=0)
         b, h, w, c = img.shape
-        img = tf.image.extract_patches(img, dims, dims, [1, 1, 1, 1], padding=self.patch_padding.upper())
+        img = tf.image.extract_patches(img, dims, strides, [1, 1, 1, 1], padding=self.patch_padding.upper())
 
         if not self.single_image:
             n, nx, ny, np = img.shape
