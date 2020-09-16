@@ -3,6 +3,7 @@ from pathlib import Path
 import h5py
 import tensorflow as tf
 import numpy as np
+import horovod.tensorflow as hvd
 
 from e2e_benchmark.constants import PATCH_SIZE, IMAGE_H, IMAGE_W
 from typing import Union, List
@@ -105,6 +106,7 @@ class SLSTRDataLoader:
     def to_dataset(self):
         """Input function for training"""
         dataset = tf.data.Dataset.from_tensor_slices(self._image_paths)
+        dataset = dataset.shard(hvd.size(), hvd.rank())
 
         if self._shuffle:
             dataset = dataset.shuffle(len(self._image_paths))

@@ -11,6 +11,11 @@ from e2e_benchmark.preprocessing.image import ImageLoader
 
 
 def do_conversion(path: Path, output_path: Path):
+    # Check if file already exists, if so skip
+    if ((output_path / Path('day') / path.name).exists() or
+            (output_path / Path('night') / path.name).exists()):
+        return
+
     loader = ImageLoader(path)
 
     bts = loader.load_bts().to_array().values

@@ -1,6 +1,5 @@
-import numpy as np
 import tensorflow as tf
-import matplotlib.pyplot as plt
+import horovod.tensorflow as hvd
 from pathlib import Path
 
 from e2e_benchmark.data_loader import SLSTRDataLoader
@@ -10,13 +9,15 @@ from e2e_benchmark.model import unet
 def weighted_cross_entropy(beta):
     def convert_to_logits(y_pred):
         # see https://github.com/tensorflow/tensorflow/blob/r1.10/tensorflow/python/keras/backend.py#L3525
-        y_pred = tf.clip_by_value(y_pred, tf.keras.backend.epsilon(), 1 - tf.keras.backend.epsilon())
+        y_pred = tf.clip_by_value(
+            y_pred, tf.keras.backend.epsilon(), 1 - tf.keras.backend.epsilon())
 
         return tf.math.log(y_pred / (1 - y_pred))
 
     def loss(y_true, y_pred):
         y_pred = convert_to_logits(y_pred)
-        loss = tf.nn.weighted_cross_entropy_with_logits(logits=y_pred, labels=y_true, pos_weight=beta)
+        loss = tf.nn.weighted_cross_entropy_with_logits(
+            logits=y_pred, labels=y_true, pos_weight=beta)
 
         # or reduce_sum and/or axis=-1
         return tf.reduce_mean(loss)
@@ -24,24 +25,16 @@ def weighted_cross_entropy(beta):
     return loss
 
 
-def save_images(path: str, images: np.ndarray, masks: np.ndarray, predicted: np.ndarray):
-    fig, axes = plt.subplots(5, 4, figsize=(10, 10))
-
-    for i, row in enumerate(axes):
-        ax1, ax2, ax3, ax4 = row
-        ax1.matshow(images[i, ..., 7])
-        ax2.matshow(masks[i, ..., 0], vmin=0, vmax=1)
-        ax3.matshow(predicted[i, ..., 0], vmin=0, vmax=1)
-        ax4.matshow(predicted[i, ..., 0] > .5, vmin=0, vmax=1)
-
-        for ax in row:
-            ax.axis('off')
-
-    plt.savefig(path)
-    plt.close()
-
-
 def train_model(data_path: Path, output_path: Path):
+    hvd.init()
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
+    if gpus:
+        tf.config.experimental.set_visible_devices(
+            gpus[hvd.local_rank()], 'GPU')
+
+    epochs = 30
     batch_size = 32
     train_data_loader = SLSTRDataLoader(data_path, batch_size=batch_size)
 
@@ -49,7 +42,8 @@ def train_model(data_path: Path, output_path: Path):
 
     optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
     bce = weighted_cross_entropy(.5)
-    model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer=optimizer,
+                  loss='binary_crossentropy', metrics=['accuracy'])
 
     dataset = train_data_loader.to_dataset()
 
@@ -57,24 +51,36 @@ def train_model(data_path: Path, output_path: Path):
     acc_metric = tf.keras.metrics.BinaryAccuracy()
 
     @tf.function
-    def train_step(images, masks):
+    def train_step(images, masks, first_batch=False):
         with tf.GradientTape() as tape:
             predicted = model(images)
             clip_offset = 15
-            predicted = predicted[:, clip_offset:-clip_offset, clip_offset:-clip_offset]
-            masks = masks[:, clip_offset:-clip_offset, clip_offset:-clip_offset]
+            predicted = predicted[:, clip_offset:-
+                                  clip_offset, clip_offset:-clip_offset]
+            masks = masks[:, clip_offset:-
+                          clip_offset, clip_offset:-clip_offset]
             loss = bce(masks, predicted)
             loss_metric.update_state(loss)
 
+        tape = hvd.DistributedGradientTape(tape)
         gradients = tape.gradient(
             loss, model.trainable_variables)
 
         optimizer.apply_gradients(
             zip(gradients, model.trainable_variables))
 
+        # Horovod: broadcast initial variable states from rank 0 to all other processes.
+        # This is necessary to ensure consistent initialization of all workers when
+        # training is started with random weights or restored from a checkpoint.
+        #
+        # Note: broadcast should be done after the first gradient step to ensure optimizer
+        # initialization.
+        if first_batch:
+            hvd.broadcast_variables(model.variables, root_rank=0)
+            hvd.broadcast_variables(optimizer.variables(), root_rank=0)
+
         return predicted, masks
 
-    epochs = 30
     for epoch in range(epochs):
         # Clear epoch metrics
         loss_metric.reset_states()
@@ -82,16 +88,15 @@ def train_model(data_path: Path, output_path: Path):
 
         # Train model
         for i, (images, masks) in enumerate(dataset):
-            predicted, msk = train_step(images, masks)
+            predicted, msk = train_step(images, masks, i == 0)
             acc_metric.update_state(msk, predicted)
-            print('Batch: {}, Accuracy: {}'.format(i, acc_metric.result().numpy()))
+            if hvd.rank() == 0:
+                print('Batch: {}, Accuracy: {}'.format(
+                    i, acc_metric.result().numpy()))
 
-            if i % 10:
-                save_images(output_path / 'epoch_{}_{}.png'.format(epoch, i), images.numpy(), masks.numpy(), predicted.numpy())
-
-        # Print metrics
-        loss_value = loss_metric.result().numpy()
-
-        print('Epoch {}, Loss: {}'.format(epoch, loss_value))
-        model_file = output_path / 'model.h5'
-        model.save(model_file)
+        if hvd.rank() == 0:
+            # Print metrics
+            loss_value = loss_metric.result().numpy()
+            print('Epoch {}, Loss: {}'.format(epoch, loss_value))
+            model_file = output_path / 'model.h5'
+            model.save(model_file)
