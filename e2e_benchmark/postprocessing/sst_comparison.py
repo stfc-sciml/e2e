@@ -1,5 +1,6 @@
 import h5py
 import click
+import numpy as np
 import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
@@ -12,13 +13,11 @@ def load_ssts_matchups(sst_file):
     sst_matchups = sst_matchups.rename({name: name.lower() for name in sst_matchups.columns}, axis=1)
 
     ssts_filtered = sst_matchups.copy()
-    # print(all_ssts.shape)
     ssts_filtered['isst_fixed'] = ssts_filtered.isst + 273.15
 
-    # Filter out mis-aligned pixels
+    # Filter out mis-aligned pixels outside of regridding window
     ssts_filtered = ssts_filtered.loc[(ssts_filtered.slat - ssts_filtered.latitude_an).abs() < 0.005]
     ssts_filtered = ssts_filtered.loc[(ssts_filtered.slon - ssts_filtered.longitude_an).abs() < 0.01]
-
     # filter out SST which are filled/not physical
     ssts_filtered = ssts_filtered.loc[ssts_filtered.isst_fixed > MIN_SST]
     # filter out satellite zenith angles less than 55 degrees
@@ -33,16 +32,18 @@ def load_ssts_matchups(sst_file):
 @click.argument('output-dir')
 def main(sst_file, output_dir):
     output_dir = Path(output_dir)
-
-    sst_df = load_ssts_matchups(sst_file)
-
     mask_files = list(Path(output_dir).glob("S3A*.h5"))
 
+    sst_df = load_ssts_matchups(sst_file)
+    # select only the SST matchups we have files for
+    sst_df = sst_df.loc[sst_df.local_file.isin(mask_files)]
+
+    # rename the file names to match the mask file names
     cems_files = sst_df.cems_path.map(lambda x: Path(x).name)
     cems_files = cems_files.map(lambda x: Path(x).with_suffix('.h5'))
 
     sst_df['local_file'] = cems_files
-    sst_df['model_mask'] = 0
+    sst_df['model_mask'] = np.NaN
 
     for file_name in tqdm(mask_files):
         # read the mask from disk
