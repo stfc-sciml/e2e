@@ -1,5 +1,4 @@
 import h5py
-import click
 from pathlib import Path
 from tqdm import tqdm
 import numpy as np
@@ -30,10 +29,6 @@ def reconstruct_from_patches(patches, nx, ny, patch_size: int = PATCH_SIZE):
     return out
 
 
-@click.command()
-@click.argument('model-file')
-@click.argument('data-dir')
-@click.argument('output-dir')
 def main(model_file, data_dir, output_dir):
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -67,7 +62,3 @@ def main(model_file, data_dir, output_dir):
 
         with h5py.File(mask_name, 'w') as handle:
             handle.create_dataset('mask', data=mask)
-
-
-if __name__ == "__main__":
-    main()

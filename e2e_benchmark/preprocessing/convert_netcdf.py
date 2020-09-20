@@ -74,9 +74,6 @@ def convert_netcdf(path: Path, output_path: Path, n_jobs: int = 8):
             pass
 
 
-@click.command()
-@click.argument('input-path')
-@click.argument('output-path')
 def prepare(input_path, output_path):
     input_path = Path(input_path)
 
@@ -87,7 +84,3 @@ def prepare(input_path, output_path):
     output_path.mkdir(exist_ok=True, parents=True)
 
     convert_netcdf(input_path, output_path)
-
-
-if __name__ == "__main__":
-    prepare()

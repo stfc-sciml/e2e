@@ -1,4 +1,4 @@
-import click
+import sys
 import zipfile
 from pathlib import Path
 from functools import partial
@@ -18,14 +18,13 @@ def extract_files(file_names, output_path: Path, n_jobs: int = 8):
         for _ in tqdm(pool.imap_unordered(func, file_names), total=len(file_names)):
             pass
 
-@click.command()
-@click.argument('input-file')
-@click.argument('output-path')
+
 def extract(input_file, output_path):
     input_file = Path(input_file)
 
     if not input_file.exists():
-        click.Abort('The input file {} does not exist!'.format(input_file))
+        print('The input file {} does not exist!'.format(input_file))
+        sys.exit(-1)
 
     with input_file.open('r') as handle:
         file_names = handle.readlines()
@@ -35,6 +34,3 @@ def extract(input_file, output_path):
     output_path.mkdir(exist_ok=True, parents=True)
 
     extract_files(file_names, output_path)
-
-if __name__ == "__main__":
-    extract()
