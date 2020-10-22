@@ -7,4 +7,4 @@ Three datasets are provided with this benchmark. The details of each induvidual 
 |---------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------|
 | one-day | 971          | 599       | Data recorded during a single full orbit cycle of Sentinel-3A. Consists of day and night time examples and images from a wide variety of biomes. |
 | pixbox  | 414          | 243       | A mix of data used as part of a cloud mask validation dataset containing numerous difficult examples across a variety of biomes.                 |
-| ssts    | 100          | 63        | A dataset of products which have been co-aligned with sea surface temperature (SST) buoys. The matching pixels in these products can be used to  |
+| ssts    | 100          | 63        | A dataset of products which have been co-aligned with sea surface temperature (SST) buoys. The matching pixels in these products can be used to validate the quality of cloud masking |
