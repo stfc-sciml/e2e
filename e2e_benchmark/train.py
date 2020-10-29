@@ -2,6 +2,8 @@ import tensorflow as tf
 import horovod.tensorflow as hvd
 from pathlib import Path
 
+from e2e_benchmark.monitor.logger import MultiLevelLogger
+from e2e_benchmark.monitor.monitors import RuntimeMonitor
 from e2e_benchmark.data_loader import SLSTRDataLoader
 from e2e_benchmark.model import unet
 
@@ -26,13 +28,16 @@ def weighted_cross_entropy(beta):
 
 
 def train_model(data_path: Path, output_path: Path, user_argv: dict):
+    logger = MultiLevelLogger(output_path / 'training_log.txt')
+    hvd.init()
+
     learning_rate = user_argv['learning_rate']
     epochs = user_argv['epochs']
     batch_size = user_argv['batch_size']
     wbce = user_argv['wbce']
     clip_offset = user_argv['clip_offset']
 
-    hvd.init()
+    # Pin the number of GPUs to the local rank for Horovod
     gpus = tf.config.experimental.list_physical_devices('GPU')
     for gpu in gpus:
         tf.config.experimental.set_memory_growth(gpu, True)
@@ -40,19 +45,31 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
         tf.config.experimental.set_visible_devices(
             gpus[hvd.local_rank()], 'GPU')
 
+    # Setup runtime monitoring to track metrics, parameters & system usage
+    monitor = RuntimeMonitor(path=output_path / 'train_log.pkl')
+    monitor.start()
+
+    if hvd.rank() == 0:
+        logger.message(f"Num GPUS: {len(gpus)}")
+        logger.message(f"Num ranks: {hvd.size()}")
+        monitor.report('user_args', user_argv)
+
+    # Get the data loader
     train_data_loader = SLSTRDataLoader(data_path, batch_size=batch_size)
+    train_dataset = train_data_loader.to_dataset()
 
     model = unet(train_data_loader.input_size)
 
+    # Setup the loss functions and optimizer
     optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
     bce = weighted_cross_entropy(wbce)
     model.compile(optimizer=optimizer,
                   loss='binary_crossentropy', metrics=['accuracy'])
 
-    dataset = train_data_loader.to_dataset()
-
     loss_metric = tf.keras.metrics.Mean()
     acc_metric = tf.keras.metrics.BinaryAccuracy()
+
+    if hvd.rank() == 0: logger.begin("Training Loop")
 
     @tf.function
     def train_step(images, masks, first_batch=False):
@@ -84,22 +101,64 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
 
         return predicted, masks
 
+    # Start monitoring of device resources for each node
+    if gpus:
+        device_log_file = output_path / f'device_{hvd.rank()}.pkl'
+        dev_monitor = monitor.device_monitor(device_log_file, index=hvd.rank(), interval=1)
+        dev_monitor.start()
+
+    # Start monitoring wall time of training
+    if hvd.rank() == 0: monitor.start_timer(name='training_time')
+
+    # Start monitoring system resources for each node
+    if hvd.local_rank() == 0:
+        sys_log_file = output_path / f'node_{hvd.local_rank()}.pkl'
+        sys_monitor = monitor.system_monitor(sys_log_file, interval=1)
+        sys_monitor.start()
+
     for epoch in range(epochs):
         # Clear epoch metrics
         loss_metric.reset_states()
         acc_metric.reset_states()
 
+        if hvd.rank() == 0:
+            logger.begin(f"Epoch {epoch}")
+            monitor.start_timer(name=f'epoch_{epoch}_time')
+
         # Train model
-        for i, (images, masks) in enumerate(dataset):
+        for i, (images, masks) in enumerate(train_dataset):
             predicted, msk = train_step(images, masks, i == 0)
             acc_metric.update_state(msk, predicted)
             if hvd.rank() == 0:
-                print('Batch: {}, Accuracy: {}'.format(
-                    i, acc_metric.result().numpy()))
+                message = f'Batch: {i}, Loss: {loss_metric.result().numpy(): .5f}'
+                logger.message(message)
 
+        # Log Epoch Results
         if hvd.rank() == 0:
+            monitor.stop_timer(name=f'epoch_{epoch}_time')
+            logger.ended("Epoch")
+
             # Print metrics
-            loss_value = loss_metric.result().numpy()
-            print('Epoch {}, Loss: {}'.format(epoch, loss_value))
+            loss = loss_metric.result().numpy()
+            accuracy = acc_metric.result().numpy()
+
+            message = f'Epoch {epoch}, Loss: {loss:.5f} Train Acc: {accuracy: .2f}'
+            logger.message(message)
+
+            # Save model
             model_file = output_path / 'model.h5'
             model.save(model_file)
+
+            monitor.report(f'epoch_{epoch}', dict(accuracy=accuracy, epoch=epoch, loss=loss))
+
+    # Stop monitors
+    if hvd.rank() == 0:
+        logger.ended("Training Loop")
+        monitor.stop_timer(name='training_time')
+
+    if hvd.local_rank() == 0:
+        sys_monitor.stop()
+
+    if gpus:
+        dev_monitor.stop()
+    monitor.stop()

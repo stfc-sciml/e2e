@@ -7,6 +7,8 @@ from pathlib import Path
 from multiprocessing import Pool
 from skimage.transform import resize
 from e2e_benchmark.constants import IMAGE_H, IMAGE_W
+from e2e_benchmark.monitor.logger import MultiLevelLogger
+from e2e_benchmark.monitor.monitors import RuntimeMonitor
 from e2e_benchmark.preprocessing.image import ImageLoader
 
 
@@ -65,16 +67,31 @@ def do_conversion(path: Path, output_path: Path):
         handle.create_dataset("summary", data=summary)
 
 
-def convert_netcdf(path: Path, output_path: Path, n_jobs: int = 8):
+def convert_to_hdf(path: Path, output_path: Path, n_jobs: int = 8):
     paths = list(path.glob('**/*.SEN3'))
 
+    logger = MultiLevelLogger(output_path / 'preprocessing_logs.txt')
+
+    monitor = RuntimeMonitor(output_path / 'preprocessing_logs.pkl')
+    monitor.start()
+    monitor.start_timer('preprocessing_time')
+
+    sys_monitor = monitor.system_monitor(output_path / 'preprocessing_system_logs.pkl', interval=1)
+    sys_monitor.start()
+
+    logger.begin('Preprocessing raw SLSTR products')
     func = partial(do_conversion, output_path=output_path)
     with Pool(processes=n_jobs) as pool:
-        for _ in tqdm(pool.imap_unordered(func, paths), total=len(paths)):
-            pass
+        for _, path in tqdm(zip(pool.imap_unordered(func, paths), paths), total=len(paths)):
+            logger.message(f'Finished processing {path}')
+
+    logger.ended('Preprocessing raw SLSTR products')
+    monitor.end_timer('preprocessing_time')
+    sys_monitor.end()
+    monitor.end()
 
 
-def prepare(input_path, output_path):
+def prepare(input_path: Path, output_path: Path):
     input_path = Path(input_path)
 
     if not input_path.exists():
@@ -83,4 +100,4 @@ def prepare(input_path, output_path):
     output_path = Path(output_path)
     output_path.mkdir(exist_ok=True, parents=True)
 
-    convert_netcdf(input_path, output_path)
+    convert_to_hdf(input_path, output_path)

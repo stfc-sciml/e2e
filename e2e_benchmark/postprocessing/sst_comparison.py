@@ -1,5 +1,4 @@
 import h5py
-import click
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -7,6 +6,8 @@ from tqdm import tqdm
 
 from sklearn.metrics import accuracy_score
 from e2e_benchmark.constants import MIN_SST
+from e2e_benchmark.monitor.logger import MultiLevelLogger
+from e2e_benchmark.monitor.monitors import RuntimeMonitor
 
 
 class AlgorithmType:
@@ -42,7 +43,7 @@ def load_ssts_matchups(sst_file):
     # filter out satellite zenith angles less than 55 degrees
     ssts_filtered = ssts_filtered.loc[(ssts_filtered.satzan <= 55) & (ssts_filtered.satzao <= 55)]
     # filter out quality < 5
-    # ssts_filtered = ssts_filtered.loc[ssts_filtered.quality_level == 5]
+    ssts_filtered = ssts_filtered.loc[ssts_filtered.quality_level == 5]
     return ssts_filtered
 
 
@@ -70,13 +71,20 @@ def get_sst_diff(df, method):
     return diff, sst_s, sst_i
 
 
-@click.command()
-@click.argument('sst-file')
-@click.argument('output-dir')
-def main(sst_file, output_dir):
+def main(sst_file: Path, output_dir: Path):
     output_dir = Path(output_dir)
+
+    logger = MultiLevelLogger(output_dir / 'sst_comparison.pkl')
     mask_files = list(Path(output_dir).glob("S3A*.h5"))
     mask_file_names = list(map(lambda x: x.name, mask_files))
+
+    monitor = RuntimeMonitor(output_dir / 'inference_logs.pkl')
+    monitor.start()
+
+    # Start system and  device monitor
+    sys_monitor = monitor.system_monitor(output_dir / 'sst_system_logs.pkl', interval=1)
+    sys_monitor.start()
+    monitor.start_timer(name='sst_inference_time')
 
     sst_df = load_ssts_matchups(sst_file)
 
@@ -90,6 +98,8 @@ def main(sst_file, output_dir):
     # select only the SST matchups we have files for
     sst_df = sst_df.loc[sst_df.local_file.isin(mask_file_names)]
 
+    logger.begin('Load SST Match-up Pixels')
+
     for file_name in tqdm(mask_files):
         # read the mask from disk
         with h5py.File(file_name, 'r') as handle:
@@ -98,29 +108,40 @@ def main(sst_file, output_dir):
         subset = sst_df.loc[sst_df.local_file == file_name.name]
         values = mask[0, subset.y_cems, subset.x_cems]
         sst_df.loc[sst_df.local_file == file_name.name, 'model_mask'] = values
+        logger.message(f'Found {len(subset)} match-up pixels for {file_name}')
+
+    logger.ended('Load SST Match-up Pixels')
+    logger.begin('Summary')
 
     # find difference between Bayesian mask and SST ground truth
+    # For the Bayesian mask it is standard to only keep pixels below .9 probability that this is cloud
     bayes_ssts = sst_df.loc[(sst_df.pcloudn < .9) & (sst_df.pcloudo < .9)]
     diff, sst_s, sst_i = get_sst_diff(bayes_ssts, 2)
-    median = diff.median()
-    RSD = robust_std(diff)
-
-    print("Bayesian median {:.4f}".format(median))
-    print("Bayesian RSD {:.4f}".format(RSD))
+    bayes_median = diff.median()
+    bayes_RSD = robust_std(diff)
 
     # find difference between UNet mask and SST ground truth
     unet_ssts = sst_df.loc[sst_df.model_mask < .5]
     diff, sst_s, sst_i = get_sst_diff(unet_ssts, 2)
-    median = diff.median()
-    RSD = robust_std(diff)
-
-    print("UNet median {:.4f}".format(median))
-    print("UNet RSD {:.4f}".format(RSD))
-
+    unet_median = diff.median()
+    unet_RSD = robust_std(diff)
     bayes_unet_agreement = accuracy_score(sst_df.model_mask > .5, sst_df.bayes_in > .5)
-    print("Bayes/UNet Mask Agreement: {:.2f}".format(bayes_unet_agreement))
+
+    logger.message("Bayesian median {:.4f}".format(bayes_median))
+    logger.message("Bayesian RSD {:.4f}".format(bayes_RSD))
+    logger.message("UNet median {:.4f}".format(unet_median))
+    logger.message("UNet RSD {:.4f}".format(unet_RSD))
+    logger.message("Bayes/UNet Mask Agreement: {:.2f}".format(bayes_unet_agreement))
+
+    monitor.report('bayes', dict(bayes_median=bayes_median, bayes_RSD=bayes_RSD))
+    monitor.report('unet', dict(unet_median=unet_median, unet_RSD=unet_RSD))
+    logger.ended('Summary')
 
     sst_df.to_hdf(output_dir / 'sst_predictions.h5', key='data')
+
+    monitor.end_timer(name='sst_inference_time')
+    sys_monitor.end()
+    monitor.end()
 
 
 if __name__ == "__main__":
