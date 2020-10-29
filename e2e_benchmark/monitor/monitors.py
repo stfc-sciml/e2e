@@ -6,6 +6,17 @@ from pathlib import Path
 import pickle
 
 
+def load_logs(path):
+    with open(path, 'rb') as handle:
+        logs = []
+        while True:
+            try:
+                logs.append(pickle.load(handle))
+            except EOFError:
+                break
+        return logs
+
+
 class RuntimeMonitor:
 
     def __init__(self, path):

@@ -31,15 +31,14 @@ def reconstruct_from_patches(patches, nx, ny, patch_size: int = PATCH_SIZE):
 
 def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
     CROP_SIZE = user_argv['crops_size']
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     logger = MultiLevelLogger(output_dir / 'inference_logs.txt')
 
     monitor = RuntimeMonitor(output_dir / 'inference_logs.pkl')
     monitor.start()
     monitor.report('user_args', user_argv)
-
-    output_dir = Path(output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
 
     model = tf.keras.models.load_model(model_file)
     file_paths = list(Path(data_dir).glob('**/S3A*.hdf'))

@@ -2,16 +2,7 @@ import pickle
 import time
 import numpy as np
 import tensorflow as tf
-from e2e_benchmark.monitor.monitors import RuntimeMonitor, SystemMonitor
-
-
-def load_logs(path):
-    with open(path, 'rb') as handle:
-        while True:
-            try:
-                yield pickle.load(handle)
-            except EOFError:
-                break
+from e2e_benchmark.monitor.monitors import RuntimeMonitor, SystemMonitor, load_logs
 
 
 def test_runtime_monitor_report(tmp_path):

@@ -14,4 +14,5 @@ pytest
 tqdm
 xarray
 h5netcdf
-pytables
+tables
+pandas
