@@ -55,6 +55,7 @@ def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
 
     sys_monitor.start()
     device_monitor.start()
+    monitor.start_timer(name='inference_time')
 
     logger.begin('Inference Loop')
     for file_name, (patches, _) in tqdm(zip(file_paths, dataset), total=len(file_paths)):
@@ -79,6 +80,8 @@ def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
             handle.create_dataset('mask', data=mask)
 
     logger.ended('Inference Loop')
+
+    monitor.end_timer(name='inference_time')
     sys_monitor.end()
     device_monitor.end()
     monitor.end()
