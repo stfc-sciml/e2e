@@ -33,12 +33,17 @@ class MultiLevelLogger:
         self._timers = []
         self._current_level = 0
         self._indent_fill = indent_fill
-        file_handler = logging.FileHandler(path)
+
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(logging.INFO)
+
+        file_handler = logging.FileHandler(path, 'w')
         file_handler.setLevel(logging.INFO)
 
-        self._logger = logging.getLogger('test')
+        self._logger = logging.getLogger('MultiLevelLogger')
         self._logger.setLevel(logging.INFO)
         self._logger.addHandler(file_handler)
+        self._logger.addHandler(stream_handler)
 
     def begin(self, proc_name: str):
         """Begin logging a sub-process
