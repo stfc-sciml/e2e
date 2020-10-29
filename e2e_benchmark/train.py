@@ -1,6 +1,10 @@
+from os.path import split
+
 import tensorflow as tf
 import horovod.tensorflow as hvd
 from pathlib import Path
+
+from sklearn.model_selection import train_test_split
 
 from e2e_benchmark.monitor.logger import MultiLevelLogger
 from e2e_benchmark.monitor.monitors import RuntimeMonitor
@@ -55,8 +59,14 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
         monitor.report('user_args', user_argv)
 
     # Get the data loader
-    train_data_loader = SLSTRDataLoader(data_path, batch_size=batch_size)
+    data_paths = list(Path(data_path).glob('**/S3A*.hdf'))
+    train_paths, test_paths = train_test_split(data_paths, train_size=.6, random_state=42)
+
+    train_data_loader = SLSTRDataLoader(train_paths, batch_size=batch_size)
     train_dataset = train_data_loader.to_dataset()
+
+    test_data_loader = SLSTRDataLoader(test_paths, batch_size=batch_size)
+    test_dataset = test_data_loader.to_dataset()
 
     model = unet(train_data_loader.input_size)
 
@@ -66,8 +76,11 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
     model.compile(optimizer=optimizer,
                   loss='binary_crossentropy', metrics=['accuracy'])
 
-    loss_metric = tf.keras.metrics.Mean()
-    acc_metric = tf.keras.metrics.BinaryAccuracy()
+    train_loss_metric = tf.keras.metrics.Mean()
+    train_acc_metric = tf.keras.metrics.BinaryAccuracy()
+
+    test_loss_metric = tf.keras.metrics.Mean()
+    test_acc_metric = tf.keras.metrics.BinaryAccuracy()
 
     if hvd.rank() == 0: logger.begin("Training Loop")
 
@@ -80,7 +93,7 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
             masks = masks[:, clip_offset:-
                           clip_offset, clip_offset:-clip_offset]
             loss = bce(masks, predicted)
-            loss_metric.update_state(loss)
+            train_loss_metric.update_state(loss)
 
         tape = hvd.DistributedGradientTape(tape)
         gradients = tape.gradient(
@@ -101,6 +114,17 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
 
         return predicted, masks
 
+    @tf.function
+    def test_step(images, masks, first_batch=False):
+        predicted = model(images)
+        predicted = predicted[:, clip_offset:-
+        clip_offset, clip_offset:-clip_offset]
+        masks = masks[:, clip_offset:-
+        clip_offset, clip_offset:-clip_offset]
+        loss = bce(masks, predicted)
+        test_loss_metric.update_state(loss)
+        return predicted, masks
+
     # Start monitoring of device resources for each node
     if gpus:
         device_log_file = output_path / f'device_{hvd.rank()}.pkl'
@@ -118,38 +142,59 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
 
     for epoch in range(epochs):
         # Clear epoch metrics
-        loss_metric.reset_states()
-        acc_metric.reset_states()
+        train_loss_metric.reset_states()
+        train_acc_metric.reset_states()
+
+        test_loss_metric.reset_states()
+        test_acc_metric.reset_states()
 
         if hvd.rank() == 0:
             logger.begin(f"Epoch {epoch}")
+            logger.begin("Training")
             monitor.start_timer(name=f'epoch_{epoch}_time')
 
         # Train model
         for i, (images, masks) in enumerate(train_dataset):
             predicted, msk = train_step(images, masks, i == 0)
-            acc_metric.update_state(msk, predicted)
+            train_acc_metric.update_state(msk, predicted)
             if hvd.rank() == 0:
-                message = f'Batch: {i}, Loss: {loss_metric.result().numpy(): .5f}'
+                message = f'Batch: {i}, Train Loss: {train_loss_metric.result().numpy(): .5f}'
+                logger.message(message)
+
+        if hvd.rank() == 0:
+            logger.ended("Training")
+            logger.begin("Testing")
+
+        # Test model
+        for i, (images, masks) in enumerate(test_dataset):
+            predicted, msk = test_step(images, masks, i == 0)
+            test_acc_metric.update_state(msk, predicted)
+            if hvd.rank() == 0:
+                message = f'Batch: {i}, Test Loss: {test_loss_metric.result().numpy(): .5f}'
                 logger.message(message)
 
         # Log Epoch Results
         if hvd.rank() == 0:
             monitor.stop_timer(name=f'epoch_{epoch}_time')
+            logger.ended('Testing')
             logger.ended("Epoch")
 
             # Print metrics
-            loss = loss_metric.result().numpy()
-            accuracy = acc_metric.result().numpy()
+            train_loss = train_loss_metric.result().numpy()
+            train_accuracy = train_acc_metric.result().numpy()
 
-            message = f'Epoch {epoch}, Loss: {loss:.5f} Train Acc: {accuracy: .2f}'
+            test_loss = test_loss_metric.result().numpy()
+            test_accuracy = test_acc_metric.result().numpy()
+
+            message = f'Epoch {epoch}, Train Loss: {train_loss:.5f}, Test Loss: {test_loss:.5f}, Train Acc: {train_accuracy: .2f}, Test Acc: {test_accuracy: .2f}'
             logger.message(message)
 
             # Save model
             model_file = output_path / 'model.h5'
             model.save(model_file)
 
-            monitor.report(f'epoch_{epoch}', dict(accuracy=accuracy, epoch=epoch, loss=loss))
+            monitor.report(f'epoch_{epoch}', dict(train_accuracy=train_accuracy, epoch=epoch, train_loss=train_loss,
+                                                  test_accuracy=test_accuracy, test_loss=test_loss))
 
     # Stop monitors
     if hvd.rank() == 0:
