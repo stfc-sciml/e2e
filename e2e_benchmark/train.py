@@ -25,7 +25,13 @@ def weighted_cross_entropy(beta):
     return loss
 
 
-def train_model(data_path: Path, output_path: Path):
+def train_model(data_path: Path, output_path: Path, user_argv: dict):
+    learning_rate = user_argv['learning_rate']
+    epochs = user_argv['epochs']
+    batch_size = user_argv['batch_size']
+    wbce = user_argv['wbce']
+    clip_offset = user_argv['clip_offset']
+
     hvd.init()
     gpus = tf.config.experimental.list_physical_devices('GPU')
     for gpu in gpus:
@@ -34,14 +40,12 @@ def train_model(data_path: Path, output_path: Path):
         tf.config.experimental.set_visible_devices(
             gpus[hvd.local_rank()], 'GPU')
 
-    epochs = 30
-    batch_size = 32
     train_data_loader = SLSTRDataLoader(data_path, batch_size=batch_size)
 
     model = unet(train_data_loader.input_size)
 
-    optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
-    bce = weighted_cross_entropy(.5)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+    bce = weighted_cross_entropy(wbce)
     model.compile(optimizer=optimizer,
                   loss='binary_crossentropy', metrics=['accuracy'])
 
@@ -54,7 +58,6 @@ def train_model(data_path: Path, output_path: Path):
     def train_step(images, masks, first_batch=False):
         with tf.GradientTape() as tape:
             predicted = model(images)
-            clip_offset = 15
             predicted = predicted[:, clip_offset:-
                                   clip_offset, clip_offset:-clip_offset]
             masks = masks[:, clip_offset:-

@@ -1,3 +1,4 @@
+import os
 import click
 from pathlib import Path
 
@@ -27,7 +28,12 @@ def convert_hdf(input_path, output_path):
 @click.argument('data-path')
 @click.argument('output-path')
 @click.option('--cpu-only', default=False, is_flag=True, type=bool)
-def train(data_path, output_path, cpu_only=False):
+@click.option('--learning-rate', default=0.001)
+@click.option('--epochs', default=30)
+@click.option('--batch-size', default=32)
+@click.option('--wbce', default=.5)
+@click.option('--clip-offset', default=15)
+def train(data_path, output_path, **user_argv):
     data_path = Path(data_path)
 
     if not data_path.exists():
@@ -36,12 +42,11 @@ def train(data_path, output_path, cpu_only=False):
     output_path = Path(output_path)
     output_path.mkdir(exist_ok=True, parents=True)
 
-    if cpu_only:
-        import os
+    if user_argv['cpu_only']:
         os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
     from e2e_benchmark.train import train_model
-    train_model(data_path, output_path)
+    train_model(data_path, output_path, user_argv)
 
 
 @click.command()
