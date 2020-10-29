@@ -1,4 +1,8 @@
-tensorflow-gpu>=2.1.0
+horovod
+psutil
+py-cpuinfo
+pynvml
+tensorflow
 scikit-learn
 scikit-image
 numpy
@@ -10,4 +14,4 @@ pytest
 tqdm
 xarray
 h5netcdf
-tables
+pytables
