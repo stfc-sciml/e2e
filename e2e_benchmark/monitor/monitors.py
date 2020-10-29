@@ -29,7 +29,8 @@ class RuntimeMonitor:
         self._timers[name].start()
 
     def stop_timer(self, name):
-        timer = self._timers[name].pop()
+        timer = self._timers.pop(name)
+        timer.stop()
         self.report(name, timer.elapsed_time())
 
     def system_monitor(self, path, interval):
@@ -80,10 +81,10 @@ class DeviceMonitor(RuntimeMonitor, RepeatedTimer):
         RepeatedTimer.__init__(self, interval)
         RuntimeMonitor.start(self)
         self.spec = DeviceSpec(index)
-        self.report('device_info', self.spec.get_sys_info())
+        self.report('device_info', self.spec.get_device_info())
 
     def _run(self):
-        self.report('device_state', self.spec.get_sys_state())
+        self.report('device_state', self.spec.get_device_state())
 
     def start(self):
         RepeatedTimer.start(self)

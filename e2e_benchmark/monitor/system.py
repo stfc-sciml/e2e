@@ -115,7 +115,7 @@ class DeviceSpec:
             nv.nvmlInit()
             self._handle = nv.nvmlDeviceGetHandleByIndex(index)
         except nv.NVMLError_LibraryNotFound:
-            pass
+            raise RuntimeError(f"Cannot find GPU with index {index}")
 
     @property
     def uuid(self):

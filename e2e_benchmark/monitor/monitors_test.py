@@ -40,6 +40,16 @@ def test_runtime_monitor_report(tmp_path):
             assert log['value'] == expected_value
 
 
+def test_runtime_monitor(tmp_path):
+    report_file = tmp_path / 'report.pkl'
+    monitor = RuntimeMonitor(report_file)
+    monitor.start()
+    monitor.start_timer('wtime')
+    time.sleep(1)
+    monitor.stop_timer('wtime')
+    monitor.stop()
+
+
 def test_system_monitor(tmp_path):
     report_file = tmp_path / 'sys_logs.pkl'
 
