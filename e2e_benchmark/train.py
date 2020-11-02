@@ -60,7 +60,7 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
 
     # Get the data loader
     data_paths = list(Path(data_path).glob('**/S3A*.hdf'))
-    train_paths, test_paths = train_test_split(data_paths, train_size=.6, random_state=42)
+    train_paths, test_paths = train_test_split(data_paths, train_size=user_argv['train_split'], random_state=42)
 
     train_data_loader = SLSTRDataLoader(train_paths, batch_size=batch_size)
     train_dataset = train_data_loader.to_dataset()
