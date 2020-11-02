@@ -66,13 +66,14 @@ class HostSpec:
     def disk_io(self):
         try:
             info = self._process.io_counters()
-            info._asdict()
+            for child in self._process.children(recursive=True):
+                child_info = child.disk_io_counters()
         except AttributeError:
             return {}
 
     @property
     def net_io(self):
-        info = psutil.net_io_counters(pernic=self._per_device)
+        info = self._process.net_io_counters(pernic=self._per_device)
         if self._per_device:
             return {key: {k: v for k, v in value._asdict().items()} for key, value in info.items()}
         else:
@@ -80,7 +81,7 @@ class HostSpec:
 
     @property
     def memory(self):
-        memory_props = dict(psutil.virtual_memory()._asdict())
+        memory_props = dict(self._process.virtual_memory()._asdict())
 
         metrics = {}
         metrics['free'] = bytesto(memory_props['free'], 'm')

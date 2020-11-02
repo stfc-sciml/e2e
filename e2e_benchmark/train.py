@@ -135,10 +135,9 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
     if hvd.rank() == 0: monitor.start_timer(name='training_time')
 
     # Start monitoring system resources for each node
-    if hvd.local_rank() == 0:
-        sys_log_file = output_path / f'node_{hvd.local_rank()}.pkl'
-        sys_monitor = monitor.system_monitor(sys_log_file, interval=1)
-        sys_monitor.start()
+    sys_log_file = output_path / f'train_rank_{hvd.rank()}.pkl'
+    sys_monitor = monitor.system_monitor(sys_log_file, interval=1)
+    sys_monitor.start()
 
     for epoch in range(epochs):
         # Clear epoch metrics
@@ -201,9 +200,9 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
         logger.ended("Training Loop")
         monitor.stop_timer(name='training_time')
 
-    if hvd.local_rank() == 0:
-        sys_monitor.stop()
+    sys_monitor.stop()
 
     if gpus:
         dev_monitor.stop()
+
     monitor.stop()

@@ -6,7 +6,7 @@ from e2e_benchmark import command as cmd
 
 @pytest.fixture()
 def raw_data_dir():
-    return Path('../data/tets_data/pixbox').absolute()
+    return Path('../data/test_data/pixbox').absolute()
 
 
 @pytest.fixture()
