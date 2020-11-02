@@ -1,0 +1,51 @@
+#!/bin/bash
+
+#SBATCH -J PEARLIntelE2E
+#SBATCH -o e2e-%j.out
+#SBATCH -t 01:00:00
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=2
+#SBATCH --gres-flags=enforce-binding
+#SBATCH --ntasks-per-socket=1
+
+# PEARL site specific
+module load singularity OpenMPI/3.1.6-GCC-8.3.0
+
+# check info
+echo "Running on hosts: $SLURM_NODELIST"
+echo "Running on $SLURM_NNODES nodes."
+echo "Running $SLURM_NTASKS tasks."
+
+TRAIN_DATA=/work/data/one-day
+TEST_DATA=/work/data/ssts
+TRAIN_DATA_HDF=/work/data/hdf/one-day
+OUTPUT_DIR=/work/results/run_$SLURM_JOB_ID
+TEST_DATA_HDF=/work/data/hdf/ssts
+SST_FILE=/work/data/ssts/sst_matchups.h5
+MODEL_FILE=$TRAIN_OUTPUT/model.h5
+
+export SINGULARITYENV_PYTHONPATH=/work
+
+set -e
+
+# Convert training & validation data to HDF
+singularity run --nv -B ~/work/intel-e2e-benchmark:/work e2e.sif \
+	python /work/e2e_benchmark/command.py convert-hdf $TRAIN_DATA $TRAIN_DATA_HDF
+
+singularity run --nv -B ~/work/intel-e2e-benchmark:/work e2e.sif \
+	python /work/e2e_benchmark/command.py convert-hdf $SST_DATA $SST_DATA_HDF
+
+# Train model on training data
+singularity run --nv -B ~/work/intel-e2e-benchmark:/work e2e.sif \
+	python /work/e2e_benchmark/command.py train $TRAIN_DATA_HDF $OUTPUT_DIR --epochs 1
+
+# Run inference on test data
+singularity run --nv -B ~/work/intel-e2e-benchmark:/work e2e.sif \
+	python /work/e2e_benchmark/command.py inference $MODEL_FILE $TEST_DATA_HDF $OUTPUT_DIR
+
+# Run SST comparison
+singularity run --nv -B ~/work/intel-e2e-benchmark:/work e2e.sif \
+	python /work/e2e_benchmark/command.py sst-comp $SST_FILE $OUTPUT_DIR
+
