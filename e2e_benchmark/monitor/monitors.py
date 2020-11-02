@@ -1,3 +1,5 @@
+import os
+
 from e2e_benchmark.monitor.system import HostSpec, DeviceSpec
 from e2e_benchmark.monitor.logger import SimpleTimer
 from datetime import datetime

@@ -1,10 +1,7 @@
 import click
 import h5py
 import numpy as np
-from functools import partial
-from tqdm import tqdm
 from pathlib import Path
-from multiprocessing import Pool
 from skimage.transform import resize
 from e2e_benchmark.constants import IMAGE_H, IMAGE_W
 from e2e_benchmark.monitor.logger import MultiLevelLogger
@@ -80,10 +77,9 @@ def convert_to_hdf(path: Path, output_path: Path, n_jobs: int = 8):
     sys_monitor.start()
 
     logger.begin('Preprocessing raw SLSTR products')
-    func = partial(do_conversion, output_path=output_path)
-    with Pool(processes=n_jobs) as pool:
-        for _, path in tqdm(zip(pool.imap_unordered(func, paths), paths), total=len(paths)):
-            logger.message(f'Finished processing {path}')
+    for path in paths:
+        do_conversion(path, output_path=output_path)
+        logger.message(f'Finished processing {path}')
 
     logger.ended('Preprocessing raw SLSTR products')
     monitor.stop_timer('preprocessing_time')
