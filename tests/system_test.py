@@ -6,12 +6,12 @@ from e2e_benchmark import command as cmd
 
 @pytest.fixture()
 def raw_data_dir():
-    return Path('../data/pixbox').absolute()
+    return Path('../data/tets_data/pixbox').absolute()
 
 
 @pytest.fixture()
 def sst_data_dir():
-    return Path('../data/ssts/').absolute()
+    return Path('../data/test_data/ssts/').absolute()
 
 
 def test_commands_end_to_end(raw_data_dir, sst_data_dir):
