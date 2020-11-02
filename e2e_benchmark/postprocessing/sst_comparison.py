@@ -139,9 +139,9 @@ def main(sst_file: Path, output_dir: Path):
 
     sst_df.to_hdf(output_dir / 'sst_predictions.h5', key='data')
 
-    monitor.end_timer(name='sst_inference_time')
-    sys_monitor.end()
-    monitor.end()
+    monitor.stop_timer(name='sst_inference_time')
+    sys_monitor.stop()
+    monitor.stop()
 
 
 if __name__ == "__main__":

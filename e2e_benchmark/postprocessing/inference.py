@@ -30,7 +30,7 @@ def reconstruct_from_patches(patches, nx, ny, patch_size: int = PATCH_SIZE):
 
 
 def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
-    CROP_SIZE = user_argv['crops_size']
+    CROP_SIZE = user_argv['crop_size']
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -51,10 +51,13 @@ def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
 
     # Start system and  device monitor
     sys_monitor = monitor.system_monitor(output_dir / 'inference_system_logs.pkl', interval=1)
-    device_monitor = monitor.device_monitor(output_dir / 'inference_device_logs.pkl', interval=1)
-
     sys_monitor.start()
-    device_monitor.start()
+
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    if gpus:
+        device_monitor = monitor.device_monitor(output_dir / 'inference_device_logs.pkl', interval=1)
+        device_monitor.start()
+
     monitor.start_timer(name='inference_time')
 
     logger.begin('Inference Loop')
@@ -81,7 +84,8 @@ def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
 
     logger.ended('Inference Loop')
 
-    monitor.end_timer(name='inference_time')
-    sys_monitor.end()
-    device_monitor.end()
-    monitor.end()
+    monitor.stop_timer(name='inference_time')
+    sys_monitor.stop()
+    if gpus:
+        device_monitor.stop()
+    monitor.stop()

@@ -68,7 +68,7 @@ def do_conversion(path: Path, output_path: Path):
 
 
 def convert_to_hdf(path: Path, output_path: Path, n_jobs: int = 8):
-    paths = list(path.glob('**/*.SEN3'))
+    paths = list(path.glob('*.SEN3'))
 
     logger = MultiLevelLogger(output_path / 'preprocessing_logs.txt')
 
@@ -86,9 +86,9 @@ def convert_to_hdf(path: Path, output_path: Path, n_jobs: int = 8):
             logger.message(f'Finished processing {path}')
 
     logger.ended('Preprocessing raw SLSTR products')
-    monitor.end_timer('preprocessing_time')
-    sys_monitor.end()
-    monitor.end()
+    monitor.stop_timer('preprocessing_time')
+    sys_monitor.stop()
+    monitor.stop()
 
 
 def prepare(input_path: Path, output_path: Path):

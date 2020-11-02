@@ -8,7 +8,7 @@ def cli():
     pass
 
 
-@click.command()
+@cli.command()
 @click.argument('input-file')
 @click.argument('output-path')
 def extract(input_file, output_path):
@@ -16,7 +16,7 @@ def extract(input_file, output_path):
     extract(input_file, output_path)
 
 
-@click.command()
+@cli.command()
 @click.argument('input-path')
 @click.argument('output-path')
 def convert_hdf(input_path, output_path):
@@ -49,17 +49,17 @@ def train(data_path, output_path, **user_argv):
     train_model(data_path, output_path, user_argv)
 
 
-@click.command()
+@cli.command()
 @click.argument('model-file')
 @click.argument('data-dir')
 @click.argument('output-dir')
 @click.option('--crop-size', default=80)
-def inference(model_file, data_dir, output_dir, user_argv):
+def inference(model_file, data_dir, output_dir, **user_argv):
     from e2e_benchmark.postprocessing.inference import main
     main(model_file, data_dir, output_dir, user_argv)
 
 
-@click.command()
+@cli.command()
 @click.argument('sst-file')
 @click.argument('output-dir')
 def sst_comp(sst_file, output_dir):
