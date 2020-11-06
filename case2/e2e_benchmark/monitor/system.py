@@ -81,7 +81,7 @@ class HostSpec:
 
     @property
     def memory(self):
-        memory_props = dict(self._process.virtual_memory()._asdict())
+        memory_props = dict(psutil.virtual_memory()._asdict())
 
         metrics = {}
         metrics['free'] = bytesto(memory_props['free'], 'm')
