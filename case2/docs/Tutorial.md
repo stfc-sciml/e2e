@@ -1,5 +1,7 @@
 # Pipeline Components
 
+![pipeline](case2/docs/pipeline.png "pipeline")
+
 ### Extraction
  The extraction step unzips the raw data from the CEDA archive. The extraction step takes an input list of file locations on the CEDA archive and will unzip every file in the list to the corresponding output directory. An example of how to run this step is given below:
 
