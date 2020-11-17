@@ -2,6 +2,21 @@
 
 ![pipeline](case2/docs/pipeline.png "pipeline")
 
+### Timings
+
+| Stage                       | Time (s)           |
+|-----------------------------|--------------------|
+| Convert to HDF (Train)      | 9099.09            |
+| Convert to HDF (Validation) | 947.84             |
+| Training (Total 30 epochs)  | 16119.9            |
+| Training (1 Epoch)          | 535.8              |
+| Training (Epoch Train)      | 436.51             |
+| Training (Epoch Test)       | 99.31              |
+| Inference                   | 118.40             |
+| SST Comparision             | 1.10               |
+
+
+
 ### Extraction
  The extraction step unzips the raw data from the CEDA archive. The extraction step takes an input list of file locations on the CEDA archive and will unzip every file in the list to the corresponding output directory. An example of how to run this step is given below:
 
