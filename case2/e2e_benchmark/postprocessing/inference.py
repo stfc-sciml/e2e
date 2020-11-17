@@ -3,6 +3,7 @@ from pathlib import Path
 from tqdm import tqdm
 import numpy as np
 import tensorflow as tf
+import horovod.tensorflow as hvd
 
 from e2e_benchmark.monitor.logger import MultiLevelLogger
 from e2e_benchmark.monitor.monitors import RuntimeMonitor
@@ -30,19 +31,28 @@ def reconstruct_from_patches(patches, nx, ny, patch_size: int = PATCH_SIZE):
 
 
 def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
+    hvd.init()
     CROP_SIZE = user_argv['crop_size']
+
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     logger = MultiLevelLogger(output_dir / 'inference_logs.txt')
 
+    logger.message('Creating monitor') 
     monitor = RuntimeMonitor(output_dir / 'inference_logs.pkl')
     monitor.start()
     monitor.report('user_args', user_argv)
 
-    model = tf.keras.models.load_model(model_file)
-    file_paths = list(Path(data_dir).glob('**/S3A*.hdf'))
+    logger.message('Loading model {}'.format(model_file)) 
+    assert Path(model_file).exists(), "Model file does not exist!"
+    model = tf.keras.models.load_model(str(model_file))
 
+    logger.message('Getting file paths') 
+    file_paths = list(Path(data_dir).glob('**/S3A*.hdf'))
+    assert len(file_paths) > 0, "Could not find any HDF files!"
+
+    logger.message('Preparing data loader') 
     # Create data loader in single image mode. This turns off shuffling and
     # only yields batches of images for a single image at a time so they can be
     # reconstructed.
@@ -55,7 +65,7 @@ def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
 
     gpus = tf.config.experimental.list_physical_devices('GPU')
     if gpus:
-        device_monitor = monitor.device_monitor(output_dir / 'inference_device_logs.pkl', interval=1)
+        device_monitor = monitor.device_monitor(output_dir / 'inference_device_logs.pkl', hvd.local_rank(), interval=1)
         device_monitor.start()
 
     monitor.start_timer(name='inference_time')
