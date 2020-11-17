@@ -1,8 +1,10 @@
 # Pipeline Components
 
 ![pipeline](case2/docs/pipeline.png "pipeline")
+Diagram of the full end-to-end workflow of the benchmark. Red components indicate the artifacts input or output from each stage. Blue components indicate a step in the processing workflow.
 
 ### Timings
+Rough timings for a single run of each stage on an single DGX-2 node with a single v100 GPU.
 
 | Stage                       | Time (s)           |
 |-----------------------------|--------------------|
