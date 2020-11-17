@@ -3,6 +3,9 @@
 ![pipeline](case2/docs/pipeline.png "pipeline")
 Diagram of the full end-to-end workflow of the benchmark. Red components indicate the artifacts input or output from each stage. Blue components indicate a step in the processing workflow.
 
+### Software
+The benchmark is written in pure python code. The preprocessing scripts make use of the NetCDF, H5py, and scikit-image libraries pre-processing the imagry. The network uses a U-Net style architecture with 9 channels as input (6 channels reflectance, 3 channels brightness temperature) and a single channel binary output. This network is writting in Tensorflow 2.0.
+
 ### Timings
 Rough timings for a single run of each stage on an single DGX-2 node with a single v100 GPU.
 
@@ -16,6 +19,7 @@ Rough timings for a single run of each stage on an single DGX-2 node with a sing
 | Training (Epoch Test)       | 99.31              |
 | Inference                   | 118.40             |
 | SST Comparision             | 1.10               |
+| **Total**                   | 27357.95           |
 
 
 
@@ -28,14 +32,14 @@ python -m e2e_benchmark.command extract file_list.txt extracted_files
 
 ### HDF Conversion
 
-The HDF conversion converts the raw data files into a stand alone HDF file. This collects all of the brightness temperature channels, radiance channels, and product masks into a single file. This step is neccesary to cut down the number of I/O calls during training. This step also converts the radiance channels to reflectance values. Finally, the data will be split into day and night time image folders. An example of how to run this step is given below:
+The HDF conversion converts the raw NetCDF files into a stand alone HDF file. This collects all of the brightness temperature channels, radiance channels, and product masks into a single file. This step is neccesary to cut down the number of I/O calls during training. This step also converts the radiance channels to reflectance values and resizes the images to a common size. Finally, the data will be split into day and night time image folders. An example of how to run this step is given below:
 
 ```bash
 python -m e2e_benchmark.command convert_hdf extracted_files hdf_files
 ```
 
 ## Training
-To train the model you will need to have performed both preprocessing tasks and should now have a folder to HDF files ready. The input parameters for the model training are the folder of HDF files and an output path to save the model to.
+To train the model you will need to have performed both preprocessing tasks and should now have a folder to HDF files ready. The input parameters for the model training are the folder of HDF files and an output path to save the model to. This will run the U-net like model with each of the images in the input folder. The input images will be automatically split into a training & test set.
 
 ```bash
 python -m e2e_benchmark.command train hdf_files model_output
