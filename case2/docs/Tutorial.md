@@ -1,8 +1,4 @@
-# Tutorial
-
-## Pre-processing
-
-The preprocessing component of the pipeline consists of two stages, extraction and HDF conversion. 
+# Pipeline Components
 
 ### Extraction
  The extraction step unzips the raw data from the CEDA archive. The extraction step takes an input list of file locations on the CEDA archive and will unzip every file in the list to the corresponding output directory. An example of how to run this step is given below:
@@ -27,9 +23,6 @@ python -m e2e_benchmark.command train hdf_files model_output
 ```
 
 To run the model in CPU only mode you can pass the additional flag `--cpu-only`.
-
-## Post-processing
-There are two post-processing steps in the pipeline: inference and sst comparison.
 
 ### Inference
 After the model has been trained you can run it on a set of test images using the inference command. The inference command takes three arguments:
