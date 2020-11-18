@@ -9,17 +9,20 @@ The benchmark is written in pure python code. The preprocessing scripts make use
 ### Timings
 Rough timings for a single run of each stage on an single DGX-2 node with a single v100 GPU.
 
-| Stage                       | Time (s)           |
-|-----------------------------|--------------------|
-| Convert to HDF (Train)      | 9099.09            |
-| Convert to HDF (Validation) | 947.84             |
-| Training (Total 30 epochs)  | 16119.9            |
-| Training (1 Epoch)          | 535.8              |
-| Training (Epoch Train)      | 436.51             |
-| Training (Epoch Test)       | 99.31              |
-| Inference                   | 118.40             |
-| SST Comparision             | 1.10               |
-| **Total**                   | 27357.95           |
+| Stage                       | Time (s)           | Notes                                       |
+|-----------------------------|--------------------|---------------------------------------------|
+| Convert to HDF (Train)      | 9099.09            |                                             |
+| Convert to HDF (Validation) | 947.84             |                                             |
+| Training (Total 30 epochs)  | 4674.06            |                                             |
+| Training (1 Epoch)          | 142.89             | Time after tf.data.Dataset.cache            |
+| Training (1 Epoch Train)    | 124.19             | Time after tf.data.Dataset.cache            |
+| Training (1 Epoch Test)     | 18.70              | Time after tf.data.Dataset.cache            |
+| Training (1st Epoch)        | 530.04             | Time before tf.data.Dataset.cache           |
+| Training (1st Epoch Train)  | 431.11             | Time before tf.data.Dataset.cache           |
+| Training (1st Epoch Test)   | 98.92              | Time before tf.data.Dataset.cache           |
+| Inference                   | 118.40             |                                             |
+| SST Comparision             | 1.10               |                                             |
+| **Total**                   | 27357.95           |                                             |
 
 
 
@@ -45,7 +48,13 @@ To train the model you will need to have performed both preprocessing tasks and 
 python -m e2e_benchmark.command train hdf_files model_output
 ```
 
-To run the model in CPU only mode you can pass the additional flag `--cpu-only`.
+To run the model in CPU only mode you can pass the additional flag `--cpu-only`. 
+
+As part of a the data loading the following operations will be performed:
+
+ - Image normaisation of each channel
+ - Conversion from full (1500x1200) resolution to patches (512x512).
+ - Cache these operations in memory using `tf.data.Dataset.cache`
 
 ### Inference
 After the model has been trained you can run it on a set of test images using the inference command. The inference command takes three arguments:
