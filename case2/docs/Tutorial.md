@@ -7,7 +7,7 @@ Diagram of the full end-to-end workflow of the benchmark. Red components indicat
 The benchmark is written in pure python code. The preprocessing scripts make use of the NetCDF, H5py, and scikit-image libraries pre-processing the imagry. The network uses a U-Net style architecture with 9 channels as input (6 channels reflectance, 3 channels brightness temperature) and a single channel binary output. This network is written in Tensorflow 2.0. A full list of software requirements can be found in the [requirements.txt](case2/requirements.txt)
 
 ### Timings
-Rough timings for a single run of each stage on an single DGX-2 node with a single v100 GPU.
+Rough timings for a single run of each stage on an single DGX-2 node with a single v100 GPU. *Note*: This implementation uses `tf.data.Dataset.cache` to store loaded data in memory after loading, so the first epoch takes longer than all subsequent epochs. The difference in time is noted below.
 
 | Stage                       | Time (s)           | Notes                                       |
 |-----------------------------|--------------------|---------------------------------------------|
