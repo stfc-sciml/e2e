@@ -22,7 +22,7 @@ Rough timings for a single run of each stage on an single DGX-2 node with a sing
 | Training (1st Epoch Test)   | 98.92              | Time before tf.data.Dataset.cache           |
 | Inference                   | 118.40             |                                             |
 | SST Comparision             | 1.10               |                                             |
-| **Total**                   | 27357.95           |                                             |
+| **Total**                   | 14840.49           |                                             |
 
 
 
