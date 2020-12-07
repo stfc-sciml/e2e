@@ -5,7 +5,6 @@ from pathlib import Path
 from skimage.transform import resize
 from e2e_benchmark.constants import IMAGE_H, IMAGE_W
 from e2e_benchmark.monitor.logger import MultiLevelLogger
-from e2e_benchmark.monitor.monitors import RuntimeMonitor
 from e2e_benchmark.preprocessing.image import ImageLoader
 
 
@@ -69,22 +68,12 @@ def convert_to_hdf(path: Path, output_path: Path, n_jobs: int = 8):
 
     logger = MultiLevelLogger(output_path / 'preprocessing_logs.txt')
 
-    monitor = RuntimeMonitor(output_path / 'preprocessing_logs.pkl')
-    monitor.start()
-    monitor.start_timer('preprocessing_time')
-
-    sys_monitor = monitor.system_monitor(output_path / 'preprocessing_system_logs.pkl', interval=1)
-    sys_monitor.start()
-
     logger.begin('Preprocessing raw SLSTR products')
     for path in paths:
         do_conversion(path, output_path=output_path)
         logger.message(f'Finished processing {path}')
 
     logger.ended('Preprocessing raw SLSTR products')
-    monitor.stop_timer('preprocessing_time')
-    sys_monitor.stop()
-    monitor.stop()
 
 
 def prepare(input_path: Path, output_path: Path):

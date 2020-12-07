@@ -3,13 +3,16 @@ from os.path import split
 import tensorflow as tf
 import horovod.tensorflow as hvd
 from pathlib import Path
+import pickle
+import yaml
+from collections import defaultdict
 
 from sklearn.model_selection import train_test_split
 
-from e2e_benchmark.monitor.logger import MultiLevelLogger
-from e2e_benchmark.monitor.monitors import RuntimeMonitor
 from e2e_benchmark.data_loader import SLSTRDataLoader
 from e2e_benchmark.model import unet
+
+from case2.e2e_benchmark.monitor.logger import MultiLevelLogger
 
 
 def weighted_cross_entropy(beta):
@@ -49,14 +52,12 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
         tf.config.experimental.set_visible_devices(
             gpus[hvd.local_rank()], 'GPU')
 
-    # Setup runtime monitoring to track metrics, parameters & system usage
-    monitor = RuntimeMonitor(path=output_path / 'train_log.pkl')
-    monitor.start()
+    user_argv['num_ranks'] = hvd.size()
+    user_argv['num_gpus'] = len(gpus)
 
     if hvd.rank() == 0:
         logger.message(f"Num GPUS: {len(gpus)}")
         logger.message(f"Num ranks: {hvd.size()}")
-        monitor.report('user_args', user_argv)
 
     # Get the data loader
     data_paths = list(Path(data_path).glob('**/S3A*.hdf'))
@@ -125,20 +126,7 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
         test_loss_metric.update_state(loss)
         return predicted, masks
 
-    # Start monitoring of device resources for each node
-    if gpus:
-        device_log_file = output_path / f'device_{hvd.rank()}.pkl'
-        dev_monitor = monitor.device_monitor(device_log_file, index=hvd.rank(), interval=1)
-        dev_monitor.start()
-
-    # Start monitoring wall time of training
-    if hvd.rank() == 0: monitor.start_timer(name='training_time')
-
-    # Start monitoring system resources for each node
-    sys_log_file = output_path / f'train_rank_{hvd.rank()}.pkl'
-    sys_monitor = monitor.system_monitor(sys_log_file, interval=1)
-    sys_monitor.start()
-
+    history = defaultdict(list)
     for epoch in range(epochs):
         # Clear epoch metrics
         train_loss_metric.reset_states()
@@ -150,7 +138,6 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
         if hvd.rank() == 0:
             logger.begin(f"Epoch {epoch}")
             logger.begin("Training")
-            monitor.start_timer(name=f'epoch_{epoch}_time')
 
         # Train model
         for i, (images, masks) in enumerate(train_dataset):
@@ -174,7 +161,6 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
 
         # Log Epoch Results
         if hvd.rank() == 0:
-            monitor.stop_timer(name=f'epoch_{epoch}_time')
             logger.ended('Testing')
             logger.ended("Epoch")
 
@@ -192,17 +178,19 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
             model_file = output_path / 'model.h5'
             model.save(model_file)
 
-            monitor.report(f'epoch_{epoch}', dict(train_accuracy=train_accuracy, epoch=epoch, train_loss=train_loss,
-                                                  test_accuracy=test_accuracy, test_loss=test_loss))
+            # capture metrics
+            history['train_accuracy'].append(train_accuracy)
+            history['train_loss'].append(train_loss)
+            history['test_accuracy'].append(test_accuracy)
+            history['test_loss'].append(test_loss)
 
-    # Stop monitors
     if hvd.rank() == 0:
         logger.ended("Training Loop")
-        monitor.stop_timer(name='training_time')
 
-    sys_monitor.stop()
+        # Save history metrics
+        with (output_path / 'history.pkl').open('wb') as handle:
+            pickle.dump(history, handle)
 
-    if gpus:
-        dev_monitor.stop()
-
-    monitor.stop()
+        # Save parameters
+        with (output_path / 'train_params.yml').open('w') as handle:
+            yaml.dump(user_argv, handle)

@@ -51,9 +51,9 @@ def train(data_path, output_path, **user_argv):
 
 
 @cli.command()
-@click.argument('model-file')
 @click.argument('data-dir')
 @click.argument('output-dir')
+@click.option('--model-file', default=None)
 @click.option('--crop-size', default=80)
 def inference(model_file, data_dir, output_dir, **user_argv):
     from e2e_benchmark.postprocessing.inference import main

@@ -1,12 +1,11 @@
 import h5py
+import yaml
 from pathlib import Path
-from tqdm import tqdm
 import numpy as np
 import tensorflow as tf
 import horovod.tensorflow as hvd
 
 from e2e_benchmark.monitor.logger import MultiLevelLogger
-from e2e_benchmark.monitor.monitors import RuntimeMonitor
 from e2e_benchmark.data_loader import SLSTRDataLoader
 from e2e_benchmark.constants import PATCH_SIZE, N_CHANNELS, IMAGE_H, IMAGE_W
 
@@ -39,12 +38,11 @@ def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
 
     logger = MultiLevelLogger(output_dir / 'inference_logs.txt')
 
-    logger.message('Creating monitor') 
-    monitor = RuntimeMonitor(output_dir / 'inference_logs.pkl')
-    monitor.start()
-    monitor.report('user_args', user_argv)
+    # If not model provided, try to load it from the output folder
+    if model_file is None:
+        model_file = Path(output_dir / 'model.h5')
 
-    logger.message('Loading model {}'.format(model_file)) 
+    logger.message('Loading model {}'.format(model_file))
     assert Path(model_file).exists(), "Model file does not exist!"
     model = tf.keras.models.load_model(str(model_file))
 
@@ -59,19 +57,23 @@ def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
     data_loader = SLSTRDataLoader(file_paths, single_image=True, crop_size=CROP_SIZE)
     dataset = data_loader.to_dataset()
 
-    # Start system and  device monitor
-    sys_monitor = monitor.system_monitor(output_dir / 'inference_system_logs.pkl', interval=1)
-    sys_monitor.start()
-
+    # Pin the number of GPUs to the local rank for Horovod
     gpus = tf.config.experimental.list_physical_devices('GPU')
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
     if gpus:
-        device_monitor = monitor.device_monitor(output_dir / 'inference_device_logs.pkl', hvd.local_rank(), interval=1)
-        device_monitor.start()
+        tf.config.experimental.set_visible_devices(
+            gpus[hvd.local_rank()], 'GPU')
 
-    monitor.start_timer(name='inference_time')
+    user_argv['num_gpus'] = len(gpus)
+    user_argv['num_ranks'] = hvd.size()
 
-    logger.begin('Inference Loop')
-    for file_name, (patches, _) in tqdm(zip(file_paths, dataset), total=len(file_paths)):
+    if hvd.rank() == 0:
+        logger.message(f"Num GPUS: {len(gpus)}")
+        logger.message(f"Num ranks: {hvd.size()}")
+        logger.begin('Inference Loop')
+
+    for file_name, (patches, _) in zip(file_paths, dataset):
         logger.message(f"Processing file {file_name}")
 
         # convert patches to a batch of patches
@@ -92,10 +94,10 @@ def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
         with h5py.File(mask_name, 'w') as handle:
             handle.create_dataset('mask', data=mask)
 
-    logger.ended('Inference Loop')
+    if hvd.rank() == 0:
+        logger.ended('Inference Loop')
 
-    monitor.stop_timer(name='inference_time')
-    sys_monitor.stop()
-    if gpus:
-        device_monitor.stop()
-    monitor.stop()
+        # Save parameters
+        with (output_dir / 'inference_params.yml').open('w') as handle:
+            yaml.dump(user_argv, handle)
+

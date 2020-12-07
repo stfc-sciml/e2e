@@ -1,13 +1,12 @@
 import h5py
+import pickle
 import numpy as np
 import pandas as pd
 from pathlib import Path
-from tqdm import tqdm
 
 from sklearn.metrics import accuracy_score
 from e2e_benchmark.constants import MIN_SST
 from e2e_benchmark.monitor.logger import MultiLevelLogger
-from e2e_benchmark.monitor.monitors import RuntimeMonitor
 
 
 class AlgorithmType:
@@ -78,14 +77,6 @@ def main(sst_file: Path, output_dir: Path):
     mask_files = list(Path(output_dir).glob("S3A*.h5"))
     mask_file_names = list(map(lambda x: x.name, mask_files))
 
-    monitor = RuntimeMonitor(output_dir / 'inference_logs.pkl')
-    monitor.start()
-
-    # Start system and  device monitor
-    sys_monitor = monitor.system_monitor(output_dir / 'sst_system_logs.pkl', interval=1)
-    sys_monitor.start()
-    monitor.start_timer(name='sst_inference_time')
-
     sst_df = load_ssts_matchups(sst_file)
 
     # rename the file names to match the mask file names
@@ -97,10 +88,11 @@ def main(sst_file: Path, output_dir: Path):
 
     # select only the SST matchups we have files for
     sst_df = sst_df.loc[sst_df.local_file.isin(mask_file_names)]
+    assert sst_df.shape[0] > 0, "Could not find any SST matchups with data folder."
 
     logger.begin('Load SST Match-up Pixels')
 
-    for file_name in tqdm(mask_files):
+    for file_name in mask_files:
         # read the mask from disk
         with h5py.File(file_name, 'r') as handle:
             mask = handle['mask'][:]
@@ -133,15 +125,14 @@ def main(sst_file: Path, output_dir: Path):
     logger.message("UNet RSD {:.4f}".format(unet_RSD))
     logger.message("Bayes/UNet Mask Agreement: {:.2f}".format(bayes_unet_agreement))
 
-    monitor.report('bayes', dict(bayes_median=bayes_median, bayes_RSD=bayes_RSD))
-    monitor.report('unet', dict(unet_median=unet_median, unet_RSD=unet_RSD))
+    # Save outputs
+    outputs = dict(bayes_median=bayes_median, bayes_RSD=bayes_RSD, unet_median=unet_median, unet_RSD=unet_RSD)
+    with (output_dir / 'summary.pkl').open('wb') as handle:
+        pickle.dump(outputs, handle)
+
     logger.ended('Summary')
 
     sst_df.to_hdf(output_dir / 'sst_predictions.h5', key='data')
-
-    monitor.stop_timer(name='sst_inference_time')
-    sys_monitor.stop()
-    monitor.stop()
 
 
 if __name__ == "__main__":
