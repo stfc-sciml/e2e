@@ -9,7 +9,7 @@ from e2e_benchmark.constants import PATCH_SIZE, IMAGE_H, IMAGE_W
 
 @pytest.fixture()
 def data_dir():
-    path = Path("../data/test_data/hdf")
+    path = Path("data/test_data/hdf")
     assert path.exists()
     return path
 
