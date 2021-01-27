@@ -111,18 +111,18 @@ class SLSTRDataLoader:
         if self._shuffle:
             dataset = dataset.shuffle(len(self._image_paths))
 
-        dataset = dataset.interleave(self._generator, cycle_length=8, num_parallel_calls=8)
-        dataset = dataset.map(self._preprocess_images, num_parallel_calls=8)
+        dataset = dataset.interleave(self._generator, cycle_length=2, num_parallel_calls=2)
+        dataset = dataset.map(self._preprocess_images, num_parallel_calls=2)
 
         if self.single_image:
             return dataset
 
         dataset = dataset.unbatch()
         dataset = dataset.cache()
-        dataset = dataset.prefetch(self.batch_size * 3)
+        dataset = dataset.prefetch(self.batch_size)
 
         if self._shuffle:
-            dataset = dataset.shuffle(self.batch_size * 3)
+            dataset = dataset.shuffle(self.batch_size)
 
-        dataset = dataset.batch(self.batch_size)
+        dataset = dataset.batch(self.batch_size, drop_remainder=True)
         return dataset

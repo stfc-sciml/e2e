@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 from e2e_benchmark.data_loader import SLSTRDataLoader
 from e2e_benchmark.model import unet
 
-from case2.e2e_benchmark.monitor.logger import MultiLevelLogger
+from e2e_benchmark.monitor.logger import MultiLevelLogger
 
 
 def weighted_cross_entropy(beta):
@@ -58,6 +58,10 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
     if hvd.rank() == 0:
         logger.message(f"Num GPUS: {len(gpus)}")
         logger.message(f"Num ranks: {hvd.size()}")
+
+
+    logger.message(f'Global Rank {hvd.rank()}')
+    logger.message(f'Local Rank {hvd.local_rank()}')
 
     # Get the data loader
     data_paths = list(Path(data_path).glob('**/S3A*.hdf'))

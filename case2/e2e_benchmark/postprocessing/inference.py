@@ -31,6 +31,15 @@ def reconstruct_from_patches(patches, nx, ny, patch_size: int = PATCH_SIZE):
 
 def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
     hvd.init()
+
+    # Pin the number of GPUs to the local rank for Horovod
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
+    if gpus:
+        tf.config.experimental.set_visible_devices(
+            gpus[hvd.local_rank()], 'GPU')
+
     CROP_SIZE = user_argv['crop_size']
 
     output_dir = Path(output_dir)
@@ -56,14 +65,6 @@ def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
     # reconstructed.
     data_loader = SLSTRDataLoader(file_paths, single_image=True, crop_size=CROP_SIZE)
     dataset = data_loader.to_dataset()
-
-    # Pin the number of GPUs to the local rank for Horovod
-    gpus = tf.config.experimental.list_physical_devices('GPU')
-    for gpu in gpus:
-        tf.config.experimental.set_memory_growth(gpu, True)
-    if gpus:
-        tf.config.experimental.set_visible_devices(
-            gpus[hvd.local_rank()], 'GPU')
 
     user_argv['num_gpus'] = len(gpus)
     user_argv['num_ranks'] = hvd.size()
