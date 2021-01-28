@@ -13,7 +13,7 @@ N_CHANNELS = 9
 
 class SLSTRDataLoader:
 
-    def __init__(self, paths: Union[Path, List[Path]], shuffle: bool = True, batch_size: int = 32, single_image: bool = False, crop_size: int = 20):
+    def __init__(self, paths: Union[Path, List[Path]], shuffle: bool = True, batch_size: int = 32, single_image: bool = False, crop_size: int = 20, no_cache=False):
         if isinstance(paths, Path):
             self._image_paths = Path(paths).glob('**/S3A*.hdf')
         else:
@@ -118,7 +118,8 @@ class SLSTRDataLoader:
             return dataset
 
         dataset = dataset.unbatch()
-        dataset = dataset.cache()
+        if not no_cache:
+            dataset = dataset.cache()
         dataset = dataset.prefetch(self.batch_size)
 
         if self._shuffle:

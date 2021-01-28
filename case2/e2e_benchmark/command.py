@@ -33,6 +33,7 @@ def convert_hdf(input_path, output_path):
 @click.option('--batch-size', default=32)
 @click.option('--wbce', default=.5)
 @click.option('--clip-offset', default=15)
+@click.option('--no-cache', default=False, is_flag=True, type=bool)
 @click.option('--train_split', default=.8, help='Train split size as a float between 0-1. Default is 80%')
 def train(data_path, output_path, **user_argv):
     data_path = Path(data_path)
