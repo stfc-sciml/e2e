@@ -55,11 +55,11 @@ def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
     assert Path(model_file).exists(), "Model file does not exist!"
     model = tf.keras.models.load_model(str(model_file))
 
-    logger.message('Getting file paths') 
+    logger.message('Getting file paths')
     file_paths = list(Path(data_dir).glob('**/S3A*.hdf'))
     assert len(file_paths) > 0, "Could not find any HDF files!"
 
-    logger.message('Preparing data loader') 
+    logger.message('Preparing data loader')
     # Create data loader in single image mode. This turns off shuffling and
     # only yields batches of images for a single image at a time so they can be
     # reconstructed.
@@ -74,7 +74,8 @@ def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
         logger.message(f"Num ranks: {hvd.size()}")
         logger.begin('Inference Loop')
 
-    for file_name, (patches, _) in zip(file_paths, dataset):
+    for patches, file_name in dataset:
+        file_name = Path(file_name.numpy().decode('utf-8'))
         logger.message(f"Processing file {file_name}")
 
         # convert patches to a batch of patches

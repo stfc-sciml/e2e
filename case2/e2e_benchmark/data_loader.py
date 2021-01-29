@@ -27,6 +27,7 @@ class SLSTRDataLoader:
         self.single_image = single_image
         self.patch_padding = 'valid' if not single_image else 'same'
         self.crop_size = crop_size
+        self.no_cache = no_cache
 
         assert len(self._image_paths) > 0, 'No image data found in path!'
 
@@ -54,14 +55,17 @@ class SLSTRDataLoader:
         msk[msk == 0] = 0
         msk = msk.astype(np.float)
 
-        yield img, msk
+        yield (img, msk, path.encode('utf-8'))
 
-    def _preprocess_images(self, img, msk):
+    def _preprocess_images(self, img, msk, path):
         # Crop & convert to patches
         img = self._transform_image(img)
         msk = self._transform_image(msk)
 
-        return img, msk
+        if self.single_image:
+            return img, path
+        else:
+            return img, msk
 
     def _transform_image(self, img):
         # Crop to image which is divisible by the patch size
@@ -94,9 +98,10 @@ class SLSTRDataLoader:
         return img
 
     def _generator(self, path):
-        types = (tf.float32, tf.float32)
+        types = (tf.float32, tf.float32, tf.string)
         shapes = (tf.TensorShape([IMAGE_H, IMAGE_W, N_CHANNELS]),
-                  tf.TensorShape([IMAGE_H, IMAGE_W, 1]))
+                  tf.TensorShape([IMAGE_H, IMAGE_W, 1]),
+                  tf.TensorShape([]))
         dataset = tf.data.Dataset.from_generator(self._load_data,
                                                  output_types=types,
                                                  output_shapes=shapes,
@@ -118,7 +123,7 @@ class SLSTRDataLoader:
             return dataset
 
         dataset = dataset.unbatch()
-        if not no_cache:
+        if not self.no_cache:
             dataset = dataset.cache()
         dataset = dataset.prefetch(self.batch_size)
 
