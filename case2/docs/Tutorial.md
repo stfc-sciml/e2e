@@ -24,7 +24,23 @@ Rough timings for a single run of each stage on an single DGX-2 node with a sing
 | SST Comparision             | 1.10               |                                             |
 | **Total**                   | 14840.49           |                                             |
 
+Below shows the detailed training performance across different systems and configurations.
 
+| System | Job ID | # Nodes | # GPUs | Cache? | Epochs | Total Time(s) | Time 1 Epoch (s) | Train Time 1 Epoch (s) | Test Time 1 Epoch (s) | Time 1st Epoch (s) | Train time 1st Epoch | Test Time 1st Epoch | Accuracy | Loss    |
+|--------|--------|---------|--------|--------|--------|---------------|------------------|------------------------|-----------------------|--------------------|----------------------|---------------------|----------|---------|
+| PEARL  | 20176  | 1       | 1      | Y      | 30     | 4894.09       | 148.66           | 128.86                 | 19.80                 | 536.46             | 434.36               | 102.09              | 84%      | 0.23851 |
+| PEARL  | 19974  | 1       | 2      | Y      | 30     | 11000.68      | 415.01           | 336.68                 | 78.33                 | 454.70             | 373.24               | 81.45               | 84%      | 0.25569 |
+| PEARL  | 19975  | 1       | 4      | Y      | 30     | 5659.76       | 190.73           | 152.26                 | 38.47                 | 234.24             | 194.07               | 40.16               | 86%      | 0.20783 |
+| PEARL  | 19976  | 1       | 8      | Y      | 30     | 2942.93       | 96.72            | 78.39                  | 18.33                 | 142.72             | 122.61               | 20.11               | 87%      | 0.21899 |
+| PEARL  | 19995  | 1       | 16     | Y      | 30     | 535.37        | 15.03            | 13.68                  | 1.97                  | 117.48             | 102.68               | 14.79               | 83%      | 0.23977 |
+|        |        |         |        |        |        |               |                  |                        |                       |                    |                      |                     |          |         |
+| SCARF  | 789763 | 1       | 1      | N      | 30     | 40471.34      | 1530.06          | 1272.94                | 257.12                | n/a                | n/a                  | n/a                 | 84%      | 0.20906 |
+| SCARF  | 789764 | 1       | 2      | N      | 30     | 25606.76      | 984.77           | 839.59                 | 145.17                | n/a                | n/a                  | n/a                 | 85%      | 0.21448 |
+| SCARF  | 789765 | 1       | 4      | N      | 30     | 13638.27      | 581.85           | 438.32                 | 143.52                | n/a                | n/a                  | n/a                 | 89%      | 0.19948 |
+|        |        |         |        |        |        |               |                  |                        |                       |                    |                      |                     |          |         |
+| SCARF  | 789772 | 2       | 8      | N      | 30     | 4648.28       | 339.83           | 292.17                 | 47.65                 | n/a                | n/a                  | n/a                 | 90%      | 0.1643  |
+| SCARF  | 789773 | 4       | 16     | N      | 30     | 1821.49       | 235.34           | 195.40                 | 39.93                 | n/a                | n/a                  | n/a                 | 90%      | 0.16477 |
+| SCARF  | 790385 | 8       | 32     | N      | 30     | 2217.20       | 86.16            | 79.97                  | 6.18                  | n/a                | n/a                  | n/a                 | 84%      | 0.23107 |
 
 ### Extraction
  The extraction step unzips the raw data from the CEDA archive. The extraction step takes an input list of file locations on the CEDA archive and will unzip every file in the list to the corresponding output directory. An example of how to run this step is given below:
