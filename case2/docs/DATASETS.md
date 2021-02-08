@@ -8,3 +8,5 @@ Three datasets are provided with this benchmark. The details of each induvidual 
 | one-day | 971          | 599       | Data recorded during a single full orbit cycle of Sentinel-3A. Consists of day and night time examples and images from a wide variety of biomes. |
 | pixbox  | 414          | 243       | A mix of data used as part of a cloud mask validation dataset containing numerous difficult examples across a variety of biomes.                 |
 | ssts    | 100          | 63        | A dataset of products which have been co-aligned with sea surface temperature (SST) buoys. The matching pixels in these products can be used to validate the quality of cloud masking |
+
+In addition to each of these raw datasets, the data transformed preprocessed to the HDF format is also provided. This is the intermediate output after running `convert_to_hdf` on each of the `one-day` and `ssts` dataset. These intermediate files can be found in `./hdf` and are about ~30% the size of the original dataset.
