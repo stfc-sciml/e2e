@@ -1,8 +1,0 @@
-#!/bin/bash
-#SBATCH --gres=gpu:1
-#SBATCH --mem=300GB
-#SBATCH --job-name="e2e"
-#SBATCH --time=2-00:00:00
-
-
-singularity exec --nv -B /mnt/beegfs/work/stfc/pearl008/sciml-benchmarks/data/slstr_cloud/one-day/day:/data e2e_benchmark.sif python e2e_benchmark/command.py train /data model
