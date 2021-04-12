@@ -8,12 +8,8 @@ from e2e_benchmark.monitor.logger import MultiLevelLogger
 from e2e_benchmark.preprocessing.image import ImageLoader
 
 
-def do_conversion(path: Path, output_path: Path):
-    # Check if file already exists, if so skip
-    if ((output_path / Path('day') / path.name).exists() or
-            (output_path / Path('night') / path.name).exists()):
-        return
-
+def load_arrays(path: Path):
+    """ Load a dictionary of data from the NetCDF files"""
     loader = ImageLoader(path)
 
     bts = loader.load_bts().to_array().values
@@ -49,18 +45,29 @@ def do_conversion(path: Path, output_path: Path):
     bayes = resize(bayes, (IMAGE_H, IMAGE_W), anti_aliasing=False, preserve_range=True)
     summary = resize(summary, (IMAGE_H, IMAGE_W), anti_aliasing=False, preserve_range=True)
 
-    folder = 'day' if np.all(day) > 0 else 'night'
+    return dict(rads=rads, refs=refs, bts=bts, bayes=bayes, summary=summary, day=day)
+
+
+def do_conversion(path: Path, output_path: Path):
+    # Check if file already exists, if so skip
+    if ((output_path / Path('day') / path.name).exists() or
+            (output_path / Path('night') / path.name).exists()):
+        return
+
+    data = load_arrays(path)
+
+    folder = 'day' if np.all(data['day']) > 0 else 'night'
     folder = output_path / folder
     folder.mkdir(parents=True, exist_ok=True)
 
     output_file = (folder / path.name).with_suffix('.hdf')
 
     with h5py.File(output_file, 'w') as handle:
-        handle.create_dataset("bts", data=bts)
-        handle.create_dataset("rads", data=rads)
-        handle.create_dataset("refs", data=refs)
-        handle.create_dataset("bayes", data=bayes)
-        handle.create_dataset("summary", data=summary)
+        handle.create_dataset("bts", data=data['bts'])
+        handle.create_dataset("rads", data=data['rads'])
+        handle.create_dataset("refs", data=data['refs'])
+        handle.create_dataset("bayes", data=data['bayes'])
+        handle.create_dataset("summary", data=data['summary'])
 
 
 def convert_to_hdf(path: Path, output_path: Path, n_jobs: int = 8):

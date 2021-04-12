@@ -5,6 +5,7 @@ import tensorflow as tf
 import numpy as np
 import horovod.tensorflow as hvd
 
+from e2e_benchmark.preprocessing.convert_netcdf import load_arrays
 from e2e_benchmark.constants import PATCH_SIZE, IMAGE_H, IMAGE_W
 from typing import Union, List
 
@@ -42,20 +43,31 @@ class SLSTRDataLoader:
     def _load_data(self, path):
         path = path.decode()
 
-        with h5py.File(path, 'r') as handle:
-            refs = handle['refs'][:]
-            bts = handle['bts'][:]
-            msk = handle['bayes'][:]
+        if self.single_image:
+            # Load directly from NetCDF file
+            print(path)
+            data = load_arrays(path)
+            refs = data['refs']
+            bts = data['bts']
+            msk = data['bayes']
+        else:
+            # Load from a preprocessed file
+            with h5py.File(path, 'r') as handle:
+                refs = handle['refs'][:]
+                bts = handle['bts'][:]
+                msk = handle['bayes'][:]
 
+        # Normalise image
         bts = (bts - 270.0) / 22.0
         refs = refs - 0.5
         img = np.concatenate([refs, bts], axis=-1)
 
+        # Normalise mask
         msk[msk > 0] = 1
         msk[msk == 0] = 0
         msk = msk.astype(np.float)
 
-        yield (img, msk, path.encode('utf-8'))
+        yield img, msk, path.encode('utf-8')
 
     def _preprocess_images(self, img, msk, path):
         # Crop & convert to patches
