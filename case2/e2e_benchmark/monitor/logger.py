@@ -1,3 +1,4 @@
+import csv
 import time
 import logging
 
@@ -31,8 +32,10 @@ class MultiLevelLogger:
         @param indent_fill: indent to fill different process levels (default='.')
         """
         self._timers = []
+        self._file_log = []
         self._current_level = 0
         self._indent_fill = indent_fill
+        self._path = path
 
         stream_handler = logging.StreamHandler()
         stream_handler.setLevel(logging.INFO)
@@ -75,6 +78,8 @@ class MultiLevelLogger:
 
         self._logger.info(message)
 
+        self.log_event([proc_name, elapsed, timer.start_time, timer.end_time])
+
     def message(self, what: str):
         """ Log a message to from the current sub-process
 
@@ -83,3 +88,8 @@ class MultiLevelLogger:
         message = [self._indent_fill * self._current_level * 4, "<MESSG> ", what]
         message = ''.join(message)
         self._logger.info(message)
+
+    def log_event(self, event):
+        with open(self._path.with_suffix('.csv'), 'a') as f:
+            writer = csv.writer(f)
+            writer.writerow(event)
