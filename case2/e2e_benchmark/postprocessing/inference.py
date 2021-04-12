@@ -56,8 +56,8 @@ def main(model_file: Path, data_dir: Path, output_dir: Path, user_argv: dict):
     model = tf.keras.models.load_model(str(model_file))
 
     logger.message('Getting file paths')
-    file_paths = list(Path(data_dir).glob('**/S3A*.hdf'))
-    assert len(file_paths) > 0, "Could not find any HDF files!"
+    file_paths = list(Path(data_dir).glob('**/S3A*.SEN3'))
+    assert len(file_paths) > 0, "Could not find any SLSTR products!"
 
     logger.message('Preparing data loader')
     # Create data loader in single image mode. This turns off shuffling and
