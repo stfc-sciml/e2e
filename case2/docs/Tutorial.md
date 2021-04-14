@@ -9,38 +9,60 @@ The benchmark is written in pure python code. The preprocessing scripts make use
 ### Timings
 Rough timings for a single run of each stage on an single DGX-2 node with a single v100 GPU. *Note*: This implementation uses `tf.data.Dataset.cache` to store loaded data in memory after loading, so the first epoch takes longer than all subsequent epochs. The difference in time is noted below.
 
-| Stage                       | Time (s)           | Notes                                       |
-|-----------------------------|--------------------|---------------------------------------------|
-| Convert to HDF (Train)      | 9099.09            |                                             |
-| Convert to HDF (Validation) | 947.84             |                                             |
-| Training (Total 30 epochs)  | 4674.06            |                                             |
-| Training (1 Epoch)          | 142.89             | Time after tf.data.Dataset.cache            |
-| Training (1 Epoch Train)    | 124.19             | Time after tf.data.Dataset.cache            |
-| Training (1 Epoch Test)     | 18.70              | Time after tf.data.Dataset.cache            |
-| Training (1st Epoch)        | 530.04             | Time before tf.data.Dataset.cache           |
-| Training (1st Epoch Train)  | 431.11             | Time before tf.data.Dataset.cache           |
-| Training (1st Epoch Test)   | 98.92              | Time before tf.data.Dataset.cache           |
-| Inference                   | 118.40             |                                             |
-| SST Comparision             | 1.10               |                                             |
-| **Total**                   | 14840.49           |                                             |
+| Stage                       | Time (s)           | 
+|-----------------------------|--------------------|
+| Convert to HDF (Train)      | 9099.09            |
+| Convert to HDF (Validation) | 947.84             |
+| SST Comparision             | 1.10               |
+| **Total**                   | 10048.03           |
 
-Below shows the detailed training performance across different systems and configurations.
+Below shows the detailed training & inference performance across different systems and configurations.
 
-| System | Job ID | # Nodes | # GPUs | Cache? | Epochs | Total Time(s) | Time 1 Epoch (s) | Train Time 1 Epoch (s) | Test Time 1 Epoch (s) | Time 1st Epoch (s) | Train time 1st Epoch | Test Time 1st Epoch | Accuracy | Loss    |
-|--------|--------|---------|--------|--------|--------|---------------|------------------|------------------------|-----------------------|--------------------|----------------------|---------------------|----------|---------|
-| PEARL  | 20176  | 1       | 1      | Y      | 30     | 4894.09       | 148.66           | 128.86                 | 19.80                 | 536.46             | 434.36               | 102.09              | 84%      | 0.23851 |
-| PEARL  | 19974  | 1       | 2      | Y      | 30     | 11000.68      | 415.01           | 336.68                 | 78.33                 | 454.70             | 373.24               | 81.45               | 84%      | 0.25569 |
-| PEARL  | 19975  | 1       | 4      | Y      | 30     | 5659.76       | 190.73           | 152.26                 | 38.47                 | 234.24             | 194.07               | 40.16               | 86%      | 0.20783 |
-| PEARL  | 19976  | 1       | 8      | Y      | 30     | 2942.93       | 96.72            | 78.39                  | 18.33                 | 142.72             | 122.61               | 20.11               | 87%      | 0.21899 |
-| PEARL  | 19995  | 1       | 16     | Y      | 30     | 535.37        | 15.03            | 13.68                  | 1.97                  | 117.48             | 102.68               | 14.79               | 83%      | 0.23977 |
-|        |        |         |        |        |        |               |                  |                        |                       |                    |                      |                     |          |         |
-| SCARF  | 789763 | 1       | 1      | N      | 30     | 40471.34      | 1530.06          | 1272.94                | 257.12                | n/a                | n/a                  | n/a                 | 84%      | 0.20906 |
-| SCARF  | 789764 | 1       | 2      | N      | 30     | 25606.76      | 984.77           | 839.59                 | 145.17                | n/a                | n/a                  | n/a                 | 85%      | 0.21448 |
-| SCARF  | 789765 | 1       | 4      | N      | 30     | 13638.27      | 581.85           | 438.32                 | 143.52                | n/a                | n/a                  | n/a                 | 89%      | 0.19948 |
-|        |        |         |        |        |        |               |                  |                        |                       |                    |                      |                     |          |         |
-| SCARF  | 789772 | 2       | 8      | N      | 30     | 4648.28       | 339.83           | 292.17                 | 47.65                 | n/a                | n/a                  | n/a                 | 90%      | 0.1643  |
-| SCARF  | 789773 | 4       | 16     | N      | 30     | 1821.49       | 235.34           | 195.40                 | 39.93                 | n/a                | n/a                  | n/a                 | 90%      | 0.16477 |
-| SCARF  | 790385 | 8       | 32     | N      | 30     | 2217.20       | 86.16            | 79.97                  | 6.18                  | n/a                | n/a                  | n/a                 | 84%      | 0.23107 |
+#### PEARL
+
+##### Training
+
+| index     | system | num_ranks | num_gpus | total_time  | first_epoch_time | second_epoch_time | first_epoch_train_time | second_epoch_train_time | first_epoch_test_time | second_epoch_test_time | imgs_per_s_second_epoch | imgs_per_s_first_epoch | train_accuracy | test_accuracy | train_loss   | test_loss    | batch_size | epochs | learning_rate |
+|-----------|--------|-----------|----------|-------------|------------------|-------------------|------------------------|-------------------------|-----------------------|------------------------|-------------------------|------------------------|----------------|---------------|--------------|--------------|------------|--------|---------------|
+| run_24409 | PEARL  |         1 |        1 | 4686.985232 |      487.8024068 |        141.622344 |            397.6475568 |             121.4117088 |           90.14920092 |            20.20682693 |             159.7868952 |            48.78692115 |   0.8525564075 |  0.8511553407 |  0.212181896 | 0.2179534435 |         32 |     30 |         0.001 |
+| run_24410 | PEARL  |         2 |        2 | 3681.385369 |      491.1161945 |       111.7994499 |            403.2262571 |             95.93596053 |           87.87036061 |            15.84929371 |             202.2182286 |            48.11194623 |   0.8602660298 |  0.8509029746 |  0.209066987 | 0.2072046548 |         32 |     30 |         0.001 |
+| run_24411 | PEARL  |         4 |        4 |  1828.20399 |      247.7779794 |       56.72645378 |            207.1155813 |             50.34581685 |           40.65675735 |            6.377050877 |              385.334894 |            93.66750623 |   0.8714677691 |  0.8823924065 | 0.1888048351 |   0.19068937 |         32 |     30 |         0.001 |
+| run_24412 | PEARL  |         8 |        8 | 1014.694396 |      147.2587397 |       30.28834724 |            125.2010143 |             26.60576439 |           22.05094743 |            3.679215431 |             729.1652935 |            154.9508214 |    0.870210588 |  0.8634964824 | 0.1910666525 | 0.2004272044 |         32 |     30 |         0.001 |
+| run_24413 | PEARL  |        16 |       16 | 562.1420362 |      122.4123983 |       16.82446599 |            108.0181093 |              14.6912303 |           14.37209558 |            2.129650831 |             1320.515682 |            179.5995146 |   0.8498619795 |  0.8233401775 | 0.2154550254 | 0.2386761159 |         32 |     30 |         0.001 |
+
+##### Inference
+
+| index     | system | num_gpus | num_ranks | total       | imgs_per_s  |
+|-----------|--------|----------|-----------|-------------|-------------|
+| run_24409 | PEARL  |        1 |         1 | 1255.247758 | 1.593310951 |
+| run_24410 | PEARL  |        2 |         2 | 1256.608641 | 1.591585427 |
+| run_24411 | PEARL  |        4 |         4 | 539.1232088 | 3.709727141 |
+| run_24412 | PEARL  |        8 |         8 | 265.4282806 |  7.53499211 |
+| run_24413 | PEARL  |       16 |        16 | 153.5484927 | 13.02520113 |
+
+#### SCARF
+
+##### Training
+
+| index     | system | num_gpus | num_ranks | total_time  | first_epoch_time | second_epoch_time | first_epoch_train_time | second_epoch_train_time | first_epoch_test_time | second_epoch_test_time | imgs_per_s_second_epoch | imgs_per_s_first_epoch | train_accuracy | test_accuracy | train_loss   | test_loss    | batch_size | epochs | learning_rate |
+|-----------|--------|----------|-----------|-------------|------------------|-------------------|------------------------|-------------------------|-----------------------|------------------------|-------------------------|------------------------|----------------|---------------|--------------|--------------|------------|--------|---------------|
+| run_53428 | SCARF  |        1 |         1 | 45402.69838 |      1544.732399 |       1385.684085 |            1310.427494 |             1135.814839 |            234.288147 |            249.8591855 |             17.08024877 |            14.80432919 |   0.8453990817 |  0.8437467813 | 0.2220225632 | 0.2172799259 |         32 |     30 |         0.001 |
+| run_53429 | SCARF  |        2 |         2 | 23281.76684 |      887.9685924 |       758.1281309 |            768.9431183 |             605.4871981 |           119.0109875 |            152.6255419 |             32.04031408 |            25.22943445 |   0.8685059547 |  0.8409053683 |  0.199012056 | 0.2114881426 |         32 |     30 |         0.001 |
+| run_53430 | SCARF  |        4 |         4 | 12457.26462 |       553.053158 |        430.865139 |            428.0327735 |             337.2702899 |           125.0028179 |            93.57313132 |             57.52063132 |            45.32363221 |   0.8864958882 |  0.8918270469 | 0.1738203466 | 0.1762486845 |         32 |     30 |         0.001 |
+| run_53431 | SCARF  |        4 |         8 | 4786.609712 |      271.2817438 |       227.4275584 |            221.4258764 |             182.9286768 |           49.82610321 |            44.30622077 |             106.0522622 |            87.61396959 |   0.8920868039 |  0.9006774426 |  0.168565765 | 0.1690753251 |         32 |     30 |         0.001 |
+| run_53432 | SCARF  |        4 |        16 |  1615.83125 |      138.0618007 |       49.79375076 |            117.5387204 |             42.28568292 |           20.50362778 |            7.483509541 |             458.7841241 |            165.0519926 |   0.8876604438 |   0.893393755 | 0.1764502972 | 0.1759866029 |         32 |     30 |         0.001 |
+| run_53433 | SCARF  |        4 |        32 | 1006.319253 |        184.39413 |       26.36715484 |            150.9293756 |             22.45009375 |           33.44167328 |            3.885875463 |             864.1389305 |            128.5369393 |    0.877099812 |  0.8711004853 | 0.1782446504 | 0.1876683086 |         32 |     30 |         0.001 |
+
+##### Inference
+
+| index     | system | num_gpus | num_ranks | total       | imgs_per_s  |
+|-----------|--------|----------|-----------|-------------|-------------|
+| run_53428 | SCARF  |        1 |         1 | 1494.222932 | 1.338488359 |
+| run_53429 | SCARF  |        2 |         2 | 1048.268264 | 1.907908566 |
+| run_53430 | SCARF  |        4 |         4 | 664.9484975 | 3.007751739 |
+| run_53431 | SCARF  |        4 |         8 | 297.8718445 | 6.714296892 |
+| run_53432 | SCARF  |        4 |        16 | 111.2567739 | 17.97643352 |
+| run_53433 | SCARF  |        4 |        32 | 78.90235639 | 25.34778544 |
 
 ### Extraction
  The extraction step unzips the raw data from the CEDA archive. The extraction step takes an input list of file locations on the CEDA archive and will unzip every file in the list to the corresponding output directory. An example of how to run this step is given below:
