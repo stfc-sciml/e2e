@@ -24,7 +24,7 @@ export SINGULARITYENV_PYTHONPATH=/work
 mpirun -q \
 	--mca btl_openib_allow_ib 1 \
 	--mca btl_openib_if_include mlx5_0:1 \
-	-x NCCL_DEBUG=INFO \ 
+	-x NCCL_DEBUG=INFO \
 	-x LD_LIBRARY_PATH \
 	-x PATH \
         -x HOROVOD_TIMELINE=$OUTPUT_DIR/timeline_train.json \
