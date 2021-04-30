@@ -94,6 +94,10 @@ Training with and without intel optimized python & Tensorflow.
 | run_66586 	| EPCC   	| intel   	|        16 	|               4 	| 73.51474023 	| 27.20542838 	|
 | run_66587 	| EPCC   	| intel   	|        32 	|               4 	| 38.53717971 	| 51.89793376 	|
 
+ <img src="https://user-images.githubusercontent.com/2487781/116727059-fcd9db80-a9db-11eb-977f-18755a3d433c.png" width=600 />
+ <img src="https://user-images.githubusercontent.com/2487781/116727067-ff3c3580-a9db-11eb-8cc9-e6a688f355e1.png" width=600 />
+
+
 ### Extraction
  The extraction step unzips the raw data from the CEDA archive. The extraction step takes an input list of file locations on the CEDA archive and will unzip every file in the list to the corresponding output directory. An example of how to run this step is given below:
 
