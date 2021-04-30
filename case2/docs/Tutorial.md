@@ -81,6 +81,10 @@ Training with and without intel optimized python & Tensorflow.
 | run_66586 	| intel   	| EPCC   	|        16 	|               4 	| 10048.95009 	|      370.1908703 	|       325.2897694 	|             338.415674 	|              305.858561 	|           31.76151896 	|             19.4233954 	|             63.42801043 	|            57.32594998 	|   0.8748027682 	|  0.8450528383 	| 0.1811204255 	| 0.2225735188 	|     30 	|         0.001 	|         32 	|
 | run_66587 	| intel   	| EPCC   	|        32 	|               4 	| 5018.560455 	|      180.0462604 	|       165.5005553 	|            168.0348213 	|             156.2506983 	|           12.00623393 	|            9.245760441 	|             124.1594451 	|            115.4522607 	|   0.8825953603 	|  0.8800027966 	| 0.1745795608 	| 0.1922903806 	|     30 	|         0.001 	|         32 	|
 
+
+ <img src="https://user-images.githubusercontent.com/2487781/116727059-fcd9db80-a9db-11eb-977f-18755a3d433c.png" width=600 />
+ <img src="https://user-images.githubusercontent.com/2487781/116727067-ff3c3580-a9db-11eb-8cc9-e6a688f355e1.png" width=600 />
+ 
 ##### Inference
 
 | index     	| system 	| python  	| num_ranks 	| ntasks_per_node 	| total       	| imgs_per_s  	|
@@ -93,9 +97,6 @@ Training with and without intel optimized python & Tensorflow.
 | run_66585 	| EPCC   	| intel   	|         8 	|               4 	|  133.802573 	| 14.94739567 	|
 | run_66586 	| EPCC   	| intel   	|        16 	|               4 	| 73.51474023 	| 27.20542838 	|
 | run_66587 	| EPCC   	| intel   	|        32 	|               4 	| 38.53717971 	| 51.89793376 	|
-
- <img src="https://user-images.githubusercontent.com/2487781/116727059-fcd9db80-a9db-11eb-977f-18755a3d433c.png" width=600 />
- <img src="https://user-images.githubusercontent.com/2487781/116727067-ff3c3580-a9db-11eb-8cc9-e6a688f355e1.png" width=600 />
 
 
 ### Extraction
