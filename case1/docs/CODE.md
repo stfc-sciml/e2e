@@ -46,4 +46,20 @@ We will supply a linux binary for convenience.
 
 # CCP-EM pipeliner
 
-Developed in-house, in collaboration with Sjors' group.
+Developed in-house, in collaboration with Sjors' group. A snapshot of the master branch has been included in directory 'e2e_benchmark' which is compatible with Relion 3.1. An updated version is being developed by CCP-EM that will be compatible with the forthcoming Relion 4, but that has not been used here.
+
+The pipeliner library should be installed as follows:
+
+python3 -m venv vrelion  
+source vrelion/bin/activate
+cd relion-pipeline   
+pip install -r requirements.txt  
+pip install -r requirements-dev.txt  
+pre-commit install  
+python setup.py install  
+
+and used with:
+
+source .../vrelion/bin/activate    
+export PYTHONPATH=.../relion-pipeline:$PYTHONPATH
+
