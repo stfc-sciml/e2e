@@ -16,7 +16,9 @@ Running a benchmark consists of the following steps:
 4. Unpack the example dataset of choice.
 5. Within the dataset, look at benchmark_runs.py  Edit "benchmark = " near the top to
 choose a benchmark.
-6. The benchmarks make use of slurm_template.sh to submit batch jobs. Edit this for
+6. Edit the appropriate files in JobFiles/ to set e.g. number of MPI tasks.
+7. The benchmarks make use of slurm_template.sh to submit batch jobs. Edit this for
 local system.
-7. Run!
+8. Run!
 
+Further details are in docs/HOW_TO_RUN_BENCHMARKS.md 
