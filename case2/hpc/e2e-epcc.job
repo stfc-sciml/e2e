@@ -1,0 +1,48 @@
+#!/bin/bash
+#SBATCH -t 02-00:00
+#SBATCH -D /home/nx04/nx04/sljack/e2e
+#SBATCH -J e2e-epcc
+#SBATCH -o /home/nx04/nx04/sljack/e2e/e2e-%A.out
+#SBATCH -e /home/nx04/nx04/sljack/e2e/e2e-%A.err
+#SBATCH --cpus-per-task=5
+#SBATCH --mem=150G
+#SBATCH --nvram-option=1LM:1000
+ 
+# EPCC specific 
+module load openmpi/4.0.3-GNU8
+
+# Check info
+echo "Running on hosts: $SLURM_NODELIST"
+echo "Running on $SLURM_NNODES nodes."
+echo "Running $SLURM_NTASKS tasks."
+
+echo `python --version`
+
+EPOCHS=30
+DATA_DIR=/home/nx04/nx04/sljack/e2e/datasets/case2
+
+echo "No. epochs: $EPOCHS"
+
+TRAIN_DATA=$DATA_DIR/one-day
+TRAIN_DATA_HDF=$DATA_DIR/hdf/one-day
+OUTPUT_DIR=results/run_$SLURM_JOB_ID
+INFERENCE_DATA=$DATA_DIR/ssts
+SST_FILE=$DATA_DIR/ssts/sst_matchups.h5
+
+mpirun -x NCCL_DEBUG=INFO \
+       -x LD_LIBRARY_PATH \
+       -x PATH \
+       -mca pml ob1 -mca btl ^openib \
+       -bind-to none -map-by slot \
+       -mca btl_tcp_if_include ib0 \
+       -x HOROVOD_TIMELINE=$OUTPUT_DIR/timeline_train.json \
+	python -m e2e_benchmark.command train $TRAIN_DATA_HDF $OUTPUT_DIR --epochs $EPOCHS
+
+mpirun -x NCCL_DEBUG=INFO \
+       -x LD_LIBRARY_PATH \
+       -x PATH \
+       -mca pml ob1 -mca btl ^openib \
+       -bind-to none -map-by slot \
+       -mca btl_tcp_if_include ib0 \
+       -x HOROVOD_TIMELINE=$OUTPUT_DIR/timeline_infer.json \
+	python -m e2e_benchmark.command inference $INFERENCE_DATA $OUTPUT_DIR

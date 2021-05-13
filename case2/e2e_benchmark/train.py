@@ -1,3 +1,4 @@
+import os
 from os.path import split
 
 import tensorflow as tf
@@ -54,6 +55,7 @@ def train_model(data_path: Path, output_path: Path, user_argv: dict):
 
     user_argv['num_ranks'] = hvd.size()
     user_argv['num_gpus'] = len(gpus)
+    user_argv['ntasks_per_node'] = os.getenv('SLURM_NTASKS_PER_NODE', '')
 
     if hvd.rank() == 0:
         logger.message(f"Num GPUS: {len(gpus)}")
