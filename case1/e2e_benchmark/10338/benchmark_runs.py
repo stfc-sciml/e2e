@@ -1,7 +1,4 @@
-# This script makes use of the CCP-EM API to Relion.
-# On SCARF, this is made available via:
-# source /home/vol07/scarf957/bashrc/scarf_relion.bashrc
-# Separate instructions will be given for the distributed benchmark
+# This script makes use of the CCP-EM pipeliner API to Relion.
 #
 # Martyn Winn, STFC, Dec 2020
 
@@ -10,7 +7,7 @@ import time, os
 from pipeliner.api.manage_project import RelionProject
 
 my_project = RelionProject()
-benchmark='particle_picking'
+benchmark='refine3D'
 
 # For the distributed benchmark, the project is already created
 #my_project.start_new_project()
