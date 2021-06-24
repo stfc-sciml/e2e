@@ -14,14 +14,15 @@ export BASE_DIR="/mnt/beegfs/work/stfc/pearl008/intel-e2e-benchmark/case1"
 # Location of the relion singularity image
 export RELION_IMG="$BASE_DIR/relion.sif"
 # Relion project directory data
-export PROJ_DIR="$BASE_DIR/data/10338"
+export RELION_PROJ_DIR="$BASE_DIR/data/10338"
 # Location to store output files
-export OUTPUT_DIR="$BASE_DIR/runs/pearl/job_$SLURM_JOB_ID"
+export RELION_OUTPUT_DIR="$BASE_DIR/runs/pearl/job_$SLURM_JOB_ID"
 # Relion command
-export RELION_CMD="singularity run --nv -B $BASE_DIR -H $PROJ_DIR $RELION_IMG"
+export RELION_CMD="singularity run --nv -B $BASE_DIR -H $RELION_PROJ_DIR $RELION_IMG"
 # Number of cpus to use with -j option
-export CPUS_PER_TASK=$SLURM_CPUS_PER_TASK
+export RELION_CPUS_PER_TASK=$SLURM_CPUS_PER_TASK
+# Additional optimization flags
+export RELION_OPT_FLAGS='--gpu'
 
 # Run pipeline
-./benchmark_scripts/pipeline_2nd_refine3D_single.sh
-
+./benchmark_scripts/benchmark_relion.py ./benchmark_scripts/rabbit_aldolase_benchmark.sh
