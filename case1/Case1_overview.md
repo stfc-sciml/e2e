@@ -1,22 +1,25 @@
-# Case 1 overview
+# Case 1 Overview
 
-Case 1 is supplied in 3 parts:
+This folder contains scripts for the Relion End-to-End benchmark.
 
-- This documentation
-- Three example datasets. These include experimental data, intermediate data from processing, and
-scripts/configurations specific to the dataset. Further details are in docs/DATASETS.md
-- Code which can be used for all datasets. These are executables from the Relion package,
-the additional program ctffind, and a Python package "pipeliner" developed by CCP-EM for
-running Relion pipelines from the command line. Further details are in docs/CODE.md
+## Installation
+To run the benchmark you will need a copy of [relion](https://github.com/3dem/relion) and [ctffind](https://grigoriefflab.umassmed.edu/ctffind4).
 
-Running a benchmark consists of the following steps:
-1. Compile Relion executables locally to take advantage of latest compilers, options, etc.
-2. Make sure these, and ctffind (if needed), are on PATH.
-3. Make sure "pipeliner" is on PYTHONPATH.
-4. Unpack the example dataset of choice.
-5. Within the dataset, look at benchmark_runs.py  Edit "benchmark = " near the top to
-choose a benchmark.
-6. The benchmarks make use of slurm_template.sh to submit batch jobs. Edit this for
-local system.
-7. Run!
+### Using a container
 
+The easiest method to get Relion running on you system is to use a container. This is the recommended way to run the this suite of benchmarks. NVIDIA provide a [containerized version of Relion](https://ngc.nvidia.com/catalog/containers/hpc:relion). This benchmark suite makes use of the Singularity version of that container.
+
+To build the container `cd` into the `case1` folder and run the following command:
+
+```bash
+singularity build -F relion.sif relion.def
+```
+
+### Compiling from Source
+
+You'll need to install Relion and ctffind on your machine.
+ - [Relion installation instructions](https://github.com/3dem/relion#installation)
+ - [Ctffind installation instructions](https://grigoriefflab.umassmed.edu/ctffind4) 
+
+
+## Running benchmarks
