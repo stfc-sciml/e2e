@@ -19,7 +19,7 @@ def set_environment():
 
     if 'RELION_PROJ_DIR' not in env:
         raise RuntimeError('No project directory specified!')
-        
+
 def setup_output_folders():
     output_dir = Path(os.environ['RELION_OUTPUT_DIR'])
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -30,19 +30,19 @@ def setup_output_folders():
     (output_dir / 'Class3D').mkdir(parents=True, exist_ok=True)
     (output_dir / 'PostProcess').mkdir(parents=True, exist_ok=True)
     (output_dir / 'CtfRefine').mkdir(parents=True, exist_ok=True)
-    
+
     return output_dir
 
 def read_pipeline(file_name):
     with file_name.open('r') as handle:
         lines = handle.readlines()
-    
+
     def _is_command(line):
         return len(line) > 0 and line[0] != "#"
 
     lines = map(lambda s: s.strip(), lines)
     lines = list(filter(_is_command, lines))
-    names = [re.search(r'.* (relion_[a-z_]+) ', line)[1] if 'relion' in line else line for line in lines] 
+    names = [re.search(r'.* (relion_[a-z_]+) ', line)[1] if 'relion' in line else line for line in lines]
     return list(zip(names, lines))
 
 
@@ -85,7 +85,7 @@ def parse_metrics(name, output_dir):
         line = lines[40]
         line = line.strip().split()
         return dict(acc_rotation=float(line[2]), acc_translation=float(line[3]), resolution=float(line[4]))
-        
+
     else:
         return {}
 
@@ -140,14 +140,14 @@ def main(pipeline_file):
     relion_env_vars = os.environ.copy()
     relion_env_vars = {k: v for k, v in relion_env_vars.items() if 'RELION' in k}
     metrics.update(relion_env_vars)
- 
+
     json_file = output_dir / 'metrics.json'
     write_json(json_file, metrics)
 
     logger.message(f'Writing output to {json_file}')
     logger.ended('Running pipeline')
 
-    
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Benchmark multiple Relion steps.')
