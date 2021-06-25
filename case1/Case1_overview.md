@@ -23,3 +23,6 @@ You'll need to install Relion and ctffind on your machine.
 
 
 ## Running benchmarks
+Relion benchmarks are run using the `benchmark_relion.py` script. This script is the entrypoint for setting up the environment, running relion, and timing each step.
+
+A relion pipeline is defined by a sequence of Relion commands. 
