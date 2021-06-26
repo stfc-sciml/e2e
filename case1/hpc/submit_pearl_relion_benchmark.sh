@@ -1,8 +1,6 @@
 #!/bin/bash
-#SBATCH --ntasks=3
 #SBATCH --cpus-per-task=2
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:2
 
 # Load modules
 module load OpenMPI/4.1.0-GCC-9.3.0

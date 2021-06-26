@@ -23,7 +23,7 @@ export RELION_CMD="singularity run -B $BASE_DIR -H $RELION_PROJ_DIR $RELION_IMG 
 # Number of cpus to use with -j option
 export RELION_CPUS_PER_TASK=$SLURM_CPUS_PER_TASK
 # Additional optimization flags
-export RELION_OPT_FLAGS='--dont_combine_weights_via_disc'
+export RELION_OPT_FLAGS='--dont_combine_weights_via_disc --pool 30'
 # Additional MPI flags
 export RELION_MPI_FLAGS='--mca opal_warn_on_missing_libcuda 0'
 

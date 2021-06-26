@@ -55,38 +55,41 @@ def run_step(step):
     subprocess.call(step, env=env, shell=True)
 
 def parse_metrics(name, output_dir):
-    if name == 'relion_postprocess':
-        # Get resolution, B factor, and particle box fraction as metrics for PostPorcess
-        file_name = output_dir / 'PostProcess/postprocess.star'
-        names = ['_rlnFinalResolution', '_rlnBfactorUsedForSharpening', '_rlnParticleBoxFractionSolventMask']
+    try:
+        if name == 'relion_postprocess':
+            # Get resolution, B factor, and particle box fraction as metrics for PostPorcess
+            file_name = output_dir / 'PostProcess/postprocess.star'
+            names = ['_rlnFinalResolution', '_rlnBfactorUsedForSharpening', '_rlnParticleBoxFractionSolventMask']
 
-        with file_name.open('r') as handle:
-            lines = handle.readlines()
+            with file_name.open('r') as handle:
+                lines = handle.readlines()
 
-        lines = [line.strip().split() for line in lines]
-        lines = [line for line in lines if len(line) > 0]
-        lines = [line for line in lines if line[0] in names]
-        names = [line[0].strip() for line in lines]
-        values = [float(line[1].strip()) for line in lines]
-        return dict(zip(names, values))
-    elif name == 'relion_ctf_refine_mpi' or name == 'relion_ctf_refine':
-        # Get beam tilt X/Y as metric from CtfRefine
-        file_name = output_dir / 'CtfRefine/particles_ctf_refine.star'
-        with file_name.open('r') as handle:
-            lines = handle.readlines()
-        line = lines[18]
-        line = line.strip().split()
-        return dict(beam_tilt_x=float(line[10]), beam_tilt_y=float(line[11]))
-    elif name == 'relion_refine_mpi' or name == 'relion_refine':
-        # Get rotation, translation, and resolution accuracy from Refine3D
-        file_name = output_dir / 'Refine3D/run_model.star'
-        with file_name.open('r') as handle:
-            lines = handle.readlines()
-        line = lines[40]
-        line = line.strip().split()
-        return dict(acc_rotation=float(line[2]), acc_translation=float(line[3]), resolution=float(line[4]))
+            lines = [line.strip().split() for line in lines]
+            lines = [line for line in lines if len(line) > 0]
+            lines = [line for line in lines if line[0] in names]
+            names = [line[0].strip() for line in lines]
+            values = [float(line[1].strip()) for line in lines]
+            return dict(zip(names, values))
+        elif name == 'relion_ctf_refine_mpi' or name == 'relion_ctf_refine':
+            # Get beam tilt X/Y as metric from CtfRefine
+            file_name = output_dir / 'CtfRefine/particles_ctf_refine.star'
+            with file_name.open('r') as handle:
+                lines = handle.readlines()
+            line = lines[18]
+            line = line.strip().split()
+            return dict(beam_tilt_x=float(line[10]), beam_tilt_y=float(line[11]))
+        elif name == 'relion_refine_mpi' or name == 'relion_refine':
+            # Get rotation, translation, and resolution accuracy from Refine3D
+            file_name = output_dir / 'Refine3D/run_model.star'
+            with file_name.open('r') as handle:
+                lines = handle.readlines()
+            line = lines[40]
+            line = line.strip().split()
+            return dict(acc_rotation=float(line[2]), acc_translation=float(line[3]), resolution=float(line[4]))
 
-    else:
+        else:
+            return {}
+    except:
         return {}
 
 
