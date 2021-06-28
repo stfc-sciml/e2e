@@ -115,7 +115,7 @@ In this example:
 
 ## Datasets
 
-Three datasets are provided with this benchmark. The details of each individual
+Two datasets are provided with this benchmark. The details of each individual
 dataset are given in the table below. 
 
 
