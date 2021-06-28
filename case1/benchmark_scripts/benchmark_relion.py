@@ -30,6 +30,11 @@ def setup_output_folders():
     (output_dir / 'Class3D').mkdir(parents=True, exist_ok=True)
     (output_dir / 'PostProcess').mkdir(parents=True, exist_ok=True)
     (output_dir / 'CtfRefine').mkdir(parents=True, exist_ok=True)
+    (output_dir / 'Polish').mkdir(parents=True, exist_ok=True)
+    (output_dir / 'Polish_t').mkdir(parents=True, exist_ok=True)
+    (output_dir / 'Extract').mkdir(parents=True, exist_ok=True)
+    (output_dir / 'Import').mkdir(parents=True, exist_ok=True)
+    (output_dir / 'Select').mkdir(parents=True, exist_ok=True)
 
     return output_dir
 
@@ -86,7 +91,22 @@ def parse_metrics(name, output_dir):
             line = lines[40]
             line = line.strip().split()
             return dict(acc_rotation=float(line[2]), acc_translation=float(line[3]), resolution=float(line[4]))
-
+        elif name == 'relion_preprocess_mpi' or name == 'relion_preprocess':
+            # Get pixel/particle size
+            file_name = output_dir / 'Extract/particles.star'
+            with file_name.open('r') as handle:
+                lines = handle.readlines()
+            line = lines[18]
+            line = line.strip().split()
+            return dict(pixel_size=float(line[7]), particle_size=float(line[8]))
+        elif name == 'relion_motion_refine_mpi' or name =='relion_motion_refine':
+            # Get opt params
+            file_name = output_dir / 'Polish_t/opt_params_all_groups.txt'
+            with file_name.open('r') as handle:
+                lines = handle.readlines()
+            line = lines[0]
+            line = line.strip().split()
+            return dict(zip(range(len(line), line)))
         else:
             return {}
     except:
