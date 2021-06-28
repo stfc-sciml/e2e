@@ -61,3 +61,54 @@ benchmark_scripts/benchmark_relion.py benchmark_scripts/rabbit_aldolase_benchmar
 ```
 
 Several more examples are given in jobs scripts in the `hpc` folder.
+
+### Benchmark Outputs
+
+All output from the running the Relion pipeline will be output to the `RELION_OUTPUT_DIR`. Additional the benchmarking tool will also output a `metrics.json` file. This file contains the timings and quality metrics (if defined) of each step, along with some metadata about the run. An example of the output is shown below.
+
+In this example:
+
+ - `pipeline_file`: the pipeline file run to produce this `metrics.json`
+ - `total_duration`: is the total execution time for the pipeline
+ - `steps`: contains the timing & quality metrics for each step in the pipeline.
+    - `duration`:  total execution time of the step.
+ - `RELION_*`: the environment variables used by this run.
+
+```json
+{
+  "pipeline_file": "benchmark_scripts/rabbit_aldolase_benchmark.sh",
+  "total_duration": 16983.38385272026,
+  "steps": [
+    {
+      "name": "relion_refine_mpi",
+      "duration": 14575.145715475082,
+      "acc_rotation": 1.213,
+      "acc_translation": 0.47824,
+      "resolution": 3.629367
+    },
+    {
+      "name": "relion_mask_create",
+      "duration": 41.833229780197144
+    },
+    {
+      "name": "relion_postprocess",
+      "duration": 11.278026342391968,
+      "_rlnFinalResolution": 3.150769,
+      "_rlnBfactorUsedForSharpening": -114.15386,
+      "_rlnParticleBoxFractionSolventMask": 44.736736
+    },
+    {
+      "name": "relion_ctf_refine_mpi",
+      "duration": 2354.8725686073303,
+      "beam_tilt_x": -0.11172,
+      "beam_tilt_y": 0.104509
+    }
+  ],
+  "RELION_OPT_FLAGS": "--gpu --dont_combine_weights_via_disc --pool 30",
+  "RELION_CMD": "singularity run --nv -B /mnt/beegfs/work/stfc/pearl008/intel-e2e-benchmark/case1 -H /mnt/beegfs/work/stfc/pearl008/intel-e2e-benchmark/case1/data/10338 /mnt/beegfs/work/stfc/pearl008/intel-e2e-benchmark/case1/relion.sif",
+  "RELION_CPUS_PER_TASK": "2",
+  "RELION_OUTPUT_DIR": "/mnt/beegfs/work/stfc/pearl008/intel-e2e-benchmark/case1/runs/pearl/job_28257",
+  "RELION_PROJ_DIR": "/mnt/beegfs/work/stfc/pearl008/intel-e2e-benchmark/case1/data/10338",
+  "RELION_IMG": "/mnt/beegfs/work/stfc/pearl008/intel-e2e-benchmark/case1/relion.sif"
+}
+```
