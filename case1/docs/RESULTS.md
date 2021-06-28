@@ -19,3 +19,9 @@ Using the standard Plasmodium Ribosome datasets used by the Relion benchmarks
 | PEARL  |    1 |      3 |  28261 |    83173.58003 | --gpu            |                    2 |
 | PEARL  |    2 |      5 |  28262 |    39838.16112 | --gpu            |                    2 |
 | PEARL  |    4 |     11 |  28263 |    18710.24553 | --gpu            |                    2 |
+
+
+# Systems
+
+## PEARL
+PEARL is a high-performance computing cluster, designed primarily for Deep Learning and AI research. At its core are two NVIDIA DGX-2s. Each DGX-2 utilises 16 Tesla V100 GPUs with a total of 512GB of GPU memory. Each also has 1.5TB of system RAM, two Intel Xeon Platinum CPUs and 30TB of NVME SSD local storage. The DGX-2s are connected over 100Gbit/s EDR InfiniBand to two Boston Flash-IO Talyn servers which together provide half a petabyte of NVMe storage.
