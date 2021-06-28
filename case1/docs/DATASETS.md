@@ -4,11 +4,10 @@ Three datasets are provided with this benchmark. The details of each individual
 dataset are given in the table below. 
 
 
-| Dataset | EMPIAR ID    | Size (GB) | Description                                                                                                                                      |
+| Dataset | EMPIAR ID    | Size (TB) | Description                                                                                                                                      |
 |---------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| RELION tutorial | n/a | 8 | Small dataset from the Relion tutorial for rapid testing of setup. |
-| Rabbit muscle aldolase  | 10338          | ??      | Martyn's. 200kV microscope.      |
-| Coronavirus-HKU1 haemagglutinin esterase | 10390          | ??        |  Tom's |
+| RELION tutorial | n/a | 0.08 | Small dataset from the Relion tutorial for rapid testing of setup. |
+| Rabbit muscle aldolase  | 10338          | 1.4      | Rabbit muscle aldolase movies obtained using a Talos Arctica (200 kV) equipped with a K2. More details on [EMPIAR](https://www.ebi.ac.uk/pdbe/emdb/empiar/entry/10338/)      |
 
 # Flowcharts
 
