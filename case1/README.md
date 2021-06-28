@@ -7,7 +7,7 @@ To run the benchmark you will need a copy of [relion](https://github.com/3dem/re
 
 ### Using a container
 
-The easiest method to get Relion running on you system is to use a container. This is the recommended way to run the this suite of benchmarks. NVIDIA provide a [containerized version of Relion](https://ngc.nvidia.com/catalog/containers/hpc:relion). This benchmark suite makes use of the Singularity version of that container.
+The easiest method to get Relion running on you system is to use a container. This is the recommended way to run  this suite of benchmarks. NVIDIA provide a [containerized version of Relion](https://ngc.nvidia.com/catalog/containers/hpc:relion). This benchmark suite makes use of the Singularity version of that container.
 
 To build the container `cd` into the `case1` folder and run the following command:
 
