@@ -112,3 +112,14 @@ In this example:
   "RELION_IMG": "/mnt/beegfs/work/stfc/pearl008/intel-e2e-benchmark/case1/relion.sif"
 }
 ```
+
+## Datasets
+
+Three datasets are provided with this benchmark. The details of each individual
+dataset are given in the table below. 
+
+
+| Dataset | Published    | Size (TB) | Description                                                                                                                                      |
+|---------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| RELION tutorial | [Wong et al, eLife 2014](http://dx.doi.org/10.7554/eLife.03080) | 0.08 | Small dataset from the Relion tutorial for rapid testing of setup. Cryo-EM structure of the Plasmodium falciparum 80S ribosome bound to the anti-protozoan drug emetine |
+| Rabbit muscle aldolase  | [EMPIAR 10338](https://www.ebi.ac.uk/pdbe/emdb/empiar/entry/10338/)          | 1.4      | Rabbit muscle aldolase movies obtained using a Talos Arctica (200 kV) equipped with a K2.|
