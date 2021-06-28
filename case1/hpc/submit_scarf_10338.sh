@@ -1,9 +1,10 @@
 #!/bin/bash
 #SBATCH -p scarf 
 #SBATCH -C scarf17
-#SBATCH --ntasks=21
+#SBATCH --ntasks=41
 #SBATCH --cpus-per-task=2
-#SBATCH --nodes=2
+#SBATCH --nodes=4
+#SBATCH --time 3-0
 
 # Load modules
 module load OpenMPI/4.1.0-iccifort-2018.3.222-GCC-7.3.0-2.30
