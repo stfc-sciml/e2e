@@ -3,9 +3,9 @@
 This folder contains scripts for the Relion End-to-End benchmark.
 
 Contents:
- - [Installation](installation)
- - [Running benchmarks](running-benchmarks)
- - [Datasets](datasets)
+ - [Installation](#installation)
+ - [Running benchmarks](#running-benchmarks)
+ - [Datasets](#datasets)
 
 ## Installation
 To run the benchmark you will need a copy of [relion](https://github.com/3dem/relion) and [ctffind](https://grigoriefflab.umassmed.edu/ctffind4).
