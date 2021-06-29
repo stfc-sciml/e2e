@@ -82,7 +82,7 @@ In this example:
 
 ```json
 {
-  "pipeline_file": "benchmark_scripts/rabbit_aldolase_benchmark.sh",
+  "pipeline_file": "benchmark_scripts/10338/pipeline_refine3d_3.sh",
   "total_duration": 16983.38385272026,
   "steps": [
     {
