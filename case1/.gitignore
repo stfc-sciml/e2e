@@ -1,0 +1,5 @@
+*.out
+*.sif
+runs
+data
+*__pycache__*
