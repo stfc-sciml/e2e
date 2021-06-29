@@ -63,7 +63,7 @@ export RELION_CPUS_PER_TASK=$SLURM_CPUS_PER_TASK
 # Additional optimization flags
 export RELION_OPT_FLAGS='--gpu --dont_combine_weights_via_disc --pool 30'
 
-benchmark_scripts/benchmark_relion.py benchmark_scripts/rabbit_aldolase_benchmark.sh
+benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_refine3d_2.sh
 ```
 
 Several more examples are given in jobs scripts in the `hpc` folder.
