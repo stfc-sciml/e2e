@@ -20,7 +20,7 @@ mpirun $RELION_CMD relion_refine_mpi --o ${RELION_OUTPUT_DIR}/Refine3D/run  -aut
 # mask based on output 3D model from Refine3D job
 #########################################################
 
-$RELION_CMD relion_mask_create --i Refine3D/job057/run_class001.mrc --o ${RELION_OUTPUT_DIR}/MaskCreate/mask.mrc --lowpass 15 --ini_threshold 0.007 --extend_inimask 0 --width_soft_edge 5 --j 1
+$RELION_CMD relion_mask_create --i Refine3D/job057/run_class001.mrc --o ${RELION_OUTPUT_DIR}/MaskCreate/mask.mrc --lowpass 15 --ini_threshold 0.001 --extend_inimask 0 --width_soft_edge 8 --j 1
 
 # No useful metrics in text output. Mask is tested in following PostProcess job.
 
