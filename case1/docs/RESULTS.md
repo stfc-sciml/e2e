@@ -1,4 +1,7 @@
 # Results
+
+All durations are in units of seconds.
+
 ## Rabbit Muscle Aldolase
 
 Using [EMPIAR dataset 10338](https://www.ebi.ac.uk/pdbe/emdb/empiar/entry/10338/).
