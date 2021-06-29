@@ -1,6 +1,14 @@
 # Results
 
-All durations are in units of seconds.
+All durations are in units of seconds. Additional metrics captured include:
+
+ - `acc_rotation`
+ - `acc_translation`
+ - `_rlnFinalResolution`
+ - `_rlnParticleBoxFractionSolventMask`
+ - `_rlnBfactorUsedForSharpening`
+ - `beam_tilt_x`
+ - `beam_tilt_y`
 
 ## Rabbit Muscle Aldolase
 
