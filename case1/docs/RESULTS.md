@@ -7,6 +7,7 @@ All durations are in units of seconds.
 Using [EMPIAR dataset 10338](https://www.ebi.ac.uk/pdbe/emdb/empiar/entry/10338/).
 
 ### PEARL
+Run using the relion singularity container with Relion version 3.1.2.
 
 #### Stage 2
 | system | nodes | GPUs | ntasks | job_id | total_duration | ('relion_refine_mpi', 'duration') | ('relion_mask_create', 'duration') | ('relion_postprocess', 'duration') | ('relion_ctf_refine_mpi', 'duration') | ('relion_refine_mpi', 'acc_rotation') | ('relion_refine_mpi', 'acc_translation') | ('relion_refine_mpi', 'resolution') | ('relion_postprocess', '_rlnFinalResolution') | ('relion_postprocess', '_rlnBfactorUsedForSharpening') | ('relion_postprocess', '_rlnParticleBoxFractionSolventMask') | ('relion_ctf_refine_mpi', 'beam_tilt_x') | ('relion_ctf_refine_mpi', 'beam_tilt_y') |
@@ -18,6 +19,7 @@ Using [EMPIAR dataset 10338](https://www.ebi.ac.uk/pdbe/emdb/empiar/entry/10338/
 | PEARL  |     1 |   16 |     41 |  28260 |    2841.958082 |                       2357.543861 |                        40.91957307 |                        11.21114421 |                           432.0415237 |                                 1.224 |                                   0.4816 |                            3.629367 |                                      3.150769 |                                             -114.15386 |                                                    44.736736 |                                 -0.11405 |                                 0.100917 |
 
 ### SCARF
+Run using the relion singularity container with Relion version 3.1.2.
 
 #### Stage 2
 | system | nodes | GPUs | ntasks | job_id | total_duration | relion_refine_mpi duration | relion_mask_create duration | relion_postprocess duration | relion_ctf_refine_mpi duration | relion_refine_mpi acc_rotation | relion_refine_mpi acc_translation | relion_refine_mpi resolution | relion_postprocess _rlnFinalResolution | relion_postprocess _rlnBfactorUsedForSharpening | relion_postprocess _rlnParticleBoxFractionSolventMask | relion_ctf_refine_mpi beam_tilt_x | relion_ctf_refine_mpi beam_tilt_y |
