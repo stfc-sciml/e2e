@@ -6,6 +6,7 @@ Contents:
  - [Installation](#installation)
  - [Running benchmarks](#running-benchmarks)
  - [Datasets](#datasets)
+ - [Results](#results)
 
 ## Installation
 To run the benchmark you will need a copy of [relion](https://github.com/3dem/relion) and [ctffind](https://grigoriefflab.umassmed.edu/ctffind4).
@@ -128,3 +129,6 @@ dataset are given in the table below.
 |---------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------|
 | RELION tutorial | [Wong et al, eLife 2014](http://dx.doi.org/10.7554/eLife.03080) | 0.08 | Small dataset from the Relion tutorial for rapid testing of setup. Cryo-EM structure of the Plasmodium falciparum 80S ribosome bound to the anti-protozoan drug emetine |
 | Rabbit muscle aldolase  | [EMPIAR 10338](https://www.ebi.ac.uk/pdbe/emdb/empiar/entry/10338/)          | 1.4      | Rabbit muscle aldolase movies obtained using a Talos Arctica (200 kV) equipped with a K2.|
+
+## Results
+A detailed breakdown of results can be found in [case1/docs/RESULTS.md](case1/docs/RESULTS.md)
