@@ -10,7 +10,7 @@
 # using particles from job050 and 3D reference from job043
 #########################################################
 
-mpirun $RELION_CMD relion_refine_mpi --o ${RELION_OUTPUT_DIR}/Refine3D/run --auto_refine --split_random_halves --i CtfRefine/job050/particles_ctf_refine.star --ref Refine3D/job043/run_class001.mrc --ini_high 30 --dont_combine_weights_via_disc --pool 30 --pad 1  --skip_gridding  --ctf --ctf_corrected_ref --particle_diameter 120 --flatten_solvent --zero_mask --oversampling 1 --healpix_order 2 --auto_local_healpix_order 4 --offset_range 5 --offset_step 2 --sym D2 --low_resol_join_halves 40 --norm --scale  --j $RELION_CPUS_PER_TASK $RELION_OPT_FLAGS
+mpirun $RELION_CMD relion_refine_mpi --o ${RELION_OUTPUT_DIR}/Refine3D/run --auto_refine --split_random_halves --i CtfRefine/job050/particles_ctf_refine.star --ref Refine3D/job043/run_class001.mrc --ini_high 30 --pad 1  --skip_gridding  --ctf --ctf_corrected_ref --particle_diameter 120 --flatten_solvent --zero_mask --oversampling 1 --healpix_order 2 --auto_local_healpix_order 4 --offset_range 5 --offset_step 2 --sym D2 --low_resol_join_halves 40 --norm --scale  --j $RELION_CPUS_PER_TASK $RELION_OPT_FLAGS
 
 #########################################################
 # 052 MaskCreate
