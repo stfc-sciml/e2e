@@ -28,7 +28,7 @@ Run using the relion singularity container with Relion version 3.1.2.
 | SCARF  |     8 |    0 |     81 | 173964 |    48099.03498 |                47573.72996 |                 55.72322869 |                 11.62700438 |                    456.6823997 |                          1.231 |                           0.48496 |                     3.629367 |                               3.150769 |                                      -114.15386 |                                             44.736736 |                          -0.11137 |                          0.104368 |
 ## Plasmodium Ribosome
 
-Using the standard Plasmodium Ribosome datasets used by the Relion benchmarks
+Using the standard Plasmodium Ribosome datasets used by the Relion benchmarks. Run using the relion singularity container with Relion version 3.1.2.
 
 | system | GPUs | ntasks | job_id | total_duration | relion_refine_mpi duration | relion_refine_mpi duration |
 |--------|------|--------|--------|----------------|----------------------------|----------------------------|
