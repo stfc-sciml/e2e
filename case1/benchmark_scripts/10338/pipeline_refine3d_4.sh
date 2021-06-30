@@ -29,7 +29,7 @@ $RELION_CMD relion_mask_create --i Refine3D/job057/run_class001.mrc --o ${RELION
 # based on output 3D model from Refine3D job and mask from MaskCreate job
 #########################################################
 
-$RELION_CMD relion_postprocess --mask ${RELION_OUTPUT_DIR}/MaskCreate/mask.mrc --i Refine3D/job057/run_half1_class001_unfil.mrc --o ${RELION_OUTPUT_DIR}/PostProcess/postprocess  --angpix -1 --mtf benchmark_scripts/mtf_k2_200kV.star --mtf_angpix 0.56 --auto_bfac  --autob_lowres 10
+$RELION_CMD relion_postprocess --mask ${RELION_OUTPUT_DIR}/MaskCreate/mask.mrc --i Refine3D/job057/run_half1_class001_unfil.mrc --o ${RELION_OUTPUT_DIR}/PostProcess/postprocess --angpix -1 --mtf benchmark_scripts/mtf_k2_200kV.star --mtf_angpix 0.56 --auto_bfac  --autob_lowres 10
 
 
 #########################################################
@@ -38,7 +38,7 @@ $RELION_CMD relion_postprocess --mask ${RELION_OUTPUT_DIR}/MaskCreate/mask.mrc -
 # job 005, and other filenames taken from PostProcess output
 #########################################################
 
-mpirun $RELION_CMD relion_motion_refine_mpi --i Refine3D/job057/run_data.star --f ${RELION_OUTPUT_DIR}/PostProcess/postprocess.star --corr_mic MotionCorr/job005/corrected_micrographs.star --first_frame 1 --last_frame -1 --o ${RELION_OUTPUT_DIR}/Polish_t/ --min_p 10000 --eval_frac 0.5 --align_frac 0.5 --params3  --j $RELION_CPUS_PER_TASK
+$RELION_CMD relion_motion_refine --i Refine3D/job057/run_data.star --f ${RELION_OUTPUT_DIR}/PostProcess/postprocess.star --corr_mic MotionCorr/job005/corrected_micrographs.star --first_frame 1 --last_frame -1 --o ${RELION_OUTPUT_DIR}/Polish_t/ --min_p 10000 --eval_frac 0.5 --align_frac 0.5 --params3  --j $RELION_CPUS_PER_TASK
 
 #########################################################
 # 068 Polish (apply)
