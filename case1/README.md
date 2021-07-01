@@ -77,6 +77,19 @@ When running using the Relion singularity container on a CPU only machine, you m
 export RELION_CMD="singularity run --nv -B $BASE_DIR -H $RELION_PROJ_DIR $RELION_IMG -gpu_disable_check"
 ```
 
+### Optimization options
+
+Several options can be passed to `relion_refine_mpi` commands using the environment variable `RELION_OPT_FLAGS`. Below is a list of common optimization flags from the Relion documentation:
+
+| Name                            | Description                                                                                                                                                                                                                  |   |
+|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|
+| --dont_combine_weights_via_disc | By default large messages are passed between MPI processes through reading and writing of large files on the computer disk. By giving this option, the messages will be passed through the network instead.                  |   |
+| --gpu                           | Use GPU-acceleration. We often use this option.                                                                                                                                                                              |   |
+| --pool                          | This determines how many particles are processed together in a function call.                                                                                                                                                |   |
+| --no_parallel_disc_io           | By default, all MPI slaves read their own particles (from disk or into RAM). Use this option to have the master read all particles, and then send them all through the network.                                              |   |
+| --preread_images                | By default, all particles are read from the computer disk in every iteration. Using this option, they are all read into RAM once, at the very beginning of the job instead.                                                  |   |
+| --scratch_dir                   | By default, particles are read every iteration from the location specified in the input STAR file. By using this option, all particles are copied to a scratch disk, from where they will be read (every iteration) instead. |   |
+
 ### Benchmark Outputs
 
 All output from the running the Relion pipeline will be output to the `RELION_OUTPUT_DIR`. Additional the benchmarking tool will also output a `metrics.json` file. This file contains the timings and quality metrics (if defined) of each step, along with some metadata about the run. All durations are in units of seconds. Additional metrics captured by steps in the Relion workflow include:
