@@ -100,13 +100,15 @@ def parse_metrics(name, output_dir):
             line = line.strip().split()
             return dict(pixel_size=float(line[7]), particle_size=float(line[8]))
         elif name == 'relion_motion_refine_mpi' or name =='relion_motion_refine':
-            # Get opt params
+            # Get opt params from output training file
             file_name = output_dir / 'Polish_t/opt_params_all_groups.txt'
             with file_name.open('r') as handle:
                 lines = handle.readlines()
             line = lines[0]
             line = line.strip().split()
-            return dict(zip(range(len(line), line)))
+            line = list(map(float, line))
+            params = dict(zip(range(len(line)), line))
+            return params
         else:
             return {}
     except:
