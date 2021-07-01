@@ -1,3 +1,4 @@
+#!/bin/bash
 
 #####
 # This benchmark implements jobs 039 and job042  of the workflow
@@ -18,5 +19,5 @@ mpirun $RELION_CMD relion_refine_mpi --o ${RELION_OUTPUT_DIR}/Class3D/run --i Se
 # 042 Select
 #########################################################
 
-time `which relion_star_handler` --i Class3D/job039/run_it025_data.star --o ${RELION_OUTPUT_DIR}/Select/particles.star --select rlnClassNumber --minval 2 --maxval 2
+$RELION_CMD relion_star_handler --i Class3D/job039/run_it025_data.star --o ${RELION_OUTPUT_DIR}/Select/particles.star --select rlnClassNumber --minval 2 --maxval 2
 
