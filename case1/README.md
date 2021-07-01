@@ -6,7 +6,7 @@ Contents:
  - [Installation](#installation)
  - [Running benchmarks](#running-benchmarks)
  - [Datasets](#datasets)
- - [Pipline Stages](#stages)
+ - [Pipeline Stages](#stages)
  - [Results](#results)
 
 ## Installation
