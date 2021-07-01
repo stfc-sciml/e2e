@@ -180,4 +180,4 @@ A brief description of what each stage of the pipeline does.
 | pipeline_polish_5.sh   | Polishing (training and applying).                                                                                                                                                                  |   |
 
 ## Results
-A detailed breakdown of results can be found in [case1/docs/RESULTS.md](case1/docs/RESULTS.md)
+A detailed breakdown of results can be found in [case1/docs/RESULTS.md](case1/docs/RESULTS.md). Raw logs and tables of results can be found in [case1/runs](case1/runs).
