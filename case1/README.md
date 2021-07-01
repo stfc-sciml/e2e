@@ -44,6 +44,8 @@ To run a pipeline, use the `benchmark_scripts/benchmark_relion.py` tool. This to
 | RELION_CMD           | Command used to run Relion if using a singularity container. If the Relion singularity container is used then this option must be set. If Relion is not being run from within a singularity container then this must be omitted. | RELION_CMD="singularity run --nv -B $BASE_DIR -H $RELION_PROJ_DIR $RELION_IMG" |
 | RELION_CPUS_PER_TASK | Optional. Number of CPUS used per task. This option is passed to the `-j` flag in Relion commands                                                                                                                                             | RELION_CPUS_PER_TASK=2                                                         |
 | RELION_OPT_FLAGS     | Optional. Additional optimization flags to pass to relion.                                                                                                                                                                                 | RELION_OPT_FLAGS=='--gpu --dont_combine_weights_via_disc --pool 30'            |
+| RELION_MPI_FLAGS      | Optional. Additional options to pass to mpirun    | RELION_MPI_FLAGS='--mca opal_warn_on_missing_libcuda 0' |
+
 
 For example:
 
