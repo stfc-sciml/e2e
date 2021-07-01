@@ -35,7 +35,7 @@ Relion benchmarks are run using the `benchmark_relion.py` script. This script is
 
 A relion pipeline is defined by a sequence of Relion commands, e.g. `relion_refine`, `relion_postprocess` `relion_mask_create` etc. Pipeline scripts use intermediate files (provided with the dataset) from the full refinement as input, allowing the user to only run a single component, or to run multiple pipelines in parallel. All pipeline scripts are located in the `benchmark_scripts` folder.
 
-To run a pipeline, use the `benchmark_scripts/benchmark_relion.py` tool. This tool requires the use to setup several environment variables to configure the run.
+To run a pipeline, use the `benchmark_scripts/benchmark_relion.py` tool. This tool requires the user to setup several environment variables to configure the run.
 
 | Name                 | Description                                                                                                                                                                                                                      | Example                                                                        |
 |----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
