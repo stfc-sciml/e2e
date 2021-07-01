@@ -1,9 +1,8 @@
 #####
-# This benchmark implements jobs 057 to 059, 061, 068 of the workflow
+# This benchmark implements jobs 057 to 059 of the workflow
 # which cover 3D refinement with fully sampled particles (hence longer job), 
-# mask creation, postprocessing, and polishing (training and applying).
-# Note that jobs 060, 062 were failed jobs, and 063-067 were additional
-# benchmarking jobs and so not included in the main workflow.
+# mask creation, and postprocessing.
+# Note that jobs 060, 062 were failed jobs and so not included in the main workflow.
 #####
 
 
