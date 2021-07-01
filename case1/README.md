@@ -79,17 +79,7 @@ export RELION_CMD="singularity run --nv -B $BASE_DIR -H $RELION_PROJ_DIR $RELION
 
 ### Benchmark Outputs
 
-All output from the running the Relion pipeline will be output to the `RELION_OUTPUT_DIR`. Additional the benchmarking tool will also output a `metrics.json` file. This file contains the timings and quality metrics (if defined) of each step, along with some metadata about the run. An example of the output is shown below.
-
-In this example:
-
- - `pipeline_file`: the pipeline file run to produce this `metrics.json`
- - `total_duration`: is the total execution time for the pipeline
- - `steps`: contains the timing & quality metrics for each step in the pipeline.
-    - `duration`:  total execution time of the step.
- - `RELION_*`: the environment variables used by this run.
-
- All durations are in units of seconds. Additional metrics captured by steps in the relion workflow include:
+All output from the running the Relion pipeline will be output to the `RELION_OUTPUT_DIR`. Additional the benchmarking tool will also output a `metrics.json` file. This file contains the timings and quality metrics (if defined) of each step, along with some metadata about the run. All durations are in units of seconds. Additional metrics captured by steps in the relion workflow include:
 
  - `acc_rotation`
  - `acc_translation`
@@ -101,6 +91,14 @@ In this example:
  - `relion_motion_refine` params 
  - `particle_size`
  - `pixel_size` 
+
+An example of the output is shown below. In example below:
+
+ - `pipeline_file`: the pipeline file run to produce this `metrics.json`
+ - `total_duration`: is the total execution time for the pipeline
+ - `steps`: contains the timing & quality metrics for each step in the pipeline.
+    - `duration`:  total execution time of the step.
+ - `RELION_*`: the environment variables used by this run.
 
 ```json
 {
