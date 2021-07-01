@@ -92,12 +92,13 @@ def parse_metrics(name, step, output_dir):
                 line = lines[40]
                 line = line.strip().split()
                 return dict(acc_rotation=float(line[2]), acc_translation=float(line[3]), resolution=float(line[4]))
-            elif 'Class3D' or 'Class2D' in step:
+            elif 'Class3D' in step or 'Class2D' in step:
                 # Get resolution, number of classes, and class distributions
                 if 'Class3D' in step:
                     file_name = output_dir / 'Class3D/run_it025_model.star'
                 else:
                     file_name = output_dir / 'Class2D/run_it025_model.star'
+
 
                 with file_name.open('r') as handle:
                     lines = handle.readlines()
@@ -108,10 +109,12 @@ def parse_metrics(name, step, output_dir):
                 )
 
                 lines = [line for line in lines if 'Class3D' in step or 'Class2D' in line]
+
                 # class distributions
+                num_top = 0
                 for i, line in enumerate(lines):
-                    class_occ = line.strip().split()[1]
-                    metrics[f'class_{i+1}_occ'] = float(class_occ)
+                    class_occ = float(line.strip().split()[1])
+                    metrics[f'class_{i+1}_occ'] = class_occ
                     if class_occ > 0.02:
                         num_top += 1
 
