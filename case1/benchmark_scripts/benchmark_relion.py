@@ -59,7 +59,7 @@ def run_step(step):
     env = os.environ.copy()
     subprocess.call(step, env=env, shell=True)
 
-def parse_metrics(name, output_dir):
+def parse_metrics(name, step, output_dir):
     try:
         if name == 'relion_postprocess':
             # Get resolution, B factor, and particle box fraction as metrics for PostPorcess
@@ -84,13 +84,31 @@ def parse_metrics(name, output_dir):
             line = line.strip().split()
             return dict(beam_tilt_x=float(line[10]), beam_tilt_y=float(line[11]))
         elif name == 'relion_refine_mpi' or name == 'relion_refine':
-            # Get rotation, translation, and resolution accuracy from Refine3D
-            file_name = output_dir / 'Refine3D/run_model.star'
-            with file_name.open('r') as handle:
-                lines = handle.readlines()
-            line = lines[40]
-            line = line.strip().split()
-            return dict(acc_rotation=float(line[2]), acc_translation=float(line[3]), resolution=float(line[4]))
+            if 'Refine3D' in step:
+                # Get rotation, translation, and resolution accuracy from Refine3D
+                file_name = output_dir / 'Refine3D/run_model.star'
+                with file_name.open('r') as handle:
+                    lines = handle.readlines()
+                line = lines[40]
+                line = line.strip().split()
+                return dict(acc_rotation=float(line[2]), acc_translation=float(line[3]), resolution=float(line[4]))
+            elif 'Class3D' in step:
+                # Get resolution, number of classes, and class distributions
+                file_name = output_dir / 'Class3D/run_model.star'
+                with file_name.open('r') as handle:
+                    lines = handle.readlines()
+
+                metrics = dict(
+                    _rlnCurrentResolution=float(lines[8].strip().split()[-1]),
+                    _rlnNrClasses=float(lines[15].strip().split()[-1])
+                )
+
+                # class distributions
+                for i, line in enumerate(lines[range(40, 44)]):
+                    class_occ = line.strip().split()[1]
+                    metrics[f'class_{i+1}_occ'] = class_occ
+
+                return metrics
         elif name == 'relion_preprocess_mpi' or name == 'relion_preprocess':
             # Get pixel/particle size
             file_name = output_dir / 'Extract/particles.star'
@@ -109,10 +127,10 @@ def parse_metrics(name, output_dir):
             line = list(map(float, line))
             params = dict(zip(range(len(line)), line))
             return params
-        else:
-            return {}
     except:
-        return {}
+        pass
+
+    return {}
 
 
 
@@ -147,7 +165,7 @@ def main(pipeline_file):
 
         # Capture outputs
         step_metric = dict(name=name, duration=duration)
-        step_metric.update(parse_metrics(name, output_dir))
+        step_metric.update(parse_metrics(name, step, output_dir))
         step_metrics.append(step_metric)
 
         logger.begin(f'Step {name} results')
