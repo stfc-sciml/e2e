@@ -15,6 +15,9 @@ Using [EMPIAR dataset 10338](https://www.ebi.ac.uk/pdbe/emdb/empiar/entry/10338/
 ### PEARL
 Run using the relion singularity container with Relion version 3.1.2.
 
+#### Class3d Stage 1
+TODO
+
 #### Refine3D Stage 2
 | system | nodes | GPUs | ntasks | job_id | total_duration | ('relion_refine_mpi', 'duration') | ('relion_mask_create', 'duration') | ('relion_postprocess', 'duration') | ('relion_ctf_refine_mpi', 'duration') | ('relion_refine_mpi', 'acc_rotation') | ('relion_refine_mpi', 'acc_translation') | ('relion_refine_mpi', 'resolution') | ('relion_postprocess', '_rlnFinalResolution') | ('relion_postprocess', '_rlnBfactorUsedForSharpening') | ('relion_postprocess', '_rlnParticleBoxFractionSolventMask') | ('relion_ctf_refine_mpi', 'beam_tilt_x') | ('relion_ctf_refine_mpi', 'beam_tilt_y') |
 |--------|-------|------|--------|--------|----------------|-----------------------------------|------------------------------------|------------------------------------|---------------------------------------|---------------------------------------|------------------------------------------|-------------------------------------|-----------------------------------------------|--------------------------------------------------------|--------------------------------------------------------------|------------------------------------------|------------------------------------------|
@@ -38,8 +41,14 @@ Run using the relion singularity container with Relion version 3.1.2.
 
 TODO
 
+#### Polish Stage 5
+TODO
+
 ### SCARF
 Run using the relion singularity container with Relion version 3.1.2.
+
+#### Class3d Stage 1
+TODO
 
 #### Refine3D Stage 2
 | system | nodes | GPUs | ntasks | job_id | total_duration | relion_refine_mpi duration | relion_mask_create duration | relion_postprocess duration | relion_ctf_refine_mpi duration | relion_refine_mpi acc_rotation | relion_refine_mpi acc_translation | relion_refine_mpi resolution | relion_postprocess _rlnFinalResolution | relion_postprocess _rlnBfactorUsedForSharpening | relion_postprocess _rlnParticleBoxFractionSolventMask | relion_ctf_refine_mpi beam_tilt_x | relion_ctf_refine_mpi beam_tilt_y |
@@ -51,6 +60,9 @@ Run using the relion singularity container with Relion version 3.1.2.
 TODO
 
 ### Refine3D Stage 4
+TODO
+
+#### Polish Stage 5
 TODO
 
 ## Plasmodium Ribosome
