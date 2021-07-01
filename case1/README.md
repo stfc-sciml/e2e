@@ -31,11 +31,10 @@ You'll need to install Relion and ctffind on your machine.
 And the Relion executable commands will need to be visible on the PATH. 
 
 ## Running benchmarks
-Relion benchmarks are run using the `benchmark_relion.py` script. This script is the entrypoint for setting up the environment, running Relion, and timing each step.
 
-A Relion pipeline is defined by a sequence of Relion commands, e.g. `relion_refine`, `relion_postprocess` `relion_mask_create` etc. Pipeline scripts use intermediate files (provided with the dataset) from the full refinement as input, allowing the user to only run a single component, or to run multiple pipelines in parallel. All pipeline scripts are located in the `benchmark_scripts` folder.
+A full end to end refinement using Relion is can take days or even weeks of time. To facilitate running an end-to-end benchmark the full refinement is broken up into a number of stages. Each Relion stage is defined by a sequence of Relion commands, e.g. `relion_refine`, `relion_postprocess` `relion_mask_create` etc. Each stage uses intermediate files (provided with the dataset) from the full refinement as input, allowing the user to only run a single stage, or to run multiple stages in parallel. All scripts are located in the `benchmark_scripts` folder.
 
-To run a pipeline, use the `benchmark_scripts/benchmark_relion.py` tool. This tool requires the user to setup several environment variables to configure the run.
+Relion benchmarks are run using the `benchmark_relion.py` script. This script is the entrypoint for setting up the environment, running Relion, and timing each step. To run a pipeline, use the `benchmark_scripts/benchmark_relion.py` tool. This tool requires the user to setup several environment variables to configure the run.
 
 | Name                 | Description                                                                                                                                                                                                                      | Example                                                                        |
 |----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
