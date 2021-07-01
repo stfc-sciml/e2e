@@ -86,6 +86,9 @@ All output from the running the Relion pipeline will be output to the `RELION_OU
  - `_rlnFinalResolution`
  - `_rlnParticleBoxFractionSolventMask`
  - `_rlnBfactorUsedForSharpening`
+ - `_rlnCurrentResolution`
+ - `_rlnNrClasses`
+ - `classX_occ`
  - `beam_tilt_x`
  - `beam_tilt_y`
  - `relion_motion_refine` params 
