@@ -92,7 +92,7 @@ Several options can be passed to `relion_refine_mpi` commands using the environm
 
 ### Benchmark Outputs
 
-All output from the running the Relion pipeline will be output to the `RELION_OUTPUT_DIR`. Additional the benchmarking tool will also output a `metrics.json` file. This file contains the timings and quality metrics (if defined) of each step, along with some metadata about the run. All durations are in units of seconds. Additional metrics captured by steps in the Relion workflow include:
+All output from the running the Relion pipeline will be output to the `RELION_OUTPUT_DIR`. Additional the benchmarking tool will also output a `metrics.json` file. This file contains the timings and quality metrics (if defined) of each step, along with some metadata about the run. All durations are in units of seconds. Additional metrics captured by steps in the Relion workflow can be used to monitor the correctness of the processing. These include:
 
  - `acc_rotation`
  - `acc_translation`
@@ -108,7 +108,7 @@ All output from the running the Relion pipeline will be output to the `RELION_OU
  - `particle_size`
  - `pixel_size` 
 
-An example of the output is shown below. In example below:
+An example of the output for a single stage is shown below. In example below:
 
  - `pipeline_file`: the pipeline file run to produce this `metrics.json`
  - `total_duration`: is the total execution time for the pipeline
