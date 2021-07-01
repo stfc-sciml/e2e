@@ -31,18 +31,18 @@ You'll need to install Relion and ctffind on your machine.
 And the Relion executable commands will need to be visible on the PATH. 
 
 ## Running benchmarks
-Relion benchmarks are run using the `benchmark_relion.py` script. This script is the entrypoint for setting up the environment, running relion, and timing each step.
+Relion benchmarks are run using the `benchmark_relion.py` script. This script is the entrypoint for setting up the environment, running Relion, and timing each step.
 
-A relion pipeline is defined by a sequence of Relion commands, e.g. `relion_refine`, `relion_postprocess` `relion_mask_create` etc. Pipeline scripts use intermediate files (provided with the dataset) from the full refinement as input, allowing the user to only run a single component, or to run multiple pipelines in parallel. All pipeline scripts are located in the `benchmark_scripts` folder.
+A Relion pipeline is defined by a sequence of Relion commands, e.g. `relion_refine`, `relion_postprocess` `relion_mask_create` etc. Pipeline scripts use intermediate files (provided with the dataset) from the full refinement as input, allowing the user to only run a single component, or to run multiple pipelines in parallel. All pipeline scripts are located in the `benchmark_scripts` folder.
 
 To run a pipeline, use the `benchmark_scripts/benchmark_relion.py` tool. This tool requires the user to setup several environment variables to configure the run.
 
 | Name                 | Description                                                                                                                                                                                                                      | Example                                                                        |
 |----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
 | RELION_PROJ_DIR      | Relion project directory containing the data files for the benchmark                                                                                                                                                             | RELION_PROJ_DIR="data/10338"                                                   |
-| RELION_OUTPUT_DIR    | Output directory to store the results of the benchmark                                                                                                                                                                           | RELION_OUTPUT_DIR="runs/pearl/test_job"                                        |
 | RELION_CMD           | Command used to run Relion if using a singularity container. If the Relion singularity container is used then this option must be set. If Relion is not being run from within a singularity container then this must be omitted. | RELION_CMD="singularity run --nv -B $BASE_DIR -H $RELION_PROJ_DIR $RELION_IMG" |
-| RELION_CPUS_PER_TASK | Optional. Number of CPUS used per task. This option is passed to the `-j` flag in Relion commands                                                                                                                                             | RELION_CPUS_PER_TASK=2                                                         |
+| RELION_OUTPUT_DIR    | Optional. Default = `relion_output`. Output directory to store the results of the benchmark                                                                                                                                                                           | RELION_OUTPUT_DIR="runs/pearl/test_job"                                        |
+| RELION_CPUS_PER_TASK | Optional. Default = `1`. Number of CPUS used per task. This option is passed to the `-j` flag in Relion commands                                                                                                                                             | RELION_CPUS_PER_TASK=2                                                         |
 | RELION_OPT_FLAGS     | Optional. Additional optimization flags to pass to relion.                                                                                                                                                                                 | RELION_OPT_FLAGS=='--gpu --dont_combine_weights_via_disc --pool 30'            |
 | RELION_MPI_FLAGS      | Optional. Additional options to pass to mpirun    | RELION_MPI_FLAGS='--mca opal_warn_on_missing_libcuda 0' |
 
@@ -79,7 +79,7 @@ export RELION_CMD="singularity run --nv -B $BASE_DIR -H $RELION_PROJ_DIR $RELION
 
 ### Benchmark Outputs
 
-All output from the running the Relion pipeline will be output to the `RELION_OUTPUT_DIR`. Additional the benchmarking tool will also output a `metrics.json` file. This file contains the timings and quality metrics (if defined) of each step, along with some metadata about the run. All durations are in units of seconds. Additional metrics captured by steps in the relion workflow include:
+All output from the running the Relion pipeline will be output to the `RELION_OUTPUT_DIR`. Additional the benchmarking tool will also output a `metrics.json` file. This file contains the timings and quality metrics (if defined) of each step, along with some metadata about the run. All durations are in units of seconds. Additional metrics captured by steps in the Relion workflow include:
 
  - `acc_rotation`
  - `acc_translation`
