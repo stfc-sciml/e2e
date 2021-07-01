@@ -9,6 +9,9 @@ All durations are in units of seconds. Additional metrics captured include:
  - `_rlnBfactorUsedForSharpening`
  - `beam_tilt_x`
  - `beam_tilt_y`
+ - `relion_motion_refine` params 
+ - `particle_size`
+ - `pixel_size` 
 
 ## Rabbit Muscle Aldolase
 
