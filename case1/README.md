@@ -89,6 +89,19 @@ In this example:
     - `duration`:  total execution time of the step.
  - `RELION_*`: the environment variables used by this run.
 
+ All durations are in units of seconds. Additional metrics captured by steps in the relion workflow include:
+
+ - `acc_rotation`
+ - `acc_translation`
+ - `_rlnFinalResolution`
+ - `_rlnParticleBoxFractionSolventMask`
+ - `_rlnBfactorUsedForSharpening`
+ - `beam_tilt_x`
+ - `beam_tilt_y`
+ - `relion_motion_refine` params 
+ - `particle_size`
+ - `pixel_size` 
+
 ```json
 {
   "pipeline_file": "benchmark_scripts/10338/pipeline_refine3d_2.sh",
