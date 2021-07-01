@@ -170,7 +170,8 @@ dataset are given in the table below.
 
 ### Rabbit Muscle Aldolase (10338)
 
-A brief description of what each stage of the pipeline does.
+All of these stages roughly reproduce the workflow of published dataset. A brief description of what each stage of the pipeline does is given below:
+
 | Name                   | Description                                                                                                                                                                                         |   |
 |------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|
 | pipeline_class2d_0.sh |  2D classification.                        |   |
