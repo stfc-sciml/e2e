@@ -1,18 +1,5 @@
 # Results
 
-All durations are in units of seconds. Additional metrics captured include:
-
- - `acc_rotation`
- - `acc_translation`
- - `_rlnFinalResolution`
- - `_rlnParticleBoxFractionSolventMask`
- - `_rlnBfactorUsedForSharpening`
- - `beam_tilt_x`
- - `beam_tilt_y`
- - `relion_motion_refine` params 
- - `particle_size`
- - `pixel_size` 
-
 ## Systems
 
 ### PEARL
