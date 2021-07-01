@@ -6,6 +6,7 @@ Contents:
  - [Installation](#installation)
  - [Running benchmarks](#running-benchmarks)
  - [Datasets](#datasets)
+ - [Pipline Stages](#stages)
  - [Results](#results)
 
 ## Installation
@@ -148,6 +149,18 @@ dataset are given in the table below.
 |---------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------|
 | RELION tutorial | [Wong et al, eLife 2014](http://dx.doi.org/10.7554/eLife.03080) | 0.08 | Small dataset from the Relion tutorial for rapid testing of setup. Cryo-EM structure of the Plasmodium falciparum 80S ribosome bound to the anti-protozoan drug emetine |
 | Rabbit muscle aldolase  | [EMPIAR 10338](https://www.ebi.ac.uk/pdbe/emdb/empiar/entry/10338/)          | 1.4      | Rabbit muscle aldolase movies obtained using a Talos Arctica (200 kV) equipped with a K2.|
+
+## Stages
+
+### Rabbit Muscle Aldolase (10338)
+
+A brief description of what each stage of the pipeline does.
+| Name                   | Description                                                                                                                                                                                         |   |
+|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|
+| pipeline_refine3d_2.sh | 3D refinement of the top 3D class (2x sampling), mask creation, post-processing, and per-particle Ctf refinement (defocus and global astigmatism) and beam tilt estimation.                         |   |
+| pipeline_refine3d_3.sh | 3D refinement with Ctf refined particles (2x sampling), mask creation, post-processing, re-extract particles at original sampling, importing re-sampled reference, and removing duplicate particles |   |
+| pipeline_refine3d_4.sh | 3D refinement with fully sampled particles.                                                                                                                                                         |   |
+| pipeline_polish_5.sh   | Polishing (training and applying).                                                                                                                                                                  |   |
 
 ## Results
 A detailed breakdown of results can be found in [case1/docs/RESULTS.md](case1/docs/RESULTS.md)
