@@ -32,21 +32,3 @@ $RELION_CMD relion_mask_create --i Refine3D/job057/run_class001.mrc --o ${RELION
 $RELION_CMD relion_postprocess --mask ${RELION_OUTPUT_DIR}/MaskCreate/mask.mrc --i Refine3D/job057/run_half1_class001_unfil.mrc --o ${RELION_OUTPUT_DIR}/PostProcess/postprocess --angpix -1 --mtf benchmark_scripts/mtf_k2_200kV.star --mtf_angpix 0.56 --auto_bfac  --autob_lowres 10
 
 
-#########################################################
-# 061 Polish (training)
-# polish particles taken from Refine3D job, using movie frames from
-# job 005, and other filenames taken from PostProcess output
-#########################################################
-
-$RELION_CMD relion_motion_refine --i Refine3D/job057/run_data.star --f ${RELION_OUTPUT_DIR}/PostProcess/postprocess.star --corr_mic MotionCorr/job005/corrected_micrographs.star --first_frame 1 --last_frame -1 --o ${RELION_OUTPUT_DIR}/Polish_t/ --min_p 10000 --eval_frac 0.5 --align_frac 0.5 --params3  --j $RELION_CPUS_PER_TASK
-
-#########################################################
-# 068 Polish (apply)
-# polish particles taken from Refine3D job, using movie frames from
-# job 005, and other filenames taken from PostProcess output
-#########################################################
-
-mpirun $RELION_CMD relion_motion_refine_mpi --i Refine3D/job057/run_data.star --f ${RELION_OUTPUT_DIR}/PostProcess/postprocess.star --corr_mic MotionCorr/job005/corrected_micrographs.star --first_frame 1 --last_frame -1 --o ${RELION_OUTPUT_DIR}/Polish/ --params_file ${RELION_OUTPUT_DIR}/Polish_t/opt_params_all_groups.txt --combine_frames --bfac_minfreq 20 --bfac_maxfreq -1 --j $RELION_CPUS_PER_TASK
-
-# No easy metric to check. You are supposed to inspect the output graphs showing the
-# particle drift. 
