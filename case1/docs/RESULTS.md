@@ -15,6 +15,9 @@ Using [EMPIAR dataset 10338](https://www.ebi.ac.uk/pdbe/emdb/empiar/entry/10338/
 ### PEARL
 Run using the relion singularity container with Relion version 3.1.2.
 
+#### Class2d Stage 1
+TODO
+
 #### Class3d Stage 1
 TODO
 
@@ -46,6 +49,9 @@ TODO
 
 ### SCARF
 Run using the relion singularity container with Relion version 3.1.2.
+
+#### Class2d Stage 1
+TODO
 
 #### Class3d Stage 1
 TODO
