@@ -79,7 +79,7 @@ export RELION_CMD="singularity run --nv -B $BASE_DIR -H $RELION_PROJ_DIR $RELION
 
 ### Optimization options
 
-Several options can be passed to `relion_refine_mpi` commands using the environment variable `RELION_OPT_FLAGS`. Below is a list of common optimization flags from the Relion documentation:
+The `-j` option for Relion can be set with the environment variable `RELION_CPUS_PER_TASK`. Several other optimization options can be passed to `relion_refine_mpi` commands using the environment variable `RELION_OPT_FLAGS`. Below is a list of common optimization flags from the Relion documentation:
 
 | Name                            | Description                                                                                                                                                                                                                  |   |
 |---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|
