@@ -75,3 +75,6 @@ Using the standard Plasmodium Ribosome datasets used by the Relion benchmarks. R
 
 ## PEARL
 PEARL is a high-performance computing cluster, designed primarily for Deep Learning and AI research. At its core are two NVIDIA DGX-2s. Each DGX-2 utilises 16 Tesla V100 GPUs with a total of 512GB of GPU memory. Each also has 1.5TB of system RAM, two Intel Xeon Platinum CPUs and 30TB of NVME SSD local storage. The DGX-2s are connected over 100Gbit/s EDR InfiniBand to two Boston Flash-IO Talyn servers which together provide half a petabyte of NVMe storage.
+
+## SCARF
+SCARF is an HPC (High Performance Computing) cluster open to all STFC departments and Diamond, which is run by STFC’s Scientific Computing Research Infrastructures Group and it is hosted at STFC’s Rutherford Appleton Laboratory. It hosts a heteroegenous selection of CPU compute nodes. More details on the current configuration can be found [here](https://www.scarf.rl.ac.uk/scarf_hardware.html).
