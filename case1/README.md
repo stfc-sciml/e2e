@@ -68,7 +68,7 @@ export RELION_OPT_FLAGS='--gpu --dont_combine_weights_via_disc --pool 30'
 benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_refine3d_2.sh
 ```
 
-Several more examples are given in jobs scripts in the `hpc` folder.
+Several more examples are provided in the form of jobs scripts in the [hpc](case1/hpc) folder of this project.
 
 ### CPU Only jobs
 When running using the Relion singularity container on a CPU only machine, you must add the `-gpu_disable_check` option. This disables NVIDIA's check for a GPU's existence in the [nventry](https://gitlab.com/NVHPC/nventry#options) startup script. For example you can change the `RELION_CMD` to:
