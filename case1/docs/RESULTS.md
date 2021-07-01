@@ -15,6 +15,9 @@ Using [EMPIAR dataset 10338](https://www.ebi.ac.uk/pdbe/emdb/empiar/entry/10338/
 ### PEARL
 Run using the relion singularity container with Relion version 3.1.2.
 
+#### Class2d Stage 0
+TODO
+
 #### Class3d Stage 1
 TODO
 
@@ -45,7 +48,10 @@ TODO
 TODO
 
 ### SCARF
-Run using the relion singularity container with Relion version 3.1.2.
+Run using the relion singularity container with Relion version 3.1.2. All jobs were run on nodes with 24 Intel® Xeon® Processor E5-2650 v4 and 128 GB of RAM. Each task was assigned 2 CPUs.
+
+#### Class2d Stage 0
+TODO
 
 #### Class3d Stage 1
 TODO

@@ -10,7 +10,7 @@
 # using particles from job050 and 3D reference from job043
 #########################################################
 
-mpirun $RELION_CMD relion_refine_mpi --o ${RELION_OUTPUT_DIR}/Refine3D/run --auto_refine --split_random_halves --i CtfRefine/job050/particles_ctf_refine.star --ref Refine3D/job043/run_class001.mrc --ini_high 30 --pad 1  --skip_gridding  --ctf --ctf_corrected_ref --particle_diameter 120 --flatten_solvent --zero_mask --oversampling 1 --healpix_order 2 --auto_local_healpix_order 4 --offset_range 5 --offset_step 2 --sym D2 --low_resol_join_halves 40 --norm --scale  --j $RELION_CPUS_PER_TASK $RELION_OPT_FLAGS
+mpirun $RELION_MPI_FLAGS $RELION_CMD relion_refine_mpi --o ${RELION_OUTPUT_DIR}/Refine3D/run --auto_refine --split_random_halves --i CtfRefine/job050/particles_ctf_refine.star --ref Refine3D/job043/run_class001.mrc --ini_high 30 --pad 1  --skip_gridding  --ctf --ctf_corrected_ref --particle_diameter 120 --flatten_solvent --zero_mask --oversampling 1 --healpix_order 2 --auto_local_healpix_order 4 --offset_range 5 --offset_step 2 --sym D2 --low_resol_join_halves 40 --norm --scale  --j $RELION_CPUS_PER_TASK $RELION_OPT_FLAGS
 
 #########################################################
 # 052 MaskCreate
@@ -26,7 +26,7 @@ $RELION_CMD relion_mask_create --i Refine3D/job051/run_class001.mrc --o ${RELION
 # based on output 3D model from Refine3D job and mask from MaskCreate job
 #########################################################
 
-$RELION_CMD relion_postprocess --mask ${RELION_OUTPUT_DIR}/MaskCreate/mask.mrc --i Refine3D/job051/run_half1_class001_unfil.mrc --o ${RELION_OUTPUT_DIR}/PostProcess/postprocess  --angpix -1 --mtf benchmark_scripts/mtf_k2_200kV.star --mtf_angpix 0.56 --auto_bfac  --autob_lowres 10
+$RELION_CMD relion_postprocess --mask ${RELION_OUTPUT_DIR}/MaskCreate/mask.mrc --i Refine3D/job051/run_half1_class001_unfil.mrc --o ${RELION_OUTPUT_DIR}/PostProcess/postprocess  --angpix -1 --mtf mtf_k2_200kV.star --mtf_angpix 0.56 --auto_bfac  --autob_lowres 10
 
 #########################################################
 # 054 Extract at original sampling

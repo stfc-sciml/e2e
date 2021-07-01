@@ -15,7 +15,7 @@
 # 043 Refine3D
 # using particles from job042 and 3D reference from job039
 #########################################################
-mpirun $RELION_MPI_FLAGS $RELION_CMD relion_refine_mpi --o $RELION_OUTPUT_DIR/Refine3D/run --auto_refine --split_random_halves --i Select/job042/particles.star --ref Class3D/job039/run_it025_class002.mrc --ini_high 30 --pad 1  --skip_gridding  --ctf --ctf_corrected_ref --particle_diameter 120 --flatten_solvent --zero_mask --oversampling 1 --healpix_order 2 --auto_local_healpix_order 4 --offset_range 5 --offset_step 2 --sym D2 --low_resol_join_halves 40 --norm --scale  --j 1 $RELION_OPT_FLAGS 
+mpirun $RELION_MPI_FLAGS $RELION_CMD relion_refine_mpi --o $RELION_OUTPUT_DIR/Refine3D/run --auto_refine --split_random_halves --i Select/job042/particles.star --ref Class3D/job039/run_it025_class002.mrc --ini_high 30 --pad 1  --skip_gridding  --ctf --ctf_corrected_ref --particle_diameter 120 --flatten_solvent --zero_mask --oversampling 1 --healpix_order 2 --auto_local_healpix_order 4 --offset_range 5 --offset_step 2 --sym D2 --low_resol_join_halves 40 --norm --scale  --j $RELION_CPUS_PER_TASK $RELION_OPT_FLAGS 
 
 #########################################################
 # 048 MaskCreate

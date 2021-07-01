@@ -24,12 +24,12 @@ singularity build -F relion.sif relion.def
 
 ### Compiling from Source
 
-You'll need to install Relion and ctffind on your machine.
+You'll need to install Relion and ctffind on your machine. Please follow the installation instructions below:
 
  - [Relion installation instructions](https://github.com/3dem/relion#installation)
  - [Ctffind installation instructions](https://grigoriefflab.umassmed.edu/ctffind4) 
 
-And the Relion executable commands will need to be visible on the PATH. 
+Finally, make sure that the Relion executable commands are visible on the PATH. 
 
 ## Running benchmarks
 
@@ -77,9 +77,22 @@ When running using the Relion singularity container on a CPU only machine, you m
 export RELION_CMD="singularity run --nv -B $BASE_DIR -H $RELION_PROJ_DIR $RELION_IMG -gpu_disable_check"
 ```
 
+### Optimization options
+
+The `-j` option for Relion can be set with the environment variable `RELION_CPUS_PER_TASK`. Several other optimization options can be passed to `relion_refine_mpi` commands using the environment variable `RELION_OPT_FLAGS`. Below is a list of common optimization flags from the Relion documentation:
+
+| Name                            | Description                                                                                                                                                                                                                  |   |
+|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|
+| --dont_combine_weights_via_disc | By default large messages are passed between MPI processes through reading and writing of large files on the computer disk. By giving this option, the messages will be passed through the network instead.                  |   |
+| --gpu                           | Use GPU-acceleration. We often use this option.                                                                                                                                                                              |   |
+| --pool                          | This determines how many particles are processed together in a function call.                                                                                                                                                |   |
+| --no_parallel_disc_io           | By default, all MPI slaves read their own particles (from disk or into RAM). Use this option to have the master read all particles, and then send them all through the network.                                              |   |
+| --preread_images                | By default, all particles are read from the computer disk in every iteration. Using this option, they are all read into RAM once, at the very beginning of the job instead.                                                  |   |
+| --scratch_dir                   | By default, particles are read every iteration from the location specified in the input STAR file. By using this option, all particles are copied to a scratch disk, from where they will be read (every iteration) instead. |   |
+
 ### Benchmark Outputs
 
-All output from the running the Relion pipeline will be output to the `RELION_OUTPUT_DIR`. Additional the benchmarking tool will also output a `metrics.json` file. This file contains the timings and quality metrics (if defined) of each step, along with some metadata about the run. All durations are in units of seconds. Additional metrics captured by steps in the Relion workflow include:
+All output from the running the Relion pipeline will be output to the `RELION_OUTPUT_DIR`. Additional the benchmarking tool will also output a `metrics.json` file. This file contains the timings and quality metrics (if defined) of each step, along with some metadata about the run. All durations are in units of seconds. Additional metrics captured by steps in the Relion workflow can be used to monitor the correctness of the processing. These include:
 
  - `acc_rotation`
  - `acc_translation`
@@ -95,7 +108,7 @@ All output from the running the Relion pipeline will be output to the `RELION_OU
  - `particle_size`
  - `pixel_size` 
 
-An example of the output is shown below. In example below:
+An example of the output for a single stage is shown below. In example below:
 
  - `pipeline_file`: the pipeline file run to produce this `metrics.json`
  - `total_duration`: is the total execution time for the pipeline
@@ -160,11 +173,11 @@ dataset are given in the table below.
 A brief description of what each stage of the pipeline does.
 | Name                   | Description                                                                                                                                                                                         |   |
 |------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|
-| pipeline_class2d_1.sh |  3D classification and selection of particles in the top class.                        |   |
+| pipeline_class3d_1.sh |  3D classification and selection of particles in the top class.                        |   |
 | pipeline_refine3d_2.sh | 3D refinement of the top 3D class (2x sampling), mask creation, post-processing, and per-particle Ctf refinement (defocus and global astigmatism) and beam tilt estimation.                         |   |
 | pipeline_refine3d_3.sh | 3D refinement with Ctf refined particles (2x sampling), mask creation, post-processing, re-extract particles at original sampling, importing re-sampled reference, and removing duplicate particles |   |
 | pipeline_refine3d_4.sh | 3D refinement with fully sampled particles.                                                                                                                                                         |   |
 | pipeline_polish_5.sh   | Polishing (training and applying).                                                                                                                                                                  |   |
 
 ## Results
-A detailed breakdown of results can be found in [case1/docs/RESULTS.md](case1/docs/RESULTS.md)
+A detailed breakdown of results can be found in [case1/docs/RESULTS.md](case1/docs/RESULTS.md). Raw logs and tables of results can be found in [case1/runs](case1/runs).
