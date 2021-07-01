@@ -24,12 +24,12 @@ singularity build -F relion.sif relion.def
 
 ### Compiling from Source
 
-You'll need to install Relion and ctffind on your machine.
+You'll need to install Relion and ctffind on your machine. Please follow the installation instructions below:
 
  - [Relion installation instructions](https://github.com/3dem/relion#installation)
  - [Ctffind installation instructions](https://grigoriefflab.umassmed.edu/ctffind4) 
 
-And the Relion executable commands will need to be visible on the PATH. 
+Finally, make sure that the Relion executable commands are visible on the PATH. 
 
 ## Running benchmarks
 
