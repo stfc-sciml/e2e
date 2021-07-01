@@ -68,6 +68,13 @@ benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_refine3
 
 Several more examples are given in jobs scripts in the `hpc` folder.
 
+### CPU Only jobs
+When running using the Relion singularity container on a CPU only machine, you must add the `-gpu_disable_check` option. This disables NVIDIA's check for a GPU's existence in the [nventry](https://gitlab.com/NVHPC/nventry#options) startup script. For example you can change the `RELION_CMD` to:
+
+```bash
+export RELION_CMD="singularity run --nv -B $BASE_DIR -H $RELION_PROJ_DIR $RELION_IMG -gpu_disable_check"
+```
+
 ### Benchmark Outputs
 
 All output from the running the Relion pipeline will be output to the `RELION_OUTPUT_DIR`. Additional the benchmarking tool will also output a `metrics.json` file. This file contains the timings and quality metrics (if defined) of each step, along with some metadata about the run. An example of the output is shown below.
