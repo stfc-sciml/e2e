@@ -157,6 +157,7 @@ dataset are given in the table below.
 A brief description of what each stage of the pipeline does.
 | Name                   | Description                                                                                                                                                                                         |   |
 |------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|
+| pipeline_class2d_1.sh |  3D classification and selection of particles in the top class.                        |   |
 | pipeline_refine3d_2.sh | 3D refinement of the top 3D class (2x sampling), mask creation, post-processing, and per-particle Ctf refinement (defocus and global astigmatism) and beam tilt estimation.                         |   |
 | pipeline_refine3d_3.sh | 3D refinement with Ctf refined particles (2x sampling), mask creation, post-processing, re-extract particles at original sampling, importing re-sampled reference, and removing duplicate particles |   |
 | pipeline_refine3d_4.sh | 3D refinement with fully sampled particles.                                                                                                                                                         |   |
