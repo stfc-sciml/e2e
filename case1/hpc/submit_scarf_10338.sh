@@ -1,10 +1,8 @@
 #!/bin/bash
 #SBATCH -p scarf 
 #SBATCH -C scarf17
-#SBATCH --ntasks=41
 #SBATCH --cpus-per-task=2
-#SBATCH --nodes=4
-#SBATCH --time 3-0
+#SBATCH --time 4-0
 
 # Load modules
 module load OpenMPI/4.1.0-iccifort-2018.3.222-GCC-7.3.0-2.30
@@ -29,4 +27,4 @@ export RELION_OPT_FLAGS='--dont_combine_weights_via_disc --pool 30'
 export RELION_MPI_FLAGS='--mca opal_warn_on_missing_libcuda 0'
 
 # Run pipeline
-./benchmark_scripts/benchmark_relion.py ./benchmark_scripts/rabbit_aldolase_benchmark.sh
+./benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_refine3d_3.sh
