@@ -182,4 +182,4 @@ All of these stages roughly reproduce the workflow of published dataset. A brief
 | pipeline_polish_5.sh   | Polishing (training and applying).                                                                                                                                                                  |   |
 
 ## Results
-A detailed breakdown of results can be found in [case1/docs/RESULTS.md](case1/docs/RESULTS.md). Raw logs and tables of results can be found in [case1/runs](case1/runs).
+A detailed breakdown of results can be found in [case1/docs/RESULTS.md](docs/RESULTS.md). Raw logs and tables of results can be found in [case1/runs](case1/runs).
