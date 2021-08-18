@@ -11,5 +11,4 @@
 # 025 Class2D
 #########################################################
 
-mpirun $RELION_MPI_FLAGS $RELION_CMD relion_refine_mpi --o ${RELION_OUTPUT_DIR}/Class2D/run --i Extract/job024/particles.star --pad 2  --ctf  --iter 25 --tau2_fudge 2 --particle_diameter 120 --fast_subsets  --K 100 --flatten_solvent  --zero_mask  --oversampling 1 --psi_step 12 --offset_range 5 --offset_step 2 --norm --scale  --j $RELION_CPUS_PER_TASK $RELION_OPT_FLAGS
-
+mpirun $RELION_MPI_FLAGS $RELION_CMD relion_refine_mpi --o ${RELION_OUTPUT_DIR}/Class2D/run --i Extract/job024/particles.star --pad 2  --ctf  --iter 25 --tau2_fudge 2 --particle_diameter 120 --fast_subsets  --K 100 --flatten_solvent  --zero_mask  --oversampling 1 --psi_step 12 --offset_range 5 --offset_step 2 --norm --scale $RELION_OPT_FLAGS

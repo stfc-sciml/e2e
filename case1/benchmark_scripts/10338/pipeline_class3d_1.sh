@@ -13,7 +13,7 @@
 # 039 Class3D
 #########################################################
 
-mpirun $RELION_MPI_FLAGS $RELION_CMD relion_refine_mpi --o ${RELION_OUTPUT_DIR}/Class3D/run --i Select/job032/particles.star --ref Import/job033/run_class001_rescaled.mrc --firstiter_cc --ini_high 30  --pad 1  --skip_gridding  --ctf --ctf_corrected_ref --iter 25 --tau2_fudge 2 --particle_diameter 120 --fast_subsets  --K 4 --flatten_solvent --zero_mask --strict_highres_exp 7 --solvent_mask MaskCreate/job038/mask.mrc --oversampling 1 --healpix_order 2 --offset_range 5 --offset_step 2 --sym D2 --norm --scale $RELION_OPT_FLAGS --j $RELION_CPUS_PER_TASK 
+mpirun $RELION_MPI_FLAGS $RELION_CMD relion_refine_mpi --o ${RELION_OUTPUT_DIR}/Class3D/run --i Select/job032/particles.star --ref Import/job033/run_class001_rescaled.mrc --firstiter_cc --ini_high 30  --pad 1  --skip_gridding  --ctf --ctf_corrected_ref --iter 25 --tau2_fudge 2 --particle_diameter 120 --fast_subsets  --K 4 --flatten_solvent --zero_mask --strict_highres_exp 7 --solvent_mask MaskCreate/job038/mask.mrc --oversampling 1 --healpix_order 2 --offset_range 5 --offset_step 2 --sym D2 --norm --scale $RELION_OPT_FLAGS
 
 #########################################################
 # 042 Select
