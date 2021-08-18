@@ -19,10 +19,12 @@ export RELION_OUTPUT_DIR="/work3/projects/sciml/scarf688/relion/runs/scarf/job_$
 # Relion command
 export PATH="$BASE_DIR/relion/build/bin:$PATH"
 export RELION_CMD=""
-# Number of cpus to use with -j option
-export RELION_CPUS_PER_TASK=$SLURM_CPUS_PER_TASK
+# Number of cpus to use
+export RELION_NUM_CPUS=${SLURM_NTASKS:-23}
+# Number of cpu threads to use with -j option
+export RELION_CPU_THREADS_PER_TASK=4
 # Additional optimization flags
-export RELION_OPT_FLAGS='--dont_combine_weights_via_disc --pool 30 --cpu'
+export RELION_OPT_FLAGS="--dont_combine_weights_via_disc --pool $RELION_NUM_CPUS --cpu --j $RELION_CPU_THREADS_PER_TASK"
 # Additional MPI flags
 export RELION_MPI_FLAGS=''
 
