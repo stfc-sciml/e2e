@@ -261,7 +261,20 @@ Run using the relion singularity container with Relion version 3.1.2. All jobs w
 #### Polish Stage 5
 Note: The Polish apply step consumes a very large amount of memory. Hence for this stage we reduced the number of tasks used down to two tasks per machine. 
 
-```TODO```
+|                                   | 251383             | 262859             |
+|-----------------------------------|--------------------|--------------------|
+| Machine                           | scarf              | scarf              |
+| CPU Optimized                     | False              | True               |
+| No. Tasks                         | 2                  | 2                  |
+| Threads Per CPU                   | 4                  | 4                  |
+| relion_motion_refine duration     | 17983.205330133438 | 19966.754230737686 |
+| relion_motion_refine_mpi duration | 46253.454513311386 | 44241.19758081436  |
+| relion_motion_refine 0            | 0.87               | 0.999              |
+| relion_motion_refine_mpi 0        | 0.87               | 0.999              |
+| relion_motion_refine 1            | 8385.0             | 7845.0             |
+| relion_motion_refine_mpi 1        | 8385.0             | 7845.0             |
+| relion_motion_refine 2            | 2.88               | 4.2                |
+| relion_motion_refine_mpi 2        | 2.88               | 4.2                |
 
 ### CLX
 Run using the relion singularity container with Relion version 3.1.2.
@@ -453,7 +466,20 @@ Run using the relion singularity container with Relion version 3.1.2.
 #### Polish Stage 5
 Note: The Polish apply step consumes a very large amount of memory. Hence for this stage we reduced the number of tasks used down to two tasks per machine. 
 
-```TODO```
+|                                   | 78426              | 80208              |
+|-----------------------------------|--------------------|--------------------|
+| Machine                           | clx                | clx                |
+| CPU Optimized                     | False              | True               |
+| No. Tasks                         | 2                  | 2                  |
+| Threads Per CPU                   | 4                  | 4                  |
+| relion_motion_refine duration     | 16745.184577465057 | 19889.665502786636 |
+| relion_motion_refine_mpi duration | 34465.505123376846 | 35361.204431295395 |
+| relion_motion_refine 0            | 0.87               | 0.87               |
+| relion_motion_refine_mpi 0        | 0.87               | 0.87               |
+| relion_motion_refine 1            | 8385.0             | 8385.0             |
+| relion_motion_refine_mpi 1        | 8385.0             | 8385.0             |
+| relion_motion_refine 2            | 2.88               | 2.88               |
+| relion_motion_refine_mpi 2        | 2.88               | 2.88               |
 
 ### ICX
 Run using the relion singularity container with Relion version 3.1.2.
