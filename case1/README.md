@@ -3,11 +3,63 @@
 This folder contains scripts for the Relion End-to-End benchmark.
 
 Contents:
+ - [Quick Start](#quick-start-guide)
  - [Installation](#installation)
  - [Running benchmarks](#running-benchmarks)
+ - [Benchmark Outputs](#benchmark-outputs)
  - [Datasets](#datasets)
  - [Pipeline Stages](#stages)
  - [Results](#results)
+
+## Quick Start Guide
+
+1. Clone the repository and `cd` into the folder.
+
+```bash
+git clone git@github.com:stfc-sciml/e2e.git
+cd e2e/case1
+```
+
+2. Install Relion on your system (if not already available). Follow the following guide:
+   - [Relion installation instructions](https://github.com/3dem/relion#installation)
+
+3. Download the dataset folder
+
+```bash
+../download.sh /path/to/local/data
+```
+
+4. Setup the relevant environment variables and run benchmark stages. The following example will run the [case1/benchmark_scripts/10338/pipeline_class2d_0.sh](pipeline_class2d_0.sh) stage:
+
+```bash
+#Location of the case1 folder
+export BASE_DIR="/home/nx07/nx07/sljack92/intel-e2e-benchmark/case1"
+# Relion data folder
+export RELION_PROJ_DIR="/path/to/local/data/relion/10338"
+# Location to store output files
+export RELION_OUTPUT_DIR="$BASE_DIR/runs/clx/pipeline_class2d_0"
+# Relion command (make sure it's on the path)
+export PATH="/home/nx07/nx07/sljack92/relion/relion-3.1.2-clx/build/bin:$PATH"
+export RELION_CMD=""
+
+# Number of cpus to use
+export RELION_NUM_CPUS=23
+# Number of cpu threads to use with --j option
+export RELION_CPU_THREADS_PER_TASK=4
+# Additional optimization flags
+export RELION_OPT_FLAGS="--dont_combine_weights_via_disc --cpu --pool $RELION_NUM_CPUS --j $RELION_CPU_THREADS_PER_TASK"
+# Additional MPI flags
+export RELION_MPI_FLAGS="-n $RELION_NUM_CPUS"
+
+
+# Run the pipeline stage
+./benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_class2d_0.sh
+```
+
+See the [Running benchmarks](#running-benchmarks) section for more details on each environment variable. There are also a number of example files in the [hpc](case1/hpc) folder of this project.
+
+5. Get the output in the `$RELION_OUTPUT_DIR` folder. For more details see section [Benchmark Outputs](#benchmark-outputs) .
+
 
 ## Installation
 To run the benchmark you will need a copy of [relion](https://github.com/3dem/relion) and [ctffind](https://grigoriefflab.umassmed.edu/ctffind4).
@@ -47,7 +99,7 @@ Relion benchmarks are run using the `benchmark_relion.py` script. This script is
 | RELION_MPI_FLAGS      | Optional. Additional options to pass to mpirun    | RELION_MPI_FLAGS='--mca opal_warn_on_missing_libcuda 0' |
 
 
-For example:
+### Example Running with Singularity a Container
 
 ```bash
 #Location of the case1 folder
@@ -65,7 +117,34 @@ export RELION_CPUS_PER_TASK=$SLURM_CPUS_PER_TASK
 # Additional optimization flags
 export RELION_OPT_FLAGS='--gpu --dont_combine_weights_via_disc --pool 30'
 
+# Run the pipeline stage
 benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_refine3d_2.sh
+```
+
+### Example Running with a compiled version of Relion
+
+```bash
+#Location of the case1 folder
+export BASE_DIR="/home/nx07/nx07/sljack92/intel-e2e-benchmark/case1"
+# Relion project directory data
+export RELION_PROJ_DIR="/home/nx07/nx07/sljack92/relion/10338"
+# Location to store output files
+export RELION_OUTPUT_DIR="$BASE_DIR/runs/clx/job_$SLURM_JOB_ID"
+# Relion command
+export PATH="/home/nx07/nx07/sljack92/relion/relion-3.1.2-clx/build/bin:$PATH"
+export RELION_CMD=""
+# Number of cpus to use
+export RELION_NUM_CPUS=${SLURM_NTASKS:-23}
+# Number of cpu threads to use with --j option
+export RELION_CPU_THREADS_PER_TASK=4
+# Additional optimization flags
+export RELION_OPT_FLAGS="--dont_combine_weights_via_disc --cpu --pool $RELION_NUM_CPUS --j $RELION_CPU_THREADS_PER_TASK"
+# Additional MPI flags
+export RELION_MPI_FLAGS="-n $RELION_NUM_CPUS"
+
+
+# Run the pipeline stage
+./benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_class2d_0.sh
 ```
 
 Several more examples are provided in the form of jobs scripts in the [hpc](case1/hpc) folder of this project.
@@ -90,7 +169,7 @@ The `-j` option for Relion can be set with the environment variable `RELION_CPUS
 | --preread_images                | By default, all particles are read from the computer disk in every iteration. Using this option, they are all read into RAM once, at the very beginning of the job instead.                                                  |   |
 | --scratch_dir                   | By default, particles are read every iteration from the location specified in the input STAR file. By using this option, all particles are copied to a scratch disk, from where they will be read (every iteration) instead. |   |
 
-### Benchmark Outputs
+## Benchmark Outputs
 
 All output from the running the Relion pipeline will be output to the `RELION_OUTPUT_DIR`. Additional the benchmarking tool will also output a `metrics.json` file. This file contains the timings and quality metrics (if defined) of each step, along with some metadata about the run. All durations are in units of seconds. Additional metrics captured by steps in the Relion workflow can be used to monitor the correctness of the processing. These include:
 
@@ -184,4 +263,5 @@ All of these stages roughly reproduce the workflow of published dataset. A brief
 | pipeline_polish_5.sh   | Polishing (training and applying).                                                                                                                                                                  |   |
 
 ## Results
-A detailed breakdown of results can be found in [case1/docs/RESULTS.md](docs/RESULTS.md). Raw logs and tables of results can be found in [case1/runs](case1/runs).
+A detailed breakdown of results can be found in [case1/docs/RESULTS.md](docs/RESULTS.md). Raw logs and tables of results can be found in [case1/runs](case1/runs). The tables of results were generated using the notebook [case1/results_tables.ipynb](case1/results_tables.ipynb).
+
