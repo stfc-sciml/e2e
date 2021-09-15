@@ -13,7 +13,7 @@ SCARF is an HPC (High Performance Computing) cluster open to all STFC department
 Using [EMPIAR dataset 10338](https://www.ebi.ac.uk/pdbe/emdb/empiar/entry/10338/).
 
 ### PEARL
-Run using the relion singularity container with Relion version 3.1.2. Each task was assigned two CPUs. GPUs were assigned automatically by relion.
+Run using the relion singularity container with Relion version 3.1.2. Each task was assigned two CPUs. GPUs were assigned automatically by relion. All GPUs used in these runs were Tesla V100 GPUs.
 
 #### Class2d Stage 0
 
