@@ -44,7 +44,7 @@ Run using the relion singularity container with Relion version 3.1.2. Each task 
 | PEARL  |     1 |    8 |     21 |  28259 |    4969.295334 |                       4265.943474 |                        40.93388176 |                        10.79140139 |                           651.3773253 |                                 1.233 |                                  0.47824 |                            3.629367 |                                      3.150769 |                                             -114.15386 |                                                    44.736736 |                                 -0.11153 |                                 0.107299 |
 | PEARL  |     1 |   16 |     41 |  28260 |    2841.958082 |                       2357.543861 |                        40.91957307 |                        11.21114421 |                           432.0415237 |                                 1.224 |                                   0.4816 |                            3.629367 |                                      3.150769 |                                             -114.15386 |                                                    44.736736 |                                 -0.11405 |                                 0.100917 |
 
-### Refine3D Stage 3
+#### Refine3D Stage 3
 
 | system | nodes | GPUs | ntasks | job_id | total_duration | relion_refine_mpi duration | relion_mask_create duration | relion_postprocess duration | relion_preprocess_mpi duration | echo Select/job009/micrographs.star > ${RELION_OUTPUT_DIR}/Extract/coords_suffix_extract.star duration | relion_import duration | relion_star_handler duration | relion_refine_mpi acc_rotation | relion_refine_mpi acc_translation | relion_refine_mpi resolution | relion_postprocess _rlnFinalResolution | relion_postprocess _rlnBfactorUsedForSharpening | relion_postprocess _rlnParticleBoxFractionSolventMask | relion_preprocess_mpi pixel_size | relion_preprocess_mpi particle_size |
 |--------|-------|------|--------|--------|----------------|----------------------------|-----------------------------|-----------------------------|--------------------------------|--------------------------------------------------------------------------------------------------------|------------------------|------------------------------|--------------------------------|-----------------------------------|------------------------------|----------------------------------------|-------------------------------------------------|-------------------------------------------------------|----------------------------------|-------------------------------------|
@@ -54,7 +54,7 @@ Run using the relion singularity container with Relion version 3.1.2. Each task 
 | PEARL  |     1 |    8 |     21 |  28304 |    4897.714441 |                4142.222507 |                 48.66506886 |                 13.42202687 |                    676.4907908 |                                                                                           0.1074018478 |            4.268348694 |                  12.20665956 |                          1.066 |                           0.45472 |                     3.496585 |                               3.116522 |                                      -109.12579 |                                             44.767834 |                             0.56 |                                 512 |
 | PEARL  |     1 |   16 |     41 |  28305 |     2937.68019 |                2309.955555 |                 40.27271104 |                 11.77765846 |                    560.8373091 |                                                                                          0.06245279312 |            4.157188892 |                  10.33123088 |                          1.166 |                           0.46928 |                     3.496585 |                               3.116522 |                                      -109.12579 |                                             44.767834 |                             0.56 |                                 512 |
 
-### Refine3D Stage 4
+#### Refine3D Stage 4
 
 | system | nodes | GPUs | ntasks | job_id | total_duration | relion_refine_mpi duration | relion_mask_create duration | relion_postprocess duration | relion_postprocess _rlnFinalResolution | relion_postprocess _rlnBfactorUsedForSharpening | relion_postprocess _rlnParticleBoxFractionSolventMask |
 |--------|-------|------|--------|--------|----------------|----------------------------|-----------------------------|-----------------------------|----------------------------------------|-------------------------------------------------|-------------------------------------------------------|
@@ -73,53 +73,617 @@ Run using the relion singularity container with Relion version 3.1.2. Each task 
 | PEARL  |     1 |   16 |     41 |  28464 |    58959.96177 |                   58879.32404 |                         80.519207 |                 0.8925 |                     0.8925 |                   8190 |                       8190 |                   2.82 |                       2.82 |
 
 ### SCARF
-Run using the relion singularity container with Relion version 3.1.2. All jobs were run on nodes with 24 Intel® Xeon® Processor E5-2650 v4 and 128 GB of RAM. Each task was assigned 2 CPUs.
+Run using the relion singularity container with Relion version 3.1.2. All jobs were run on nodes Intel® Xeon® Gold 6126 Processor nodes and 192 GB of RAM.
 
 #### Class2d Stage 0
-| system | nodes | GPUs | ntasks | job_id | total_duration | relion_refine_mpi duration | relion_refine_mpi _rlnCurrentResolution | relion_refine_mpi _rlnNrClasses | relion_refine_mpi class_1_occ | relion_refine_mpi class_2_occ | relion_refine_mpi class_3_occ | relion_refine_mpi class_4_occ | relion_refine_mpi class_5_occ | relion_refine_mpi class_6_occ | relion_refine_mpi class_7_occ | relion_refine_mpi class_8_occ | relion_refine_mpi class_9_occ | relion_refine_mpi class_10_occ | relion_refine_mpi class_11_occ | relion_refine_mpi class_12_occ | relion_refine_mpi class_13_occ | relion_refine_mpi class_14_occ | relion_refine_mpi class_15_occ | relion_refine_mpi class_16_occ | relion_refine_mpi class_17_occ | relion_refine_mpi class_18_occ | relion_refine_mpi class_19_occ | relion_refine_mpi class_20_occ | relion_refine_mpi class_21_occ | relion_refine_mpi class_22_occ | relion_refine_mpi class_23_occ | relion_refine_mpi class_24_occ | relion_refine_mpi class_25_occ | relion_refine_mpi class_26_occ | relion_refine_mpi class_27_occ | relion_refine_mpi class_28_occ | relion_refine_mpi class_29_occ | relion_refine_mpi class_30_occ | relion_refine_mpi class_31_occ | relion_refine_mpi class_32_occ | relion_refine_mpi class_33_occ | relion_refine_mpi class_34_occ | relion_refine_mpi class_35_occ | relion_refine_mpi class_36_occ | relion_refine_mpi class_37_occ | relion_refine_mpi class_38_occ | relion_refine_mpi class_39_occ | relion_refine_mpi class_40_occ | relion_refine_mpi class_41_occ | relion_refine_mpi class_42_occ | relion_refine_mpi class_43_occ | relion_refine_mpi class_44_occ | relion_refine_mpi class_45_occ | relion_refine_mpi class_46_occ | relion_refine_mpi class_47_occ | relion_refine_mpi class_48_occ | relion_refine_mpi class_49_occ | relion_refine_mpi class_50_occ | relion_refine_mpi class_51_occ | relion_refine_mpi class_52_occ | relion_refine_mpi class_53_occ | relion_refine_mpi class_54_occ | relion_refine_mpi class_55_occ | relion_refine_mpi class_56_occ | relion_refine_mpi class_57_occ | relion_refine_mpi class_58_occ | relion_refine_mpi class_59_occ | relion_refine_mpi class_60_occ | relion_refine_mpi class_61_occ | relion_refine_mpi class_62_occ | relion_refine_mpi class_63_occ | relion_refine_mpi class_64_occ | relion_refine_mpi class_65_occ | relion_refine_mpi class_66_occ | relion_refine_mpi class_67_occ | relion_refine_mpi class_68_occ | relion_refine_mpi class_69_occ | relion_refine_mpi class_70_occ | relion_refine_mpi class_71_occ | relion_refine_mpi class_72_occ | relion_refine_mpi class_73_occ | relion_refine_mpi class_74_occ | relion_refine_mpi class_75_occ | relion_refine_mpi class_76_occ | relion_refine_mpi class_77_occ | relion_refine_mpi class_78_occ | relion_refine_mpi class_79_occ | relion_refine_mpi class_80_occ | relion_refine_mpi class_81_occ | relion_refine_mpi class_82_occ | relion_refine_mpi class_83_occ | relion_refine_mpi class_84_occ | relion_refine_mpi class_85_occ | relion_refine_mpi class_86_occ | relion_refine_mpi class_87_occ | relion_refine_mpi class_88_occ | relion_refine_mpi class_89_occ | relion_refine_mpi class_90_occ | relion_refine_mpi class_91_occ | relion_refine_mpi class_92_occ | relion_refine_mpi class_93_occ | relion_refine_mpi class_94_occ | relion_refine_mpi class_95_occ | relion_refine_mpi class_96_occ | relion_refine_mpi class_97_occ | relion_refine_mpi class_98_occ | relion_refine_mpi class_99_occ | relion_refine_mpi class_100_occ | relion_refine_mpi num_top |
-|--------|-------|------|--------|--------|----------------|----------------------------|-----------------------------------------|---------------------------------|-------------------------------|-------------------------------|-------------------------------|-------------------------------|-------------------------------|-------------------------------|-------------------------------|-------------------------------|-------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|---------------------------------|---------------------------|
-| SCARF  |     4 |    0 |     41 | 185805 |    97768.71654 |                97768.57265 |                                4.859661 |                             100 |                             0 |                             0 |                      0.005844 |                             0 |                             0 |                      0.015216 |                             0 |                             0 |                      0.022177 |                       0.039988 |                       0.030258 |                        0.00609 |                       0.047533 |                       0.034339 |                       0.040692 |                              0 |                       3.87E-05 |                       0.032112 |                       0.035065 |                       0.008521 |                        0.00269 |                              0 |                       0.004177 |                       0.015038 |                        0.00998 |                       0.001504 |                       0.005788 |                              0 |                       0.023223 |                              0 |                       0.007758 |                       0.018864 |                       0.019583 |                       0.004823 |                              0 |                              0 |                              0 |                       0.004296 |                              0 |                       0.014505 |                       0.027242 |                       0.018776 |                              0 |                              0 |                              0 |                   0.0007252957 |                              0 |                       0.004985 |                              0 |                        0.01476 |                       0.006349 |                       0.001573 |                       0.017604 |                        0.04407 |                       0.039361 |                       0.014586 |                       0.008168 |                              0 |                       0.003064 |                              0 |                        0.01839 |                       0.002848 |                              0 |                              0 |                         0.0385 |                              0 |                       0.001137 |                              0 |                        0.02832 |                              0 |                         0.0297 |                       0.036217 |                              0 |                              0 |                              0 |                       0.028971 |                       0.006131 |                       4.00E-06 |                       0.003281 |                              0 |                       0.015692 |                              0 |                       0.012018 |                       0.004324 |                              0 |                       0.013522 |                              0 |                              0 |                              0 |                       0.017305 |                       0.015194 |                              0 |                              0 |                              0 |                       0.040892 |                       0.017883 |                              0 |                              0 |                       0.008647 |                        0.009654 |                        18 |
-| SCARF  |     8 |    0 |     81 | 185806 |    48040.33383 |                48040.24933 |                                4.859661 |                             100 |                             0 |                      0.031688 |                             0 |                      0.032438 |                      0.021537 |                             0 |                             0 |                             0 |                             0 |                        0.02668 |                       0.036628 |                              0 |                       0.018779 |                              0 |                       0.036444 |                       0.013509 |                       0.013049 |                              0 |                              0 |                              0 |                       0.012314 |                       0.009446 |                       0.002249 |                        0.01681 |                       0.030231 |                       0.014847 |                              0 |                         0.0384 |                              0 |                       0.011634 |                       0.021895 |                       0.012223 |                       0.007403 |                              0 |                   0.0002124769 |                              0 |                       0.024161 |                              0 |                              0 |                       0.013216 |                        0.01624 |                       0.005627 |                              0 |                   0.0003339252 |                              0 |                       0.029727 |                       0.012101 |                              0 |                       5.34E-06 |                              0 |                              0 |                   0.0004330587 |                              0 |                       0.026821 |                         0.0119 |                       0.010959 |                              0 |                              0 |                              0 |                       0.027126 |                       0.029495 |                       0.037996 |                              0 |                        0.01319 |                       0.005711 |                              0 |                       0.032362 |                              0 |                       9.10E-05 |                              0 |                       0.006321 |                       0.009145 |                       0.015705 |                              0 |                       0.018239 |                       0.036971 |                              0 |                              0 |                       5.57E-06 |                       0.009464 |                       0.029923 |                   0.0003422792 |                              0 |                       0.010765 |                              0 |                              0 |                              0 |                       0.002884 |                              0 |                       0.004351 |                       0.037204 |                       0.028637 |                       0.014306 |                       0.036071 |                       0.025728 |                              0 |                              0 |                              0 |                       0.008027 |                               0 |                        22 |
-| SCARF  |    16 |    0 |    161 | 185807 |    24460.17197 |                24460.09024 |                                4.859661 |                             100 |                      0.041223 |                       0.03228 |                      0.049404 |                      0.006298 |                      0.002009 |                             0 |                      0.031952 |                      0.014142 |                      0.001062 |                       0.016498 |                              0 |                       0.012692 |                       0.033674 |                       0.009132 |                       0.013132 |                       0.043194 |                       0.014764 |                              0 |                       0.042975 |                       0.022786 |                              0 |                       0.024907 |                        0.00229 |                       0.018265 |                              0 |                       0.012017 |                              0 |                              0 |                              0 |                       1.33E-06 |                       0.025504 |                   0.0001904363 |                        0.04088 |                              0 |                       0.018229 |                              0 |                              0 |                       0.033868 |                       0.018414 |                              0 |                   0.0001495148 |                       0.004146 |                              0 |                        0.00617 |                    0.000504911 |                       0.011455 |                              0 |                              0 |                              0 |                       0.009531 |                       0.033467 |                   0.0008805895 |                              0 |                       0.014152 |                       4.00E-06 |                              0 |                              0 |                       0.003561 |                   0.0003364374 |                              0 |                              0 |                        0.02975 |                       0.003695 |                       0.022356 |                              0 |                              0 |                       0.002584 |                              0 |                              0 |                       0.001118 |                              0 |                       0.028292 |                              0 |                       0.013637 |                       0.019911 |                       0.026082 |                              0 |                       0.002128 |                              0 |                              0 |                   0.0007735081 |                       0.015388 |                       0.013989 |                              0 |                       0.025197 |                              0 |                       0.026449 |                              0 |                              0 |                       0.005159 |                       0.018776 |                       0.011118 |                       0.039081 |                              0 |                              0 |                              0 |                       0.001348 |                              0 |                       0.027027 |                               0 |                        21 |
+
+|                                         | 229744           | 236372            |
+|-----------------------------------------|------------------|-------------------|
+| Machine                                 | scarf            | scarf             |
+| CPU Optimized                           | True             | False             |
+| No. Tasks                               | 23               | 23                |
+| CPUs Per Thread                         | 4                | 4                 |
+| relion_refine_mpi duration              | 43480.9785861969 | 79316.82769322395 |
+| relion_refine_mpi _rlnCurrentResolution | 4.859661         | 4.859661          |
+| relion_refine_mpi _rlnNrClasses         | 100.0            | 100.0             |
+| relion_refine_mpi class_1_occ           | 0.0              | 0.049332          |
+| relion_refine_mpi class_2_occ           | 0.018546         | 0.002754          |
+| relion_refine_mpi class_3_occ           | 0.009854         | 0.02117           |
+| relion_refine_mpi class_4_occ           | 0.0              | 0.0               |
+| relion_refine_mpi class_5_occ           | 0.0              | 0.018357          |
+| relion_refine_mpi class_6_occ           | 0.033933         | 0.016826          |
+| relion_refine_mpi class_7_occ           | 0.0              | 0.0               |
+| relion_refine_mpi class_8_occ           | 0.0              | 0.0               |
+| relion_refine_mpi class_9_occ           | 0.0              | 0.0               |
+| relion_refine_mpi class_10_occ          | 0.040473         | 0.0               |
+| relion_refine_mpi class_11_occ          | 0.0006312195     | 0.001456          |
+| relion_refine_mpi class_12_occ          | 0.015583         | 0.016868          |
+| relion_refine_mpi class_13_occ          | 0.0              | 0.010572          |
+| relion_refine_mpi class_14_occ          | 0.0              | 0.018934          |
+| relion_refine_mpi class_15_occ          | 0.017155         | 0.033552          |
+| relion_refine_mpi class_16_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_17_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_18_occ          | 0.037144         | 0.030553          |
+| relion_refine_mpi class_19_occ          | 0.010674         | 0.00722           |
+| relion_refine_mpi class_20_occ          | 0.0              | 0.043201          |
+| relion_refine_mpi class_21_occ          | 0.018764         | 0.0               |
+| relion_refine_mpi class_22_occ          | 0.040461         | 0.0               |
+| relion_refine_mpi class_23_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_24_occ          | 0.035375         | 0.0001162942      |
+| relion_refine_mpi class_25_occ          | 0.022251         | 0.0               |
+| relion_refine_mpi class_26_occ          | 0.034734         | 0.0508            |
+| relion_refine_mpi class_27_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_28_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_29_occ          | 0.0              | 0.037677          |
+| relion_refine_mpi class_30_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_31_occ          | 0.0              | 0.036265          |
+| relion_refine_mpi class_32_occ          | 0.038167         | 0.0               |
+| relion_refine_mpi class_33_occ          | 0.006471         | 0.026828          |
+| relion_refine_mpi class_34_occ          | 0.001267         | 0.004493          |
+| relion_refine_mpi class_35_occ          | 0.0              | 0.016007          |
+| relion_refine_mpi class_36_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_37_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_38_occ          | 0.0              | 0.010492          |
+| relion_refine_mpi class_39_occ          | 1.601992e-05     | 0.025243          |
+| relion_refine_mpi class_40_occ          | 1.334994e-06     | 0.0               |
+| relion_refine_mpi class_41_occ          | 0.0              | 0.005886          |
+| relion_refine_mpi class_42_occ          | 0.0              | 0.002572          |
+| relion_refine_mpi class_43_occ          | 0.019607         | 0.007941          |
+| relion_refine_mpi class_44_occ          | 0.02442          | 0.01348           |
+| relion_refine_mpi class_45_occ          | 0.014529         | 0.016374          |
+| relion_refine_mpi class_46_occ          | 0.0              | 0.011986          |
+| relion_refine_mpi class_47_occ          | 0.022075         | 0.036571          |
+| relion_refine_mpi class_48_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_49_occ          | 0.0              | 0.014486          |
+| relion_refine_mpi class_50_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_51_occ          | 0.0              | 0.013608          |
+| relion_refine_mpi class_52_occ          | 0.012621         | 0.00346           |
+| relion_refine_mpi class_53_occ          | 0.001024         | 0.002861          |
+| relion_refine_mpi class_54_occ          | 0.003822         | 0.0001003535      |
+| relion_refine_mpi class_55_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_56_occ          | 0.024599         | 0.0               |
+| relion_refine_mpi class_57_occ          | 0.0              | 0.018165          |
+| relion_refine_mpi class_58_occ          | 0.0009770823     | 0.0               |
+| relion_refine_mpi class_59_occ          | 0.013212         | 0.0               |
+| relion_refine_mpi class_60_occ          | 0.0              | 5.606769e-05      |
+| relion_refine_mpi class_61_occ          | 0.018934         | 0.0               |
+| relion_refine_mpi class_62_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_63_occ          | 0.0              | 0.013851          |
+| relion_refine_mpi class_64_occ          | 0.009434         | 0.028751          |
+| relion_refine_mpi class_65_occ          | 0.0              | 0.021827          |
+| relion_refine_mpi class_66_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_67_occ          | 5.339965e-06     | 0.014039          |
+| relion_refine_mpi class_68_occ          | 0.009736         | 1.334953e-06      |
+| relion_refine_mpi class_69_occ          | 0.011364         | 0.0               |
+| relion_refine_mpi class_70_occ          | 0.015228         | 0.038847          |
+| relion_refine_mpi class_71_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_72_occ          | 0.020327         | 9.611517e-05      |
+| relion_refine_mpi class_73_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_74_occ          | 0.031801         | 0.023298          |
+| relion_refine_mpi class_75_occ          | 0.032207         | 0.0               |
+| relion_refine_mpi class_76_occ          | 0.0008166635     | 0.0               |
+| relion_refine_mpi class_77_occ          | 9.722343e-05     | 0.011469          |
+| relion_refine_mpi class_78_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_79_occ          | 0.001615         | 0.0               |
+| relion_refine_mpi class_80_occ          | 0.00189          | 0.025217          |
+| relion_refine_mpi class_81_occ          | 0.029508         | 0.009088          |
+| relion_refine_mpi class_82_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_83_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_84_occ          | 0.007731         | 0.0               |
+| relion_refine_mpi class_85_occ          | 0.046874         | 0.006546          |
+| relion_refine_mpi class_86_occ          | 0.020786         | 8.533378e-05      |
+| relion_refine_mpi class_87_occ          | 0.031846         | 0.050592          |
+| relion_refine_mpi class_88_occ          | 0.012712         | 0.0               |
+| relion_refine_mpi class_89_occ          | 0.044689         | 0.034278          |
+| relion_refine_mpi class_90_occ          | 0.012235         | 0.0               |
+| relion_refine_mpi class_91_occ          | 0.008648         | 0.042306          |
+| relion_refine_mpi class_92_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_93_occ          | 0.0              | 0.022289          |
+| relion_refine_mpi class_94_occ          | 0.0              | 0.01003           |
+| relion_refine_mpi class_95_occ          | 0.022741         | 0.015659          |
+| relion_refine_mpi class_96_occ          | 0.005514         | 0.00547           |
+| relion_refine_mpi class_97_occ          | 0.003821         | 0.0               |
+| relion_refine_mpi class_98_occ          | 0.049305         | 0.0               |
+| relion_refine_mpi class_99_occ          | 0.0              | 0.0               |
+| relion_refine_mpi class_100_occ         | 0.031748         | 0.0               |
+| relion_refine_mpi num_top               | 22.0             | 20.0              |
 
 #### Class3d Stage 1
-| system | nodes | GPUs | ntasks | job_id | total_duration | relion_refine_mpi duration | relion_star_handler duration |
-|--------|-------|------|--------|--------|----------------|----------------------------|------------------------------|
-| SCARF  |     4 |    0 |     41 | 185808 |    155163.4231 |                155136.4907 |                  26.82843971 |
-| SCARF  |     8 |    0 |     81 | 185809 |    80797.92238 |                80778.65971 |                  19.15543795 |
-| SCARF  |    16 |    0 |    161 | 185810 |    39507.89111 |                39483.65493 |                  24.13942862 |
+
+|                              | 229745             | 236373             |
+|------------------------------|--------------------|--------------------|
+| Machine                      | scarf              | scarf              |
+| CPU Optimized                | True               | False              |
+| No. Tasks                    | 23                 | 23                 |
+| CPUs Per Thread              | 4                  | 4                  |
+| relion_refine_mpi duration   | 45682.69899559021  | 179439.4861087799  |
+| relion_star_handler duration | 15.582268476486206 | 14.009530305862427 |
 
 #### Refine3D Stage 2
-| system | nodes | GPUs | ntasks | job_id | total_duration | relion_refine_mpi duration | relion_mask_create duration | relion_postprocess duration | relion_ctf_refine_mpi duration | relion_refine_mpi acc_rotation | relion_refine_mpi acc_translation | relion_refine_mpi resolution | relion_postprocess _rlnFinalResolution | relion_postprocess _rlnBfactorUsedForSharpening | relion_postprocess _rlnParticleBoxFractionSolventMask | relion_ctf_refine_mpi beam_tilt_x | relion_ctf_refine_mpi beam_tilt_y |
-|--------|-------|------|--------|--------|----------------|----------------------------|-----------------------------|-----------------------------|--------------------------------|--------------------------------|-----------------------------------|------------------------------|----------------------------------------|-------------------------------------------------|-------------------------------------------------------|-----------------------------------|-----------------------------------|
-| SCARF  |     4 |    0 |     41 | 185814 |    127804.0149 |                127069.8118 |                 49.11498833 |                 15.46060061 |                    669.2236564 |                          1.232 |                           0.48384 |                     3.629367 |                               3.150769 |                                      -114.15386 |                                             44.736736 |                          -0.11227 |                          0.102626 |
-| SCARF  |     8 |    0 |     81 | 185815 |    67104.33588 |                66583.19866 |                 51.76829815 |                 28.29993796 |                    440.6127162 |                          1.223 |                           0.48384 |                     3.629367 |                               3.150769 |                                      -114.15386 |                                             44.736736 |                          -0.11023 |                          0.103514 |
-| SCARF  |    16 |    0 |    161 | 185816 |    29173.01834 |                28855.70304 |                 43.20058656 |                 11.77438021 |                     261.967994 |                          1.246 |                             0.476 |                        3.584 |                               3.150769 |                                      -114.15386 |                                             44.736736 |                          -0.11562 |                           0.10305 |
 
-### Refine3D Stage 3
+|                                                       | 229746            | 236374            |
+|-------------------------------------------------------|-------------------|-------------------|
+| Machine                                               | scarf             | scarf             |
+| CPU Optimized                                         | True              | False             |
+| No. Tasks                                             | 23                | 23                |
+| CPUs Per Thread                                       | 4                 | 4                 |
+| relion_refine_mpi duration                            | 45209.32088804245 | 157321.2480173111 |
+| relion_mask_create duration                           | 49.28964281082153 | 48.95850968360901 |
+| relion_postprocess duration                           | 6.460908889770508 | 6.718193054199219 |
+| relion_ctf_refine_mpi duration                        | 570.6408758163452 | 614.3257734775543 |
+| relion_refine_mpi acc_rotation                        | 1.19              | 1.175             |
+| relion_refine_mpi acc_translation                     | 0.47712           | 0.47264           |
+| relion_refine_mpi resolution                          | 3.629367          | 3.629367          |
+| relion_postprocess _rlnFinalResolution                | 3.150769          | 3.150769          |
+| relion_postprocess _rlnBfactorUsedForSharpening       | -114.15386        | -114.15386        |
+| relion_postprocess _rlnParticleBoxFractionSolventMask | 44.736736         | 44.736736         |
+| relion_ctf_refine_mpi beam_tilt_x                     | -0.11186          | -0.11164          |
+| relion_ctf_refine_mpi beam_tilt_y                     | 0.104943          | 0.103837          |
 
-| system | nodes | GPUs | ntasks | job_id | total_duration | relion_refine_mpi duration | relion_mask_create duration | relion_postprocess duration | relion_preprocess_mpi duration | echo Select/job009/micrographs.star > ${RELION_OUTPUT_DIR}/Extract/coords_suffix_extract.star duration | relion_import duration | relion_star_handler duration | relion_refine_mpi acc_rotation | relion_refine_mpi acc_translation | relion_refine_mpi resolution | relion_postprocess _rlnFinalResolution | relion_postprocess _rlnBfactorUsedForSharpening | relion_postprocess _rlnParticleBoxFractionSolventMask | relion_preprocess_mpi pixel_size | relion_preprocess_mpi particle_size |
-|--------|-------|------|--------|--------|----------------|----------------------------|-----------------------------|-----------------------------|--------------------------------|--------------------------------------------------------------------------------------------------------|------------------------|------------------------------|--------------------------------|-----------------------------------|------------------------------|----------------------------------------|-------------------------------------------------|-------------------------------------------------------|----------------------------------|-------------------------------------|
-| SCARF  |     4 |    0 |     41 | 185817 |    111823.5553 |                110296.6267 |                    63.61166 |                 13.18717432 |                     1433.77786 |                                                                                           0.1026513577 |            5.125923634 |                  10.71767831 |                          1.143 |                           0.46816 |                     3.496585 |                               3.116522 |                                      -109.12579 |                                             44.767834 |                             0.56 |                                 512 |
-| SCARF  |     8 |    0 |     81 | 185818 |    69312.79067 |                67182.04606 |                  52.3345263 |                 12.89040852 |                    2048.964216 |                                                                                          0.07743835449 |            4.629011393 |                  11.44220543 |                          1.131 |                           0.46928 |                     3.496585 |                               3.116522 |                                      -109.12579 |                                             44.767834 |                             0.56 |                                 512 |
-| SCARF  |    16 |    0 |    161 | 185819 |    38922.53757 |                37108.53802 |                 53.96650362 |                 31.50708127 |                    1711.540582 |                                                                                          0.06268954277 |            5.212753057 |                  11.30187702 |                          1.128 |                           0.46816 |                     3.496585 |                               3.116522 |                                      -109.12579 |                                             44.767834 |                             0.56 |                                 512 |
+#### Refine3D Stage 3
 
-### Refine3D Stage 4
+|                                                       | 229747             | 236375             |
+|-------------------------------------------------------|--------------------|--------------------|
+| Machine                                               | scarf              | scarf              |
+| CPU Optimized                                         | True               | False              |
+| No. Tasks                                             | 23                 | 23                 |
+| CPUs Per Thread                                       | 4                  | 4                  |
+| relion_refine_mpi duration                            | 42592.89604496956  | 150888.17306756973 |
+| relion_mask_create duration                           | 49.10809063911438  | 50.511685609817505 |
+| relion_postprocess duration                           | 7.2791290283203125 | 8.161543846130371  |
+| relion_preprocess_mpi duration                        | 891.021576166153   | 1133.43763589859   |
+| relion_import duration                                | 17.905980110168457 | 4.192607641220093  |
+| relion_star_handler duration                          | 8.988205909729004  | 8.937161684036255  |
+| relion_refine_mpi acc_rotation                        | 1.098              | 1.123              |
+| relion_refine_mpi acc_translation                     | 0.46368            | 0.4592             |
+| relion_refine_mpi resolution                          | 3.496585           | 3.496585           |
+| relion_postprocess _rlnFinalResolution                | 3.116522           | 3.116522           |
+| relion_postprocess _rlnBfactorUsedForSharpening       | -109.12579         | -109.12579         |
+| relion_postprocess _rlnParticleBoxFractionSolventMask | 44.767834          | 44.767834          |
+| relion_preprocess_mpi pixel_size                      | 0.56               | 0.56               |
+| relion_preprocess_mpi particle_size                   | 512.0              | 512.0              |
 
-| system | nodes | GPUs | ntasks | job_id | total_duration | relion_refine_mpi duration | relion_mask_create duration | relion_postprocess duration | relion_postprocess _rlnFinalResolution | relion_postprocess _rlnBfactorUsedForSharpening | relion_postprocess _rlnParticleBoxFractionSolventMask |
-|--------|-------|------|--------|--------|----------------|----------------------------|-----------------------------|-----------------------------|----------------------------------------|-------------------------------------------------|-------------------------------------------------------|
-| SCARF  |     4 |    0 |     41 | 185820 |    120901.8248 |                119595.0754 |                  1229.39428 |                 77.16615319 |                               3.150769 |                                      -111.32904 |                                             38.844176 |
-| SCARF  |     8 |    0 |     81 | 185821 |    69581.58515 |                68246.44207 |                 1234.182117 |                  100.757947 |                               3.150769 |                                      -111.32904 |                                             38.844176 |
-| SCARF  |    16 |    0 |    161 | 185822 |    38079.18075 |                36769.69306 |                 1230.626627 |                 78.83912206 |                               3.150769 |                                      -111.32904 |                                             38.844176 |
+#### Refine3D Stage 4
+
+|                                                       | 229748             | 236376             |
+|-------------------------------------------------------|--------------------|--------------------|
+| Machine                                               | scarf              | scarf              |
+| CPU Optimized                                         | True               | False              |
+| No. Tasks                                             | 23                 | 23                 |
+| CPUs Per Thread                                       | 4                  | 4                  |
+| relion_refine_mpi duration                            | 132000.9162402153  | 151826.45496869087 |
+| relion_mask_create duration                           | 1461.7662155628204 | 1504.1586649417877 |
+| relion_postprocess duration                           | 50.673601388931274 | 94.41588568687439  |
+| relion_postprocess _rlnFinalResolution                | 3.150769           | 3.150769           |
+| relion_postprocess _rlnBfactorUsedForSharpening       | -111.32904         | -111.32904         |
+| relion_postprocess _rlnParticleBoxFractionSolventMask | 38.844176          | 38.844176          |
 
 #### Polish Stage 5
-Note: The Polish apply step consumes a very large amount of memory. Hence for this stage we reduced the number of tasks used down to one task per machine. 
+Note: The Polish apply step consumes a very large amount of memory. Hence for this stage we reduced the number of tasks used down to two tasks per machine. 
 
-| system | nodes | GPUs | ntasks | job_id | total_duration | relion_motion_refine duration | relion_motion_refine_mpi duration | relion_motion_refine 0 | relion_motion_refine_mpi 0 | relion_motion_refine 1 | relion_motion_refine_mpi 1 | relion_motion_refine 2 | relion_motion_refine_mpi 2 |
-|--------|-------|------|--------|--------|----------------|-------------------------------|-----------------------------------|------------------------|----------------------------|------------------------|----------------------------|------------------------|----------------------------|
-| SCARF  |     4 |    0 |      4 | 188574 |    162132.5508 |                   59743.38707 |                       102389.0074 |                 0.8925 |                     0.8925 |                   8190 |                       8190 |                   2.82 |                       2.82 |
-| SCARF  |     8 |    0 |      8 | 188575 |    111882.0821 |                   59717.44107 |                       52164.50903 |                 0.8925 |                     0.8925 |                   8190 |                       8190 |                   2.82 |                       2.82 |
-| SCARF  |    16 |    0 |     16 | 188576 |    77844.89836 |                    59614.1995 |                       18230.57151 |                 0.8925 |                     0.8925 |                   8190 |                       8190 |                   2.82 |                       2.82 |
+|                                   | 251383             | 262859             |
+|-----------------------------------|--------------------|--------------------|
+| Machine                           | scarf              | scarf              |
+| CPU Optimized                     | False              | True               |
+| No. Tasks                         | 2                  | 2                  |
+| Threads Per CPU                   | 4                  | 4                  |
+| relion_motion_refine duration     | 17983.205330133438 | 19966.754230737686 |
+| relion_motion_refine_mpi duration | 46253.454513311386 | 44241.19758081436  |
+| relion_motion_refine 0            | 0.87               | 0.999              |
+| relion_motion_refine_mpi 0        | 0.87               | 0.999              |
+| relion_motion_refine 1            | 8385.0             | 7845.0             |
+| relion_motion_refine_mpi 1        | 8385.0             | 7845.0             |
+| relion_motion_refine 2            | 2.88               | 4.2                |
+| relion_motion_refine_mpi 2        | 2.88               | 4.2                |
+
+### CLX
+Run using the relion singularity container with Relion version 3.1.2.
+
+#### Class2d Stage 0
+
+|                                         | 77577             | 77902             |
+|-----------------------------------------|-------------------|-------------------|
+| Machine                                 | clx               | clx               |
+| CPU Optimized                           | True              | False             |
+| No. Tasks                               | 23                | 23                |
+| CPUs Per Thread                         | 4                 | 4                 |
+| relion_refine_mpi duration              | 22635.08829474449 | 46009.76948404312 |
+| relion_refine_mpi _rlnCurrentResolution | 4.700328          | 4.778667          |
+| relion_refine_mpi _rlnNrClasses         | 100.0             | 100.0             |
+| relion_refine_mpi class_1_occ           | 0.002002          | 0.0               |
+| relion_refine_mpi class_2_occ           | 0.0               | 0.0               |
+| relion_refine_mpi class_3_occ           | 0.013773          | 0.053415          |
+| relion_refine_mpi class_4_occ           | 0.0               | 0.0               |
+| relion_refine_mpi class_5_occ           | 0.0               | 0.0               |
+| relion_refine_mpi class_6_occ           | 0.005203          | 0.0               |
+| relion_refine_mpi class_7_occ           | 0.009446          | 0.020382          |
+| relion_refine_mpi class_8_occ           | 0.022709          | 0.027391          |
+| relion_refine_mpi class_9_occ           | 0.0               | 0.033134          |
+| relion_refine_mpi class_10_occ          | 0.026445          | 0.0               |
+| relion_refine_mpi class_11_occ          | 0.005586          | 0.0               |
+| relion_refine_mpi class_12_occ          | 0.012492          | 0.006738          |
+| relion_refine_mpi class_13_occ          | 0.0               | 8.009933e-06      |
+| relion_refine_mpi class_14_occ          | 0.0               | 0.011873          |
+| relion_refine_mpi class_15_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_16_occ          | 0.03251           | 0.014508          |
+| relion_refine_mpi class_17_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_18_occ          | 0.0               | 0.003506          |
+| relion_refine_mpi class_19_occ          | 0.046791          | 0.019346          |
+| relion_refine_mpi class_20_occ          | 0.0               | 0.021098          |
+| relion_refine_mpi class_21_occ          | 0.007709          | 0.038629          |
+| relion_refine_mpi class_22_occ          | 0.00854           | 0.029582          |
+| relion_refine_mpi class_23_occ          | 0.0               | 0.031363          |
+| relion_refine_mpi class_24_occ          | 0.007488          | 0.022353          |
+| relion_refine_mpi class_25_occ          | 0.0157            | 0.028159          |
+| relion_refine_mpi class_26_occ          | 0.047263          | 3.086133e-06      |
+| relion_refine_mpi class_27_occ          | 0.0               | 0.011858          |
+| relion_refine_mpi class_28_occ          | 0.002011          | 0.009612          |
+| relion_refine_mpi class_29_occ          | 5.75963e-05       | 0.0               |
+| relion_refine_mpi class_30_occ          | 0.028231          | 0.0               |
+| relion_refine_mpi class_31_occ          | 0.005014          | 0.0               |
+| relion_refine_mpi class_32_occ          | 0.006548          | 0.010777          |
+| relion_refine_mpi class_33_occ          | 0.005292          | 0.023152          |
+| relion_refine_mpi class_34_occ          | 1.868992e-05      | 0.0               |
+| relion_refine_mpi class_35_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_36_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_37_occ          | 0.0004446382      | 6.664324e-05      |
+| relion_refine_mpi class_38_occ          | 0.0               | 6.674938e-06      |
+| relion_refine_mpi class_39_occ          | 0.014659          | 0.017446          |
+| relion_refine_mpi class_40_occ          | 0.012456          | 0.024004          |
+| relion_refine_mpi class_41_occ          | 0.005165          | 0.028627          |
+| relion_refine_mpi class_42_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_43_occ          | 0.033724          | 0.0               |
+| relion_refine_mpi class_44_occ          | 0.032341          | 0.0               |
+| relion_refine_mpi class_45_occ          | 0.005004          | 0.008143          |
+| relion_refine_mpi class_46_occ          | 0.028805          | 0.005645          |
+| relion_refine_mpi class_47_occ          | 0.0               | 0.022771          |
+| relion_refine_mpi class_48_occ          | 0.015637          | 0.006687          |
+| relion_refine_mpi class_49_occ          | 0.010696          | 0.046997          |
+| relion_refine_mpi class_50_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_51_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_52_occ          | 0.001517          | 0.007633          |
+| relion_refine_mpi class_53_occ          | 0.010483          | 0.002537          |
+| relion_refine_mpi class_54_occ          | 0.005575          | 0.037295          |
+| relion_refine_mpi class_55_occ          | 1.067997e-05      | 0.0               |
+| relion_refine_mpi class_56_occ          | 0.019382          | 0.007414          |
+| relion_refine_mpi class_57_occ          | 0.0               | 0.032169          |
+| relion_refine_mpi class_58_occ          | 0.0               | 0.029847          |
+| relion_refine_mpi class_59_occ          | 0.03746           | 0.0001495147      |
+| relion_refine_mpi class_60_occ          | 0.023042          | 0.029738          |
+| relion_refine_mpi class_61_occ          | 0.0               | 0.0001281575      |
+| relion_refine_mpi class_62_occ          | 0.0               | 0.005566          |
+| relion_refine_mpi class_63_occ          | 0.02799           | 0.020002          |
+| relion_refine_mpi class_64_occ          | 0.008206          | 0.0               |
+| relion_refine_mpi class_65_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_66_occ          | 0.0               | 0.003492          |
+| relion_refine_mpi class_67_occ          | 0.010958          | 0.005245          |
+| relion_refine_mpi class_68_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_69_occ          | 0.0               | 0.022826          |
+| relion_refine_mpi class_70_occ          | 0.023681          | 0.005267          |
+| relion_refine_mpi class_71_occ          | 0.010855          | 0.0002196688      |
+| relion_refine_mpi class_72_occ          | 0.0               | 0.01991           |
+| relion_refine_mpi class_73_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_74_occ          | 0.031981          | 0.00818           |
+| relion_refine_mpi class_75_occ          | 0.005895          | 0.0               |
+| relion_refine_mpi class_76_occ          | 0.0               | 0.005959          |
+| relion_refine_mpi class_77_occ          | 0.0               | 0.025567          |
+| relion_refine_mpi class_78_occ          | 0.022442          | 0.0               |
+| relion_refine_mpi class_79_occ          | 0.009498          | 0.0               |
+| relion_refine_mpi class_80_occ          | 0.009573          | 0.0               |
+| relion_refine_mpi class_81_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_82_occ          | 0.010109          | 0.0               |
+| relion_refine_mpi class_83_occ          | 0.0               | 0.011389          |
+| relion_refine_mpi class_84_occ          | 0.046984          | 0.0               |
+| relion_refine_mpi class_85_occ          | 0.0               | 0.032535          |
+| relion_refine_mpi class_86_occ          | 0.022652          | 0.0               |
+| relion_refine_mpi class_87_occ          | 0.028626          | 0.0006654836      |
+| relion_refine_mpi class_88_occ          | 0.008607          | 0.0               |
+| relion_refine_mpi class_89_occ          | 0.020621          | 0.0               |
+| relion_refine_mpi class_90_occ          | 0.043035          | 0.010157          |
+| relion_refine_mpi class_91_occ          | 0.041594          | 0.0               |
+| relion_refine_mpi class_92_occ          | 0.024404          | 0.0               |
+| relion_refine_mpi class_93_occ          | 0.0               | 0.037138          |
+| relion_refine_mpi class_94_occ          | 0.007425          | 0.0               |
+| relion_refine_mpi class_95_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_96_occ          | 0.0               | 0.006047          |
+| relion_refine_mpi class_97_occ          | 0.006615          | 0.021812          |
+| relion_refine_mpi class_98_occ          | 0.0               | 0.0001416275      |
+| relion_refine_mpi class_99_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_100_occ         | 0.011017          | 0.033689          |
+| relion_refine_mpi num_top               | 22.0              | 26.0              |
+
+
+#### Class3d Stage 1
+
+|                              | 77578              | 77903              |
+|------------------------------|--------------------|--------------------|
+| Machine                      | clx                | clx                |
+| CPU Optimized                | True               | False              |
+| No. Tasks                    | 23                 | 23                 |
+| CPUs Per Thread              | 4                  | 4                  |
+| relion_refine_mpi duration   | 24178.531142950058 | 91686.92183208466  |
+| relion_star_handler duration | 15.085314750671387 | 15.089497566223145 |
+
+#### Refine3D Stage 2
+
+|                                                       | 77579              | 77904             |
+|-------------------------------------------------------|--------------------|-------------------|
+| Machine                                               | clx                | clx               |
+| CPU Optimized                                         | True               | False             |
+| No. Tasks                                             | 23                 | 23                |
+| CPUs Per Thread                                       | 4                  | 4                 |
+| relion_refine_mpi duration                            | 15909.310443878174 | 75368.16609573364 |
+| relion_mask_create duration                           | 49.13472104072571  | 49.29287886619568 |
+| relion_postprocess duration                           | 4.282705307006836  | 4.146716594696045 |
+| relion_ctf_refine_mpi duration                        | 244.19360995292664 | 264.6836440563202 |
+| relion_refine_mpi acc_rotation                        | 1.232              | 1.212             |
+| relion_refine_mpi acc_translation                     | 0.47936            | 0.48832           |
+| relion_refine_mpi resolution                          | 3.629367           | 3.629367          |
+| relion_postprocess _rlnFinalResolution                | 3.150769           | 3.150769          |
+| relion_postprocess _rlnBfactorUsedForSharpening       | -114.15386         | -114.15386        |
+| relion_postprocess _rlnParticleBoxFractionSolventMask | 44.736736          | 44.736736         |
+| relion_ctf_refine_mpi beam_tilt_x                     | -0.11395           | -0.1152           |
+| relion_ctf_refine_mpi beam_tilt_y                     | 0.102643           | 0.100411          |
+
+#### Refine3D Stage 3
+
+|                                                       | 77580             | 77905              |
+|-------------------------------------------------------|-------------------|--------------------|
+| Machine                                               | clx               | clx                |
+| CPU Optimized                                         | True              | False              |
+| No. Tasks                                             | 23                | 23                 |
+| CPUs Per Thread                                       | 4                 | 4                  |
+| relion_refine_mpi duration                            | 21462.84359240532 | 83785.54485869408  |
+| relion_mask_create duration                           | 51.94817519187927 | 49.501972913742065 |
+| relion_postprocess duration                           | 4.212651252746582 | 4.89508056640625   |
+| relion_preprocess_mpi duration                        | 499.4388747215271 | 575.9180519580841  |
+| relion_import duration                                | 2.048455238342285 | 3.0624032020568848 |
+| relion_star_handler duration                          | 9.076976299285889 | 9.512510299682617  |
+| relion_refine_mpi acc_rotation                        | 1.139             | 1.155              |
+| relion_refine_mpi acc_translation                     | 0.46704           | 0.4648             |
+| relion_refine_mpi resolution                          | 3.496585          | 3.496585           |
+| relion_postprocess _rlnFinalResolution                | 3.116522          | 3.116522           |
+| relion_postprocess _rlnBfactorUsedForSharpening       | -109.12579        | -109.12579         |
+| relion_postprocess _rlnParticleBoxFractionSolventMask | 44.767834         | 44.767834          |
+| relion_preprocess_mpi pixel_size                      | 0.56              | 0.56               |
+| relion_preprocess_mpi particle_size                   | 512.0             | 512.0              |
+
+#### Refine3D Stage 4
+
+|                                                       | 77581              | 77906              |
+|-------------------------------------------------------|--------------------|--------------------|
+| Machine                                               | clx                | clx                |
+| CPU Optimized                                         | True               | False              |
+| No. Tasks                                             | 23                 | 23                 |
+| CPUs Per Thread                                       | 4                  | 4                  |
+| relion_refine_mpi duration                            | 20099.36516904831  | 37500.425077438354 |
+| relion_mask_create duration                           | 1408.4467754364014 | 1441.8145954608917 |
+| relion_postprocess duration                           | 30.293792247772217 | 30.6733238697052   |
+| relion_postprocess _rlnFinalResolution                | 3.150769           | 3.150769           |
+| relion_postprocess _rlnBfactorUsedForSharpening       | -111.32904         | -111.32904         |
+| relion_postprocess _rlnParticleBoxFractionSolventMask | 38.844176          | 38.844176          |
+
+#### Polish Stage 5
+Note: The Polish apply step consumes a very large amount of memory. Hence for this stage we reduced the number of tasks used down to two tasks per machine. 
+
+|                                   | 78426              | 80208              |
+|-----------------------------------|--------------------|--------------------|
+| Machine                           | clx                | clx                |
+| CPU Optimized                     | False              | True               |
+| No. Tasks                         | 2                  | 2                  |
+| Threads Per CPU                   | 4                  | 4                  |
+| relion_motion_refine duration     | 16745.184577465057 | 19889.665502786636 |
+| relion_motion_refine_mpi duration | 34465.505123376846 | 35361.204431295395 |
+| relion_motion_refine 0            | 0.87               | 0.87               |
+| relion_motion_refine_mpi 0        | 0.87               | 0.87               |
+| relion_motion_refine 1            | 8385.0             | 8385.0             |
+| relion_motion_refine_mpi 1        | 8385.0             | 8385.0             |
+| relion_motion_refine 2            | 2.88               | 2.88               |
+| relion_motion_refine_mpi 2        | 2.88               | 2.88               |
+
+### ICX
+Run using the relion singularity container with Relion version 3.1.2.
+
+#### Class2d Stage 0
+
+|                                         | 0                 | 0                 |
+|-----------------------------------------|-------------------|-------------------|
+| Machine                                 | icx               | icx               |
+| CPU Optimized                           | False             | True              |
+| No. Tasks                               | 23                | 23                |
+| CPUs Per Thread                         | 4                 | 4                 |
+| relion_refine_mpi duration              | 42307.42694020271 | 18126.46023249626 |
+| relion_refine_mpi _rlnCurrentResolution | 4.943448          | 4.859661          |
+| relion_refine_mpi _rlnNrClasses         | 100.0             | 100.0             |
+| relion_refine_mpi class_1_occ           | 0.029432          | 0.0               |
+| relion_refine_mpi class_2_occ           | 0.0               | 0.0               |
+| relion_refine_mpi class_3_occ           | 0.008795          | 0.008988          |
+| relion_refine_mpi class_4_occ           | 0.0               | 0.0               |
+| relion_refine_mpi class_5_occ           | 0.0               | 0.0               |
+| relion_refine_mpi class_6_occ           | 0.013885          | 0.0               |
+| relion_refine_mpi class_7_occ           | 0.027797          | 7.339375e-05      |
+| relion_refine_mpi class_8_occ           | 0.0               | 0.0               |
+| relion_refine_mpi class_9_occ           | 0.006828          | 0.036092          |
+| relion_refine_mpi class_10_occ          | 0.0               | 0.019975          |
+| relion_refine_mpi class_11_occ          | 0.019382          | 0.021685          |
+| relion_refine_mpi class_12_occ          | 0.009895          | 0.02615           |
+| relion_refine_mpi class_13_occ          | 1.514191e-08      | 0.0               |
+| relion_refine_mpi class_14_occ          | 0.0               | 0.030691          |
+| relion_refine_mpi class_15_occ          | 0.003344          | 0.0               |
+| relion_refine_mpi class_16_occ          | 6.3934e-05        | 0.001446          |
+| relion_refine_mpi class_17_occ          | 0.007537          | 0.021971          |
+| relion_refine_mpi class_18_occ          | 0.009382          | 0.019821          |
+| relion_refine_mpi class_19_occ          | 0.00513           | 0.0               |
+| relion_refine_mpi class_20_occ          | 0.019808          | 0.027015          |
+| relion_refine_mpi class_21_occ          | 0.01439           | 0.004491          |
+| relion_refine_mpi class_22_occ          | 0.005425          | 0.005601          |
+| relion_refine_mpi class_23_occ          | 0.041208          | 0.0               |
+| relion_refine_mpi class_24_occ          | 0.0               | 0.014035          |
+| relion_refine_mpi class_25_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_26_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_27_occ          | 0.023675          | 0.0               |
+| relion_refine_mpi class_28_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_29_occ          | 0.0               | 0.015914          |
+| relion_refine_mpi class_30_occ          | 0.010431          | 0.004124          |
+| relion_refine_mpi class_31_occ          | 0.010879          | 0.004672          |
+| relion_refine_mpi class_32_occ          | 0.0               | 0.011659          |
+| relion_refine_mpi class_33_occ          | 0.016428          | 0.028009          |
+| relion_refine_mpi class_34_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_35_occ          | 0.033947          | 0.040089          |
+| relion_refine_mpi class_36_occ          | 0.0               | 0.020349          |
+| relion_refine_mpi class_37_occ          | 0.037673          | 0.019528          |
+| relion_refine_mpi class_38_occ          | 0.003974          | 0.0               |
+| relion_refine_mpi class_39_occ          | 0.0               | 0.006791          |
+| relion_refine_mpi class_40_occ          | 0.014855          | 0.0               |
+| relion_refine_mpi class_41_occ          | 0.029584          | 0.0               |
+| relion_refine_mpi class_42_occ          | 0.034021          | 0.0               |
+| relion_refine_mpi class_43_occ          | 0.026746          | 0.002958          |
+| relion_refine_mpi class_44_occ          | 0.0               | 0.017131          |
+| relion_refine_mpi class_45_occ          | 0.0               | 0.017329          |
+| relion_refine_mpi class_46_occ          | 0.008646          | 0.043185          |
+| relion_refine_mpi class_47_occ          | 0.023763          | 0.0               |
+| relion_refine_mpi class_48_occ          | 0.01604           | 0.0               |
+| relion_refine_mpi class_49_occ          | 0.006112          | 0.0               |
+| relion_refine_mpi class_50_occ          | 0.041441          | 0.013819          |
+| relion_refine_mpi class_51_occ          | 0.009758          | 0.0               |
+| relion_refine_mpi class_52_occ          | 0.023812          | 0.0               |
+| relion_refine_mpi class_53_occ          | 0.0               | 0.018222          |
+| relion_refine_mpi class_54_occ          | 0.036296          | 0.051575          |
+| relion_refine_mpi class_55_occ          | 0.020227          | 0.009711          |
+| relion_refine_mpi class_56_occ          | 0.022212          | 0.0               |
+| relion_refine_mpi class_57_occ          | 0.0               | 0.001337          |
+| relion_refine_mpi class_58_occ          | 0.014565          | 0.0               |
+| relion_refine_mpi class_59_occ          | 0.005357          | 0.0               |
+| relion_refine_mpi class_60_occ          | 0.015436          | 0.010561          |
+| relion_refine_mpi class_61_occ          | 0.0               | 0.02853           |
+| relion_refine_mpi class_62_occ          | 0.0               | 0.003458          |
+| relion_refine_mpi class_63_occ          | 0.012239          | 0.003552          |
+| relion_refine_mpi class_64_occ          | 0.008953          | 0.0               |
+| relion_refine_mpi class_65_occ          | 0.031262          | 0.021966          |
+| relion_refine_mpi class_66_occ          | 0.026952          | 0.0               |
+| relion_refine_mpi class_67_occ          | 0.003569          | 0.0               |
+| relion_refine_mpi class_68_occ          | 0.005122          | 0.046841          |
+| relion_refine_mpi class_69_occ          | 0.004566          | 0.027182          |
+| relion_refine_mpi class_70_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_71_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_72_occ          | 0.011433          | 0.026814          |
+| relion_refine_mpi class_73_occ          | 0.0               | 0.004596          |
+| relion_refine_mpi class_74_occ          | 0.0               | 0.047371          |
+| relion_refine_mpi class_75_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_76_occ          | 0.005791          | 0.004877          |
+| relion_refine_mpi class_77_occ          | 0.031142          | 0.0               |
+| relion_refine_mpi class_78_occ          | 0.0003604411      | 0.012761          |
+| relion_refine_mpi class_79_occ          | 0.019716          | 0.002687          |
+| relion_refine_mpi class_80_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_81_occ          | 0.020025          | 0.0               |
+| relion_refine_mpi class_82_occ          | 7.890648e-05      | 0.0               |
+| relion_refine_mpi class_83_occ          | 0.0               | 0.005582          |
+| relion_refine_mpi class_84_occ          | 0.016345          | 0.0               |
+| relion_refine_mpi class_85_occ          | 0.031286          | 0.0001961235      |
+| relion_refine_mpi class_86_occ          | 0.0               | 0.017614          |
+| relion_refine_mpi class_87_occ          | 0.028741          | 0.024524          |
+| relion_refine_mpi class_88_occ          | 0.0               | 0.040662          |
+| relion_refine_mpi class_89_occ          | 0.008837          | 0.038086          |
+| relion_refine_mpi class_90_occ          | 0.0               | 0.015768          |
+| relion_refine_mpi class_91_occ          | 0.0               | 0.017916          |
+| relion_refine_mpi class_92_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_93_occ          | 0.0               | 5.337677e-06      |
+| relion_refine_mpi class_94_occ          | 4.004829e-06      | 0.0               |
+| relion_refine_mpi class_95_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_96_occ          | 0.008723          | 6.007229e-05      |
+| relion_refine_mpi class_97_occ          | 0.016671          | 0.0               |
+| relion_refine_mpi class_98_occ          | 0.0               | 0.020117          |
+| relion_refine_mpi class_99_occ          | 0.0               | 0.0               |
+| relion_refine_mpi class_100_occ         | 0.0               | 0.013836          |
+| relion_refine_mpi num_top               | 21.0              | 21.0              |
+
+#### Class3d Stage 1
+
+|                              | 1                 | 1                  |
+|------------------------------|-------------------|--------------------|
+| Machine                      | icx               | icx                |
+| CPU Optimized                | False             | True               |
+| No. Tasks                    | 23                | 23                 |
+| CPUs Per Thread              | 4                 | 4                  |
+| relion_refine_mpi duration   | 74450.08129119873 | 18434.144767522812 |
+| relion_star_handler duration | 17.3429958820343  | 16.71936297416687  |
+
+#### Refine3D Stage 2
+
+|                                                       | 2                  | 2                  |
+|-------------------------------------------------------|--------------------|--------------------|
+| Machine                                               | icx                | icx                |
+| CPU Optimized                                         | False              | True               |
+| No. Tasks                                             | 23                 | 23                 |
+| CPUs Per Thread                                       | 4                  | 4                  |
+| relion_refine_mpi duration                            | 50403.56198143959  | 14489.11923289299  |
+| relion_mask_create duration                           | 56.28577709197998  | 57.32443380355835  |
+| relion_postprocess duration                           | 4.476099491119385  | 3.7524020671844482 |
+| relion_ctf_refine_mpi duration                        | 214.86629962921143 | 218.76824688911438 |
+| relion_refine_mpi acc_rotation                        | 1.226              | 1.231              |
+| relion_refine_mpi acc_translation                     | 0.476              | 0.48048            |
+| relion_refine_mpi resolution                          | 3.629367           | 3.629367           |
+| relion_postprocess _rlnFinalResolution                | 3.150769           | 3.150769           |
+| relion_postprocess _rlnBfactorUsedForSharpening       | -114.15386         | -114.15386         |
+| relion_postprocess _rlnParticleBoxFractionSolventMask | 44.736736          | 44.736736          |
+| relion_ctf_refine_mpi beam_tilt_x                     | -0.11457           | -0.11075           |
+| relion_ctf_refine_mpi beam_tilt_y                     | 0.101099           | 0.104671           |
+
+#### Refine3D Stage 3
+
+|                                                       | 3                  | 3                  |
+|-------------------------------------------------------|--------------------|--------------------|
+| Machine                                               | icx                | icx                |
+| CPU Optimized                                         | False              | True               |
+| No. Tasks                                             | 23                 | 23                 |
+| CPUs Per Thread                                       | 4                  | 4                  |
+| relion_refine_mpi duration                            | 68913.97870445251  | 16671.09672832489  |
+| relion_mask_create duration                           | 56.1135139465332   | 56.80657410621643  |
+| relion_postprocess duration                           | 4.549367904663086  | 4.11505389213562   |
+| relion_preprocess_mpi duration                        | 428.6511356830597  | 428.93062376976013 |
+| relion_import duration                                | 2.4583919048309326 | 2.2946743965148926 |
+| relion_star_handler duration                          | 9.137850046157837  | 9.044616460800171  |
+| relion_refine_mpi acc_rotation                        | 1.155              | 1.109              |
+| relion_refine_mpi acc_translation                     | 0.46816            | 0.46928            |
+| relion_refine_mpi resolution                          | 3.496585           | 3.496585           |
+| relion_postprocess _rlnFinalResolution                | 3.116522           | 3.116522           |
+| relion_postprocess _rlnBfactorUsedForSharpening       | -109.12579         | -109.12579         |
+| relion_postprocess _rlnParticleBoxFractionSolventMask | 44.767834          | 44.767834          |
+| relion_preprocess_mpi pixel_size                      | 0.56               | 0.56               |
+| relion_preprocess_mpi particle_size                   | 512.0              | 512.0              |
+
+#### Refine3D Stage 4
+
+|                                                       | 4                  | 4                  |
+|-------------------------------------------------------|--------------------|--------------------|
+| Machine                                               | icx                | icx                |
+| CPU Optimized                                         | False              | True               |
+| No. Tasks                                             | 23                 | 23                 |
+| CPUs Per Thread                                       | 4                  | 4                  |
+| relion_refine_mpi duration                            | 31258.701100349426 | 14689.856837511063 |
+| relion_mask_create duration                           | 1390.5894944667816 | 1391.9933550357819 |
+| relion_postprocess duration                           | 32.18855118751526  | 28.632608652114868 |
+| relion_postprocess _rlnFinalResolution                | 3.150769           | 3.150769           |
+| relion_postprocess _rlnBfactorUsedForSharpening       | -111.32904         | -111.32904         |
+| relion_postprocess _rlnParticleBoxFractionSolventMask | 38.844176          | 38.844176          |
+
+#### Polish Stage 5
+Note: The Polish apply step consumes a very large amount of memory. Hence for this stage we reduced the number of tasks used down to two tasks per machine. 
+
+|                                   | 5                  | 5                  |
+|-----------------------------------|--------------------|--------------------|
+| Machine                           | icx                | icx                |
+| CPU Optimized                     | False              | True               |
+| No. Tasks                         | 2                  | 2                  |
+| CPUs Per Thread                   | 4                  | 4                  |
+| relion_motion_refine duration     | 15660.849782466888 | 16165.334248781204 |
+| relion_motion_refine_mpi duration | 32962.80286979675  | 32650.908935785294 |
+| relion_motion_refine 0            | 0.8715             | 0.8655             |
+| relion_motion_refine_mpi 0        | 0.8715             | 0.8655             |
+| relion_motion_refine 1            | 8400.0             | 8400.0             |
+| relion_motion_refine_mpi 1        | 8400.0             | 8400.0             |
+| relion_motion_refine 2            | 2.865              | 2.865              |
+| relion_motion_refine_mpi 2        | 2.865              | 2.865              |
 
 ## Plasmodium Ribosome
 
