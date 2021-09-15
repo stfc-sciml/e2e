@@ -2,6 +2,7 @@
 #SBATCH -p scarf 
 #SBATCH -C scarf17
 #SBATCH --cpus-per-task=2
+#SBATCH --exclusive
 #SBATCH --time 4-0
 
 # Load modules
@@ -16,9 +17,9 @@ export RELION_IMG="$BASE_DIR/relion.sif"
 # Relion project directory data
 export RELION_PROJ_DIR="/work3/projects/sciml/scarf688/relion/10338"
 # Location to store output files
-export RELION_OUTPUT_DIR="$BASE_DIR/runs/scarf/job_$SLURM_JOB_ID"
+export RELION_OUTPUT_DIR="/work3/projects/sciml/scarf688/relion/runs/scarf/job_$SLURM_JOB_ID"
 # Relion command
-export RELION_CMD="singularity run -B $BASE_DIR -H $RELION_PROJ_DIR $RELION_IMG -gpu_disable_check"
+export RELION_CMD="singularity run -B $RELION_OUTPUT_DIR -B $BASE_DIR -H $RELION_PROJ_DIR $RELION_IMG -gpu_disable_check"
 # Number of cpus to use with -j option
 export RELION_CPUS_PER_TASK=$SLURM_CPUS_PER_TASK
 # Additional optimization flags
@@ -27,4 +28,7 @@ export RELION_OPT_FLAGS='--dont_combine_weights_via_disc --pool 30'
 export RELION_MPI_FLAGS='--mca opal_warn_on_missing_libcuda 0'
 
 # Run pipeline
-./benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_refine3d_3.sh
+#./benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_class3d_1.sh
+#./benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_class2d_0.sh
+#./benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_refine3d_4.sh
+./benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_polish_5.sh

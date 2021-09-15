@@ -1,0 +1,3 @@
+index,total,batch_size,clip_offset,cpu_only,epochs,learning_rate,no_cache,ntasks_per_node,num_gpus,num_ranks,train_split,wbce,imgs_per_s
+run_j1,912.7746522426604,32,15,False,30,0.001,True,,0,1,0.8,0.5,2.1911213190309997
+run_j2,497.28040766716,32,15,False,30,0.001,True,,0,2,0.8,0.5,4.021875724769437

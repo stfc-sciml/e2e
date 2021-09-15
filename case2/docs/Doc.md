@@ -64,9 +64,9 @@ Below shows the detailed training & inference performance across different syste
 | run_53432 | SCARF  |        4 |        16 | 111.2567739 | 17.97643352 |
 | run_53433 | SCARF  |        4 |        32 | 78.90235639 | 25.34778544 |
 
-#### EPCC
+#### EPCC - CLX
 
-Training with and without intel optimized python & Tensorflow.
+Training with and without intel optimized python & Tensorflow Cascade Lake architecture.
 
 ##### Training
 
@@ -98,6 +98,22 @@ Training with and without intel optimized python & Tensorflow.
 | run_66586 	| EPCC   	| intel   	|        16 	|               4 	| 73.51474023 	| 27.20542838 	|
 | run_66587 	| EPCC   	| intel   	|        32 	|               4 	| 38.53717971 	| 51.89793376 	|
 
+#### EPCC - ICX
+
+Training with and without intel optimized python & Tensorflow Ice Lake architecture. Only one node was available for these runs.
+
+##### Training
+| index  | system | num_ranks | total_time         | first_epoch_time  | second_epoch_time | first_epoch_train_time | second_epoch_train_time | first_epoch_test_time | second_epoch_test_time | imgs_per_s_second_epoch | imgs_per_s_first_epoch | train_accuracy     | test_accuracy      | train_loss          | test_loss          | batch_size | epochs | learning_rate | no_cache |
+|--------|--------|-----------|--------------------|-------------------|-------------------|------------------------|-------------------------|-----------------------|------------------------|-------------------------|------------------------|--------------------|--------------------|---------------------|--------------------|------------|--------|---------------|----------|
+| run_j1 | ICX    | 1         | 150662.70891571045 | 4983.639632463455 | 5049.243052482605 | 4761.912266016007      | 4831.074041366577       | 221.72523140907288    | 218.16710019111636     | 4.015670187185183       | 4.073993579942782      | 0.8532552123069763 | 0.852003812789917  | 0.21356502175331116 | 0.2126753032207489 | 32         | 30     | 0.001         | True     |
+| run_j2 | ICX    | 2         | 103711.89777755736 | 5459.10152053833  | 3850.113874197006 | 5201.835367918015      | 3688.9679811000815      | 257.2456078529358     | 161.12971186637878     | 5.258923389791732       | 3.729452900345184      | 0.8568906188011169 | 0.8335456848144531 | 0.20529469847679138 | 0.2204301804304123 | 32         | 30     | 0.001         | True     |
+
+##### Inference
+
+| index  | num_ranks | total             | imgs_per_s         |
+|--------|-----------|-------------------|--------------------|
+| run_j1 | 1         | 912.7746522426604 | 2.1911213190309997 |
+| run_j2 | 2         | 497.28040766716   | 4.021875724769437  |
 
 ### Extraction
  The extraction step unzips the raw data from the CEDA archive. The extraction step takes an input list of file locations on the CEDA archive and will unzip every file in the list to the corresponding output directory. An example of how to run this step is given below:
