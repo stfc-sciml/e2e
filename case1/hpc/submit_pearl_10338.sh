@@ -16,11 +16,11 @@ export RELION_PROJ_DIR="$BASE_DIR/data/10338"
 # Location to store output files
 export RELION_OUTPUT_DIR="$BASE_DIR/runs/pearl/job_$SLURM_JOB_ID"
 # Relion command
-export RELION_CMD="singularity run --nv -B $BASE_DIR -H $RELION_PROJ_DIR $RELION_IMG"
+export RELION_CMD="singularity run --nv -B $BASE_DIR -H $RELION_PROJ_DIR $RELION_IMG -gpu_check_disable"
 # Number of cpus to use with -j option
 export RELION_CPUS_PER_TASK=$SLURM_CPUS_PER_TASK
 # Additional optimization flags
 export RELION_OPT_FLAGS='--gpu --dont_combine_weights_via_disc --pool 30'
 
 # Run pipeline
-./benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_polish_5.sh
+./benchmark_scripts/benchmark_relion.py ./benchmark_scripts/10338/pipeline_class2d_0.sh
