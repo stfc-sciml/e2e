@@ -1,4 +1,4 @@
-# Case 1 Overview
+# Case 1
 
 This folder contains scripts for the Relion End-to-End benchmark.
 
