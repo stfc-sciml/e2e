@@ -1,5 +1,11 @@
 # Case 2
 
+Contents:
+ - [Installation](#installation)
+ - [Running benchmarks](#running-benchmarks)
+ - [Datasets](#datasets)
+ - [Results](#results)
+
 ## Installation
 
 This benchmark is written with Tensorflow & Horovod. Horovod requires `cmake` and `openmpi` to be available on the host machine. Please ensure these are installed and available on your system before installing the rest of the project dependancies.
@@ -84,7 +90,7 @@ Three datasets are provided with this benchmark. The details of each induvidual 
 In addition to each of these raw datasets, the data transformed preprocessed to the HDF format is also provided. This is the intermediate output after running `convert_to_hdf` on each of the `one-day` and `ssts` dataset. These intermediate files can be found in `./hdf` and are about ~30% the size of the original dataset.
 
 
-## Timings
+## Results
 Rough timings for a single run of each stage on an single DGX-2 node with a single v100 GPU. *Note*: This implementation uses `tf.data.Dataset.cache` to store loaded data in memory after loading, so the first epoch takes longer than all subsequent epochs. The difference in time is noted below.
 
 | Stage                       | Time (s)           | 
