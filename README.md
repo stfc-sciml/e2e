@@ -29,11 +29,12 @@ The source tree, which captures these aspects,  is organised as follows:
 ```bash
 ├── README.md                   <This file>
 └── case1/                      <Root folder for the Case 1: Relion benchmark>
-
+    ├── benchmark_scripts/      <Benchmark scripts & python implementation>
+    ├── hpc/                    <Scripts for running the benchmark on HPC systems>
+    └── runs/                   <Output captured for runs on each HPC system> 
 └── case2/                      <Root folder for the Case 2: Cloud Mask benchmark>
     ├── e2e_benchmark/          <Benchmark python implementation>
-    ├── hpc/                    <Scripts for running the benchmark of HPC systems>
-    ├── core/                   <Core scripts> 
+    ├── hpc/                    <Scripts for running the benchmark on HPC systems>
     └── runs/                   <Output captured for runs on each HPC system> 
 ```
 
