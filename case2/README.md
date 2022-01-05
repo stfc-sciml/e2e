@@ -1,8 +1,90 @@
-### Software
+# Case 2
 
-The benchmark is written in pure python code. The preprocessing scripts make use of the NetCDF, H5py, and scikit-image libraries pre-processing the imagry. The network uses a U-Net style architecture with 9 channels as input (6 channels reflectance, 3 channels brightness temperature) and a single channel binary output. This network is written in Tensorflow 2.0. A full list of software requirements can be found in the [requirements.txt](case2/requirements.txt)
+## Installation
 
-### Timings
+This benchmark is written with Tensorflow & Horovod. Horovod requires `cmake` and `openmpi` to be available on the host machine. Please ensure these are installed and available on your system before installing the rest of the project dependancies.
+ - Clone the repo
+ - Install tensorflow & horovod
+ - `pip` install the rest of the requirements
+ 
+```bash
+git clone git@github.com:stfc-sciml/e2e.git
+cd e2e/case2
+conda install -c anaconda tensorflow-gpu
+pip install horovod
+pip install -r requirements.txt
+```
+
+## Running Benchmarks
+
+### Data Preparation
+
+The following two steps are necessary to prepare the raw data for training and inference. A preprocessed version of all the datasets are provided with the data download. Therefore these steps may be skipped if you're only training or running a model.
+
+#### Extraction
+ The extraction step unzips the raw data from the CEDA archive. The extraction step takes an input list of file locations on the CEDA archive and will unzip every file in the list to the corresponding output directory. An example of how to run this step is given below:
+
+```bash
+python -m e2e_benchmark.command extract file_list.txt extracted_files
+```
+
+#### HDF Conversion
+
+The HDF conversion converts the raw NetCDF files into a stand alone HDF file. This collects all of the brightness temperature channels, radiance channels, and product masks into a single file. This step is neccesary to cut down the number of I/O calls during training. This step also converts the radiance channels to reflectance values and resizes the images to a common size. Finally, the data will be split into day and night time image folders. An example of how to run this step is given below:
+
+```bash
+python -m e2e_benchmark.command convert_hdf extracted_files hdf_files
+```
+
+### Training
+To train the model you will need to have performed both preprocessing tasks and should now have a folder to HDF files ready. The input parameters for the model training are the folder of HDF files and an output path to save the model to. This will run the U-net like model with each of the images in the input folder. The input images will be automatically split into a training & test set.
+
+```bash
+python -m e2e_benchmark.command train hdf_files model_output
+```
+
+To run the model in CPU only mode you can pass the additional flag `--cpu-only`. 
+
+As part of a the data loading the following operations will be performed:
+
+ - Image normaisation of each channel
+ - Conversion from full (1500x1200) resolution to patches (512x512).
+ - Cache these operations in memory using `tf.data.Dataset.cache`
+
+### Inference
+After the model has been trained you can run it on a set of test images using the inference command. The inference command takes three arguments:
+ - The model file containing a trained model.
+ - The data directory containing preprocessed HDF data to perform inference on
+ - An output directory to predicted masks to for each image in the data directory
+
+An example of how to run this step is given below:
+
+```bash
+python -m e2e_benchmark.command inference model_output/model_file.h5 hdf_files predictions
+```
+
+### SST Comparision
+The final step of the benchmark is to compare the masked pixels in the validation SST dataset against the reference SST temperature buoys. For this you will specifically need the preprocessed ssts dataset. This step will take the table of SST match ups and compare the masks output from the model with those match ups and output the median and robust standard deviation for the match ups. An example of how to run this step is given below:
+
+```bash
+python -m e2e_benchmark.command sst_comp sst_matchups.h5 predictions
+```
+
+## Datasets
+
+Three datasets are provided with this benchmark. The details of each induvidual dataset are given in the table below. Each dataset contains multiple folders refered to as level 1 Sentinel-3 SLSTR products. Each product contains multiple data files containing the raw brightness temperatures and radiances measured by the satellite. For more details on the specific contains of the level 1 products, the reader is referered to the [SLSTR level 1 handbook](https://sentinel.esa.int/documents/247904/1872792/Sentinel-3-SLSTR-Product-Data-Format-Specification-Level-1).
+
+
+| Dataset | No. Products | Size (GB) | Description                                                                                                                                      |
+|---------|--------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| one-day | 971          | 599       | Data recorded during a single full orbit cycle of Sentinel-3A. Consists of day and night time examples and images from a wide variety of biomes. |
+| pixbox  | 414          | 243       | A mix of data used as part of a cloud mask validation dataset containing numerous difficult examples across a variety of biomes.                 |
+| ssts    | 100          | 63        | A dataset of products which have been co-aligned with sea surface temperature (SST) buoys. The matching pixels in these products can be used to validate the quality of cloud masking |
+
+In addition to each of these raw datasets, the data transformed preprocessed to the HDF format is also provided. This is the intermediate output after running `convert_to_hdf` on each of the `one-day` and `ssts` dataset. These intermediate files can be found in `./hdf` and are about ~30% the size of the original dataset.
+
+
+## Timings
 Rough timings for a single run of each stage on an single DGX-2 node with a single v100 GPU. *Note*: This implementation uses `tf.data.Dataset.cache` to store loaded data in memory after loading, so the first epoch takes longer than all subsequent epochs. The difference in time is noted below.
 
 | Stage                       | Time (s)           | 
@@ -112,52 +194,3 @@ Training with and without intel optimized python & Tensorflow Ice Lake architect
 | run_j1 | 1         | 912.7746522426604  | 2.1911213190309997 |
 | run_j2 | 2         | 497.28040766716    | 4.021875724769437  |
 | run_j4 | 4         | 310.29732847213745 | 6.445430935057458  |
-
-### Extraction
- The extraction step unzips the raw data from the CEDA archive. The extraction step takes an input list of file locations on the CEDA archive and will unzip every file in the list to the corresponding output directory. An example of how to run this step is given below:
-
-```bash
-python -m e2e_benchmark.command extract file_list.txt extracted_files
-```
-
-### HDF Conversion
-
-The HDF conversion converts the raw NetCDF files into a stand alone HDF file. This collects all of the brightness temperature channels, radiance channels, and product masks into a single file. This step is neccesary to cut down the number of I/O calls during training. This step also converts the radiance channels to reflectance values and resizes the images to a common size. Finally, the data will be split into day and night time image folders. An example of how to run this step is given below:
-
-```bash
-python -m e2e_benchmark.command convert_hdf extracted_files hdf_files
-```
-
-## Training
-To train the model you will need to have performed both preprocessing tasks and should now have a folder to HDF files ready. The input parameters for the model training are the folder of HDF files and an output path to save the model to. This will run the U-net like model with each of the images in the input folder. The input images will be automatically split into a training & test set.
-
-```bash
-python -m e2e_benchmark.command train hdf_files model_output
-```
-
-To run the model in CPU only mode you can pass the additional flag `--cpu-only`. 
-
-As part of a the data loading the following operations will be performed:
-
- - Image normaisation of each channel
- - Conversion from full (1500x1200) resolution to patches (512x512).
- - Cache these operations in memory using `tf.data.Dataset.cache`
-
-### Inference
-After the model has been trained you can run it on a set of test images using the inference command. The inference command takes three arguments:
- - The model file containing a trained model.
- - The data directory containing preprocessed HDF data to perform inference on
- - An output directory to predicted masks to for each image in the data directory
-
-An example of how to run this step is given below:
-
-```bash
-python -m e2e_benchmark.command inference model_output/model_file.h5 hdf_files predictions
-```
-
-### SST Comparision
-The final step of the benchmark is to compare the masked pixels in the validation SST dataset against the reference SST temperature buoys. For this you will specifically need the preprocessed ssts dataset. This step will take the table of SST match ups and compare the masks output from the model with those match ups and output the median and robust standard deviation for the match ups. An example of how to run this step is given below:
-
-```bash
-python -m e2e_benchmark.command sst_comp sst_matchups.h5 predictions
-```
