@@ -11,7 +11,7 @@
 
 # 1. Synopsis
 
-This repository provides the code, documentation and results of the End-2-End benchmarking project.
+This repository provides the code, documentation and results of the End-to-End (e2e) benchmarking project.
 
 # 2. Benchmarks 
 
@@ -20,15 +20,15 @@ This repository provides the code, documentation and results of the End-2-End be
 
 The end to end benchmarking project consists of two benchmarks:
 
-1. **Case 1: Relion**: The Relion end to end benchmark reproduces a full end to end refinement using Relion, including 2D classification, 3D classification, 3D refinement and polishing.
+1. **Case 1: RELION**: The RELION end-to-end benchmark reproduces a full end-to-end refinement using the RELION software, including 2D classification, 3D classification, 3D refinement and polishing.
 
-2. **Case 2: Cloud Mask**: The cloud mask benchmark prepares, trains, and evaluates a U-Net style segmentation model on Sentinel-3 data for cloud masking.
+2. **Case 2: Cloud Masking**: The cloud masking benchmark prepares, trains, and evaluates a U-Net style segmentation model on Sentinel-3 data for cloud masking.
 
-The source tree, which captures these aspects,  is organised as follows:
+The source tree, which captures these aspects, is organised as follows:
 
 ```bash
 ├── README.md                   <This file>
-└── case1/                      <Root folder for the Case 1: Relion benchmark>
+└── case1/                      <Root folder for the Case 1: RELION benchmark>
     ├── benchmark_scripts/      <Benchmark scripts & python implementation>
     ├── hpc/                    <Scripts for running the benchmark on HPC systems>
     └── runs/                   <Output captured for runs on each HPC system> 
@@ -42,7 +42,7 @@ We have annotated the purpose of each folder/directory within `<>`.
 
 ## 2.2 Datasets 
 
-The `download.sh` script in thsi directory can be used to download all the data for both benchmarks. For more infomation on specific datasets used both both datasets please see:
+The `download.sh` script in this directory can be used to download all the data for both benchmarks. For more information on specific datasets used both both datasets please see:
 
  - [Case 1 Datasets](./case1/README.md#datasets)
  - [Case 2 Datasets](./case2/README.md#datasets)
@@ -71,6 +71,32 @@ For example:
 Please consult documentation for each of the individual benchmark cases.
  - Case 1: See the [README](./case1/README.md) for getting started.
  - Case 2: See the [README](./case2/README.md) for getting started.
+
+# 4. Contributors and Citation
+
+## 4.1 Contributors
+
+These examples were developed by the [Scientific Machine Learning (SciML) Group](https://bityl.co/ANZz) at the [Rutherford Appleton Laboratory (RAL)](https://bityl.co/ANa0), [Science and Technology Facilities Council (STFC)](https://stfc.ukri.org/index.cfm), UK in collaboration with [Intel Corporation](https://www.intel.co.uk/) through the [Alan Turing Institute’s](https://www.turing.ac.uk/) Data Science at Scale programme. Key contributors are: 
+
+* Jeyan Thiyagalingam, RAL, STFC,
+* Samuel Jackson, RAL, STFC,
+* Martyn Winn, RAL, STFC, 
+* Manos Farsarakis, Intel, and
+* Tony Hey, RAL, STFC.
+
+
+Cite these end-to-end benchmarks as follows:
+
+```
+@misc{sciml-e2e:2021,
+    title  = {End-to-End Benchmarking for AI for Science: Two Examples},
+    author = {Samuel Jackson, Martyn Winn,  Manos Farsarakis, Jeyan Thiyagalingam, Tony Hey},
+    url    = {https://github.com/stfc-sciml/e2e},
+    year   = {2021}
+}
+```
+
+Please email scdsciml@stfc.ac.uk for any clarification regarding these examples. 
 
 # 5. Acknowledgments
 
